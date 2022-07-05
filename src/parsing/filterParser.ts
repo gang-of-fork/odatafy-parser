@@ -16,7 +16,7 @@ import { FilterNode } from '../types/nodes';
 
 
 
-const grammar = `
+export const filterGrammar = `
 //derived from ABNF construction rules 4.01
 
 {
@@ -42,7 +42,7 @@ const grammar = `
     }
   }
 
-start = boolCommonExpr
+
 boolCommonExpr = commonExpr
 
 
@@ -58,9 +58,8 @@ INT = value:$(SIGN? DIGIT+)
 //TODO ADD rootExpr/firstMemberExpr/functionExpr
 //ggf methodCall auf boolMethodCalls restricten
 commonExpr = (
-     castExpr 
-    / isofExpr 
-    / andOrExpr 
+    andOrExpr
+    / booleanValue
     )
     //{if(opAndRight) {return {left:left, op: opAndRight.op, right: opAndRight.right}} return left}
 
@@ -75,6 +74,8 @@ commonExpr = (
     / twoArgFunctionCallExpr 
     / substringMethodCallExpr 
     / caseMethodCallExpr
+    / castExpr 
+    / isofExpr 
     
     
 
@@ -87,10 +88,10 @@ oneArgFunc = "length" / "tolower"/"toupper"/"trim"/"year"/"month"/"day"/"hour"/"
 noArgFunctionCallExpr = func:noArgFunc OPEN BWS CLOSE {return {nodeType: 'FuncNode0Args', func:func}}
 noArgFunc = "mindatetime" / "maxdatetime" / "now"
 
-substringMethodCallExpr      = "substring"      OPEN BWS commonExpr BWS COMMA BWS commonExpr BWS ( COMMA BWS commonExpr BWS )? CLOSE
-
-caseMethodCallExpr = "case" OPEN BWS boolCommonExpr BWS COLON BWS commonExpr BWS 
-             ( COMMA BWS boolCommonExpr BWS COLON BWS commonExpr BWS )* CLOSE
+//FuncNodeVarArgs
+substringMethodCallExpr      = "substring" OPEN BWS part1:part BWS COMMA BWS part2:part BWS part3:( COMMA BWS @part BWS )? CLOSE {return{nodeType: "FunctionNodeVarArgs", func: "substring", args:part3?[part1,part2,part3]:[part1,part2]}}
+caseMethodCallExpr = "case" OPEN BWS head:(cond:boolCommonExpr BWS COLON BWS value:part BWS {return{cond:cond, value:value}})
+             tail:( COMMA BWS cond:boolCommonExpr BWS COLON BWS value:part BWS {return{cond:cond, value:value}})* CLOSE {return{nodeType: "FunctionNodeCase", args:[head, ...tail]}}
              
              
              
@@ -117,8 +118,9 @@ hasExpr = left:part RWS "has" RWS right:enum {return {nodeType: "OperatorNode", 
 
 negateExpr = "-" BWS right:commonExpr {return {op: "-", value:right}}
 
-isofExpr = "isof" OPEN BWS ( commonExpr BWS COMMA BWS )? optionallyQualifiedTypeName BWS CLOSE
-castExpr = "cast" OPEN BWS ( commonExpr BWS COMMA BWS )? optionallyQualifiedTypeName BWS CLOSE
+//FunctionNodeVarArgs
+isofExpr = "isof" OPEN BWS part:( @part BWS COMMA BWS )? typeName:optionallyQualifiedTypeName BWS CLOSE { return {nodeType: "FunctionNodeVarArgs", func: "isof", args:part?[part,typeName]:[typeName] }}
+castExpr = "cast" OPEN BWS part:( @part BWS COMMA BWS )? typeName:optionallyQualifiedTypeName BWS CLOSE { return {nodeType: "FunctionNodeVarArgs", func: "cast", args:part?[part,typeName]:[typeName] }}
     
 /*
 * 5. JSON format for queries
@@ -156,11 +158,11 @@ arrayOrObject = value:$array {return constantNodeHelper("Array",JSON.parse(value
 */
 
 optionallyQualifiedTypeName = singleQualifiedTypeName                  
-                            / 'Collection' OPEN singleQualifiedTypeName CLOSE
+                            / 'Collection' OPEN value:$singleQualifiedTypeName CLOSE {return{ nodeType: "SymbolNode", type: "Collection", value: value}}
                             / odataIdentifier
-                            / 'Collection' OPEN odataIdentifier CLOSE
+                            / 'Collection' OPEN value:$odataIdentifier CLOSE {return{ nodeType: "SymbolNode", type: "Collection", value: value}}
 
-singleQualifiedTypeName  = namespace "." odataIdentifier / primitiveTypeName
+singleQualifiedTypeName  = value:$(odataIdentifier ("." odataIdentifier)+ / primitiveTypeName) {return{ nodeType: "SymbolNode", type: "TypeName", value: value }}
 
 primitiveTypeName = 'Edm.' ( 'Binary'
                            / 'Boolean'
@@ -208,7 +210,7 @@ enumerationTypeName = odataIdentifier
 // INT covers value ranges of sbyte, byte, int16, int32, int64
 //left out geography and geometry stuff bcs probably not relevant
 primitiveLiteral = $nullValue                  
-                 / value:$booleanValue {return {nodeType: "ConstantNode", type: "Boolean", value: value === "true" ? true : false}}
+                 / booleanValue
                  / value:$guidValue {return constantNodeHelper("GUID",value)}
                  / value:$dateTimeOffsetValueInUrl {return constantNodeHelper("DateTimeOffsetValueInUrl",value)}
                  / value:$dateValue {return constantNodeHelper("DateValue",value)}
@@ -222,7 +224,7 @@ primitiveLiteral = $nullValue
 
 
 nullValue = 'null' 
-booleanValue = "true" / "false"
+booleanValue = value:$("true" / "false") {return {nodeType: "ConstantNode", type: "Boolean", value: value === "true" ? true : false}}
 //peggyjs does not support specific repetition
 guidValue = HEXDIG HEXDIG HEXDIG HEXDIG HEXDIG HEXDIG HEXDIG HEXDIG "-" HEXDIG HEXDIG HEXDIG HEXDIG "-" HEXDIG HEXDIG HEXDIG HEXDIG "-" HEXDIG HEXDIG HEXDIG HEXDIG "-" HEXDIG HEXDIG HEXDIG HEXDIG HEXDIG HEXDIG HEXDIG HEXDIG HEXDIG HEXDIG HEXDIG HEXDIG  
 
@@ -303,8 +305,8 @@ HTAB   = '  '
 `
 
 
-export let rawParser = peggy.generate(grammar, { trace: false });
-let myParser = peggy.generate(grammar, {trace: false});
+export let rawParser = peggy.generate(filterGrammar, { trace: false });
+let myParser = peggy.generate(filterGrammar, {trace: false});
 
 export default {
     /**

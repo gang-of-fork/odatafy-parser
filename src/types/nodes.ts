@@ -9,11 +9,15 @@ export enum NodeTypes {
     FuncNode2Args = 'FuncNode2Args',
     FuncNode1Args = 'FuncNode1Args',
     FuncNode0Args = 'FuncNode0Args',
+    FuncNodeVarArgs = 'FuncNodeVarArgs',
+    FuncNodeCase = 'FuncNodeCase',
     EnumValueNode = 'EnumValueNode',
     OrderbyNode = 'OrderbyNode',
     OrderbyItemNode = 'OrderbyItemNode',
     ExpandNode = 'ExpandNode',
-    ExpandIdentifierNode = 'ExpandIdentifierNode'
+    ExpandIdentifierNode = 'ExpandIdentifierNode',
+    ComputedNode = 'ComputedNode',
+    ComputerItemNode = 'ComputedItemNode'
 }
 
 /**
@@ -59,6 +63,22 @@ export type FuncNode0Args = {
     func: FuncNames0Args;
 }
 
+export type FuncNodeVarArgs = {
+    nodeType: NodeTypes.FuncNodeVarArgs,
+    func: FuncNamesVarArgs;
+    args: FuncArg[];
+}
+
+export type FuncNodeCase = {
+    nodeType: NodeTypes.FuncNodeCase;
+    args: CaseFuncArg[];
+}
+
+export type CaseFuncArg = {
+    cond: FilterNode;
+    value: FuncArg;
+}
+
 export type EnumValueNode = {
     nodeType: NodeTypes.EnumValueNode,
     type: "EnumValue",
@@ -82,7 +102,6 @@ export enum OperatorNodeOperators {
     Divby = 'divby',
     Mod = 'mod',
     Has = 'has',
-    In  = 'in',
     Not = 'not'
 }
 
@@ -103,7 +122,9 @@ export enum ConstantNodeTypes {
 
 export enum SymbolNodeTypes {
     Identifier = 'Identifier',
-    MemberExpression = 'MemberExpression'
+    MemberExpression = 'MemberExpression',
+    Collection = 'Collection',
+    TypeName = 'TypeName'
 }
 
 export enum FuncNames2Args {
@@ -146,6 +167,14 @@ export enum FuncNames0Args {
     Maxdatetime = 'maxdatetime',
     Now = 'now'
 }
+
+export enum FuncNamesVarArgs {
+    Isof = 'isof',
+    Cast = 'cast',
+    Substring = 'substring',
+    Case = 'case'
+}
+
 
 
 
@@ -190,4 +219,19 @@ export type ExpandItemOptions = {
     orderby?: OrderbyNode;
     skip?: number;
     top?: number;
+}
+
+/**
+ * Computed Parser Nodes
+ */
+
+export type ComputedNode = {
+    nodeType: NodeTypes.ComputedNode,
+    value: ComputedItemNode[]
+}
+
+export type ComputedItemNode = {
+    nodeType: NodeTypes.ComputerItemNode,
+    commonExpression: FilterNode,
+    computedIdentifier: string
 }

@@ -68,6 +68,187 @@ describe('filter-expressions with method calls', () => {
             })
         });
 
+        describe('variableArgExpressions', () => {
+            [{
+                type: "basic function expression with isof (1Arg)",
+                input: "isof(NorthwindModel.BigOrder)",
+                expectedAST: {
+                    nodeType: "FunctionNodeVarArgs",
+                    func: "isof",
+                    args: [
+                        {
+                            nodeType: "SymbolNode",
+                            type: "TypeName",
+                            value: "NorthwindModel.BigOrder"
+                        }
+                    ]
+                }
+            },
+            {
+                type: "basic function expression with isof (2Arg)",
+                input: "isof(Customer,NorthwindModel.VIPCustomer)",
+                expectedAST: {
+                    nodeType: "FunctionNodeVarArgs",
+                    func: "isof",
+                    args: [
+                        {
+                            nodeType: "SymbolNode",
+                            type: "Identifier",
+                            value: "Customer"
+                        },
+                        {
+                            nodeType: "SymbolNode",
+                            type: "TypeName",
+                            value: "NorthwindModel.VIPCustomer"
+                        }
+                    ]
+                }
+            },
+            {
+                type: "basic function expression with cast (1Arg)",
+                input: "cast(NorthwindModel.BigOrder)",
+                expectedAST: {
+                    nodeType: "FunctionNodeVarArgs",
+                    func: "cast",
+                    args: [
+                        {
+                            nodeType: "SymbolNode",
+                            type: "TypeName",
+                            value: "NorthwindModel.BigOrder"
+                        }
+                    ]
+                }
+            },
+            {
+                type: "basic function expression with cast (2Arg)",
+                input: "cast(Customer,NorthwindModel.VIPCustomer)",
+                expectedAST:  {
+                    nodeType: "FunctionNodeVarArgs",
+                    func: "cast",
+                    args: [
+                        {
+                            nodeType: "SymbolNode",
+                            type: "Identifier",
+                            value: "Customer"
+                        },
+                        {
+                            nodeType: "SymbolNode",
+                            type: "TypeName",
+                            value: "NorthwindModel.VIPCustomer"
+                        }
+                    ]
+                }
+            },
+            {
+                type: "basic function expression with substring (2Arg)",
+                input: "substring(CompanyName,1)",
+                expectedAST: {
+                    nodeType: "FunctionNodeVarArgs",
+                    func: "substring",
+                    args: [
+                        {
+                            nodeType: "SymbolNode",
+                            type: "Identifier",
+                            value: "CompanyName"
+                        },
+                        {
+                            nodeType: "ConstantNode",
+                            type: "Integer",
+                            value: 1
+                        }
+                    ]
+                }
+            },
+            {
+                type: "basic function expression with substring (3Arg)",
+                input: "substring(CompanyName,1,2)",
+                expectedAST: {
+                    nodeType: "FunctionNodeVarArgs",
+                    func: "substring",
+                    args: [
+                        {
+                            nodeType: "SymbolNode",
+                            type: "Identifier",
+                            value: "CompanyName"
+                        },
+                        {
+                            nodeType: "ConstantNode",
+                            type: "Integer",
+                            value: 1
+                        },
+                        {
+                            nodeType: "ConstantNode",
+                            type: "Integer",
+                            value: 2
+                        }
+                    ]
+                }
+            },
+            {
+                type: "basic function expression with case",
+                input: "case(X gt 0:1,X lt 0:-1,true:0)",
+                expectedAST: {
+                    nodeType: "FunctionNodeCase",
+                    args: [
+                        {
+                            cond: {
+                                nodeType: "OperatorNode",
+                                op: "gt",
+                                left: {
+                                    nodeType: "SymbolNode",
+                                    type: "Identifier",
+                                    value: "X"
+                                },
+                                right: {
+                                    nodeType: "ConstantNode",
+                                    type: "Integer",
+                                    value: 0
+                                }
+                            },
+                            value: {
+                                nodeType: "ConstantNode",
+                                type: "Integer",
+                                value: 1
+                            }
+                        },
+                        {
+                            cond: {
+                                nodeType: "OperatorNode",
+                                op: "lt",
+                                left: {
+                                    nodeType: "SymbolNode",
+                                    type: "Identifier",
+                                    value: "X"
+                                },
+                                right: {
+                                    nodeType: "ConstantNode",
+                                    type: "Integer",
+                                    value: 0
+                                }
+                            },
+                            value: {
+                                nodeType: "ConstantNode",
+                                type: "Integer",
+                                value: -1
+                            }
+                        },
+                        {
+                            cond: {
+                                nodeType: "ConstantNode",
+                                type: "Boolean",
+                                value: true
+                            },
+                            value: {
+                                nodeType: "ConstantNode",
+                                type: "Integer",
+                                value: 0
+                            }
+                        }
+                    ]
+                }
+            }].forEach(testcase => testParsingAndAST(testcase))
+        })
+
     })
 
     describe('nested method Call', () => {
