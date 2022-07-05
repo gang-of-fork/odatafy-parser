@@ -1,0 +1,50 @@
+{
+  "name": "datafy-parser",
+  "version": "1.0.0",
+  "description": "generate mongodb queries from odata requests",
+  "main": "/dist/index.js",
+  "scripts": {
+    "test": "nyc mocha -r ts-node/register --exit  \"./test/**/*.test.ts\" --timeout 0",
+    "build": "tsc",
+    "build-and-run": "tsc && node dist/index.js",
+    "docs": "npx typedoc index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STAT1C-Sy/odata-mongodb-generator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/STAT1C-Sy/odata-mongodb-generator/issues"
+  },
+  "homepage": "https://github.com/STAT1C-Sy/odata-mongodb-generator#readme",
+  "devDependencies": {
+    "@types/chai": "^4.3.1",
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "@odata/parser": "^0.2.11",
+    "@types/assert": "^1.5.6",
+    "@types/mocha": "^9.1.1",
+    "assert": "^2.0.0",
+    "chai": "^4.3.6",
+    "equation-parser": "^0.3.1",
+    "find-matching-bracket": "^1.0.3",
+    "mathjs": "^10.6.1",
+    "mocha": "^10.0.0",
+    "mongodb": "^4.7.0",
+    "nyc": "^15.1.0",
+    "odata-parser": "^1.4.1",
+    "peggy": "^1.2.0",
+    "querystring": "^0.2.1",
+    "ts-node": "^10.8.0",
+    "typedoc": "^0.22.18"
+  },
+  "config": {
+    "mongodbMemoryServer": {
+      "debug": "1",
+      "downloadDir": "cache"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "watermarks": {
+    "statements": [60, 70]
+  },
+  "all": true,
+  "reporter": ["html","text"],
+  "no-cache": true,
+  "temp-dir": "./nyc_output",
+  "include": [
+      "src/**",
+      "prototype/**"
+  ]
+  
+}
