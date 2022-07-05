@@ -21,7 +21,7 @@
     "url": "git+https://github.com/Gang-of-Fork/odatafy-parser.git"
   },
   "author": "Gang of Fork",
-  "license": "GNU",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/Gang-of-Fork/odatafy-parser/issues"
   },
