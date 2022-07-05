@@ -22,7 +22,8 @@
   "homepage": "https://github.com/STAT1C-Sy/odata-mongodb-generator#readme",
   "devDependencies": {
     "@types/chai": "^4.3.1",
-    "typescript": "^4.6.4"
+    "typescript": "^4.6.4",
+    "typedoc": "^0.22.18"
   },
   "dependencies": {
     "@odata/parser": "^0.2.11",
@@ -34,11 +35,9 @@
     "find-matching-bracket": "^1.0.3",
     "mathjs": "^10.6.1",
     "mocha": "^10.0.0",
-    "mongodb": "^4.7.0",
     "nyc": "^15.1.0",
     "peggy": "^1.2.0",
     "querystring": "^0.2.1",
-    "ts-node": "^10.8.0",
-    "typedoc": "^0.22.18"
+    "ts-node": "^10.8.0"
   }
 }
