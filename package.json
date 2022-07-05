@@ -1,8 +1,9 @@
 {
   "name": "datafy-parser",
   "version": "1.0.0",
-  "description": "generate mongodb queries from odata requests",
+  "description": "generate odatafy ast from odata query parameters",
   "main": "/dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "nyc mocha -r ts-node/register --exit  \"./test/**/*.test.ts\" --timeout 0",
     "build": "tsc",
@@ -11,12 +12,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/STAT1C-Sy/odata-mongodb-generator.git"
+    "url": "git+https://github.com/Gang-of-Fork/odatafy-parser.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/STAT1C-Sy/odata-mongodb-generator/issues"
+    "url": "https://github.com/Gang-of-Fork/odatafy-parser/issues"
   },
   "homepage": "https://github.com/STAT1C-Sy/odata-mongodb-generator#readme",
   "devDependencies": {
@@ -35,16 +36,9 @@
     "mocha": "^10.0.0",
     "mongodb": "^4.7.0",
     "nyc": "^15.1.0",
-    "odata-parser": "^1.4.1",
     "peggy": "^1.2.0",
     "querystring": "^0.2.1",
     "ts-node": "^10.8.0",
     "typedoc": "^0.22.18"
-  },
-  "config": {
-    "mongodbMemoryServer": {
-      "debug": "1",
-      "downloadDir": "cache"
-    }
   }
 }
