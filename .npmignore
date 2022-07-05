@@ -1,0 +1,6 @@
+/test/
+/src/
+/node_modules/
+/.github/
+tsconfig.json
+index.ts
