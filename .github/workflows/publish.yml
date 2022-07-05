@@ -1,9 +1,11 @@
 name: Generate a build and push to another branch
 
-on:
-  push:
-    branches:
-      - master
+on: 
+  workflow_run:
+    workflows: ["testing"]
+    branches: [main]
+    types: 
+      - completed
 
 jobs:
   build:
