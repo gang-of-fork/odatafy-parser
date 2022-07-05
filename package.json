@@ -4,6 +4,7 @@
   "description": "generate odatafy ast from odata query parameters",
   "main": "/dist/index.js",
   "types": "dist/index.d.ts",
+  "keywords": [ "odata", "odata-v4", "odatafy", "parser" ],
   "scripts": {
     "test": "nyc mocha -r ts-node/register --exit  \"./test/**/*.test.ts\" --timeout 0",
     "build": "tsc",
@@ -14,8 +15,8 @@
     "type": "git",
     "url": "git+https://github.com/Gang-of-Fork/odatafy-parser.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Gang of Fork",
+  "license": "GNU",
   "bugs": {
     "url": "https://github.com/Gang-of-Fork/odatafy-parser/issues"
   },
