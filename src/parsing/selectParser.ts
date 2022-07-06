@@ -10,52 +10,20 @@ selectItem     = STAR
                  / qualifiedActionName  
                  / qualifiedFunctionName  
                  )
-selectProperty = primitiveProperty  
-               / primitiveColProperty 
-               / navigationProperty
+selectProperty = odataIdentifier  
                / selectPath ( "/" selectProperty )?
-selectPath     = ( complexProperty / complexColProperty ) ( "/" qualifiedComplexTypeName )? 
+selectPath     = ( odataIdentifier ) ( "/" qualifiedComplexTypeName )? 
 
-qualifiedEntityTypeName     = namespace "." entityTypeName
-qualifiedComplexTypeName    = namespace "." complexTypeName
+qualifiedEntityTypeName     = namespace "." odataIdentifier
+qualifiedComplexTypeName    = namespace "." odataIdentifier
 
-entityTypeName      = odataIdentifier
-complexTypeName     = odataIdentifier
+qualifiedActionName   = namespace "." odataIdentifier
+qualifiedFunctionName = namespace "." odataIdentifier ( OPEN parameterNames CLOSE )?
 
-qualifiedActionName   = namespace "." action
-qualifiedFunctionName = namespace "." function [ OPEN parameterNames CLOSE ]
-
-action       = odataIdentifier
-
-function = entityFunction 
-         / entityColFunction 
-         / complexFunction 
-         / complexColFunction 
-         / primitiveFunction 
-         / primitiveColFunction
-         
-entityFunction       = odataIdentifier
-entityColFunction    = odataIdentifier
-complexFunction      = odataIdentifier
-complexColFunction   = odataIdentifier
-primitiveFunction    = odataIdentifier
-primitiveColFunction = odataIdentifier
-
-primitiveProperty       = primitiveKeyProperty / primitiveNonKeyProperty
-primitiveKeyProperty    = odataIdentifier
-primitiveNonKeyProperty = odataIdentifier
-primitiveColProperty    = odataIdentifier
-complexProperty         = odataIdentifier
-complexColProperty      = odataIdentifier
-streamProperty          = odataIdentifier
-
-navigationProperty          = entityNavigationProperty / entityColNavigationProperty  
-entityNavigationProperty    = odataIdentifier
-entityColNavigationProperty = odataIdentifier
+parameterNames = odataIdentifier ( COMMA odataIdentifier )*
 
 allOperationsInSchema = namespace "." STAR 
-namespace     = namespacePart *( "." namespacePart )
-namespacePart = odataIdentifier
+namespace     = odataIdentifier *( "." odataIdentifier )
 
 odataIdentifier             = identifierLeadingCharacter identifierCharacter*
 identifierLeadingCharacter  = ALPHA / "_"         
@@ -66,6 +34,9 @@ DIGIT  = [0-9]
 COMMA  = "," / "%2C"
 STAR   = "*" / "%2A"
 EQ     = "="
+
+OPEN  = "(" / "%28"
+CLOSE = ")" / "%29"
 
 RWS = ( SP / HTAB / "%20" / "%09" )+
 BWS =  ( SP / HTAB / "%20" / "%09" )* 
