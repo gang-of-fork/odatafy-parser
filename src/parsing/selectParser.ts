@@ -44,7 +44,11 @@ SP     = ' '
 HTAB   = '  '
 `)
 export function parseSelect(expr: string) {
-return selectParser.parse(expr);
+    return selectParser.parse(expr);
+}
+
+export default {
+    parse: parseSelect
 }
 
 
