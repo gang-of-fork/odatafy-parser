@@ -10,7 +10,7 @@ function testParsingAndAST(testcase: { type: string, input: string, expectedAST:
 
 
 /* 
-nullValue                  ; plain values up to int64Value
+                 X nullValue                  ; plain values up to int64Value
                  X booleanValue 
                  X guidValue 
                  X dateTimeOffsetValueInUrl 
@@ -19,8 +19,8 @@ nullValue                  ; plain values up to int64Value
                  X decimalValue 
                  X Integer
                  X string                     ; single-quoted
-                 ! duration
-                 ! enum
+                 X duration
+                 X enum
                  X binary                     ; all others are quoted and prefixed 
                  / geographyCollection 
                  / geographyLineString 
