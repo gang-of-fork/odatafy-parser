@@ -89,9 +89,9 @@ noArgFunctionCallExpr = func:noArgFunc OPEN BWS CLOSE {return {nodeType: 'FuncNo
 noArgFunc = "mindatetime" / "maxdatetime" / "now"
 
 //FuncNodeVarArgs
-substringMethodCallExpr      = "substring" OPEN BWS part1:part BWS COMMA BWS part2:part BWS part3:( COMMA BWS @part BWS )? CLOSE {return{nodeType: "FunctionNodeVarArgs", func: "substring", args:part3?[part1,part2,part3]:[part1,part2]}}
+substringMethodCallExpr      = "substring" OPEN BWS part1:part BWS COMMA BWS part2:part BWS part3:( COMMA BWS @part BWS )? CLOSE {return{nodeType: "FuncNodeVarArgs", func: "substring", args:part3?[part1,part2,part3]:[part1,part2]}}
 caseMethodCallExpr = "case" OPEN BWS head:(cond:boolCommonExpr BWS COLON BWS value:part BWS {return{cond:cond, value:value}})
-             tail:( COMMA BWS cond:boolCommonExpr BWS COLON BWS value:part BWS {return{cond:cond, value:value}})* CLOSE {return{nodeType: "FunctionNodeCase", args:[head, ...tail]}}
+             tail:( COMMA BWS cond:boolCommonExpr BWS COLON BWS value:part BWS {return{cond:cond, value:value}})* CLOSE {return{nodeType: "FuncNodeCase", args:[head, ...tail]}}
              
              
              
@@ -118,9 +118,9 @@ hasExpr = left:part RWS "has" RWS right:enum {return {nodeType: "OperatorNode", 
 
 negateExpr = "-" BWS right:commonExpr {return {op: "-", value:right}}
 
-//FunctionNodeVarArgs
-isofExpr = "isof" OPEN BWS part:( @part BWS COMMA BWS )? typeName:optionallyQualifiedTypeName BWS CLOSE { return {nodeType: "FunctionNodeVarArgs", func: "isof", args:part?[part,typeName]:[typeName] }}
-castExpr = "cast" OPEN BWS part:( @part BWS COMMA BWS )? typeName:optionallyQualifiedTypeName BWS CLOSE { return {nodeType: "FunctionNodeVarArgs", func: "cast", args:part?[part,typeName]:[typeName] }}
+//FuncNodeVarArgs
+isofExpr = "isof" OPEN BWS part:( @part BWS COMMA BWS )? typeName:optionallyQualifiedTypeName BWS CLOSE { return {nodeType: "FuncNodeVarArgs", func: "isof", args:part?[part,typeName]:[typeName] }}
+castExpr = "cast" OPEN BWS part:( @part BWS COMMA BWS )? typeName:optionallyQualifiedTypeName BWS CLOSE { return {nodeType: "FuncNodeVarArgs", func: "cast", args:part?[part,typeName]:[typeName] }}
     
 /*
 * 5. JSON format for queries
@@ -147,7 +147,7 @@ arrayOrObject = value:$array {return constantNodeHelper("Array",JSON.parse(value
     name_separator  = BWS COLON BWS
     value_separator = BWS COMMA BWS
     quotation_mark  = DQUOTE / "%22"
-    valueInUrl = stringInUrl / arrayOrObject
+    valueInUrl = stringInUrl / arrayOrObject / primitiveLiteral 
     stringInUrl = quotation_mark charInJSON* quotation_mark 
     charInJSON = [^"]
     
@@ -209,7 +209,7 @@ enumerationTypeName = odataIdentifier
 */
 // INT covers value ranges of sbyte, byte, int16, int32, int64
 //left out geography and geometry stuff bcs probably not relevant
-primitiveLiteral = nullValue {return constantNodeHelper("Null", null)}                
+primitiveLiteral = nullValue {return constantNodeHelper("Null", null)}               
                  / booleanValue
                  / value:$guidValue {return constantNodeHelper("GUID",value)}
                  / value:$dateTimeOffsetValueInUrl {return constantNodeHelper("DateTimeOffsetValueInUrl",value)}

@@ -149,7 +149,7 @@ describe('Primitive Literal Tests', () => {
 describe('complex literal tests', () => {
     [{
         type: "simple eq expression with Object-Expression",
-        input: "Identifier eq {\"prop1\": \"value1\", \"prop2\": \"value2\"}",
+        input: "Identifier eq {\"prop1\": \"value1\", \"prop2\": 2}",
         expectedAST: {
             nodeType: "OperatorNode",
             op: "eq",
@@ -163,7 +163,7 @@ describe('complex literal tests', () => {
                 type: "Object",
                 value: {
                     prop1: 'value1',
-                    prop2: 'value2'
+                    prop2: 2
                 }
             }
         }
@@ -192,7 +192,7 @@ describe('complex literal tests', () => {
     },
     {
         type: "simple eq expression with Array-expression",
-        input: "Identifier eq [\"1\", \"2\", \"3\"]",
+        input: "Identifier eq [\"1\", 2, \"3\"]",
         expectedAST: {
             nodeType: "OperatorNode",
             op: "eq",
@@ -204,7 +204,7 @@ describe('complex literal tests', () => {
             right: {
                 nodeType: "ConstantNode",
                 type: "Array",
-                value: ["1", "2", "3"]
+                value: ["1", 2, "3"]
             }
         }
     },
