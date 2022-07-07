@@ -209,7 +209,7 @@ enumerationTypeName = odataIdentifier
 */
 // INT covers value ranges of sbyte, byte, int16, int32, int64
 //left out geography and geometry stuff bcs probably not relevant
-primitiveLiteral = $nullValue                  
+primitiveLiteral = nullValue {return constantNodeHelper("Null", null)}                
                  / booleanValue
                  / value:$guidValue {return constantNodeHelper("GUID",value)}
                  / value:$dateTimeOffsetValueInUrl {return constantNodeHelper("DateTimeOffsetValueInUrl",value)}
