@@ -187,10 +187,6 @@ export enum FuncNamesVarArgs {
 }
 
 
-
-
-
-
 /**
  * Order parser nodes
  */
@@ -266,6 +262,9 @@ export type SelectItemNode = SelectFunctionNode | SelectPathNode | SelectIdentif
 
 export type SelectFunctionNode = {
     nodeType: NodeTypes.SelectFunctionNode;
+    func: string;
+    args: SelectIdentifierNode[]
+    
 }
 export type SelectPathNode = {
     nodeType: NodeTypes.SelectPathNode;
