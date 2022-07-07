@@ -106,6 +106,7 @@ export enum OperatorNodeOperators {
 }
 
 export enum ConstantNodeTypes {
+    Null = 'Null',
     Boolean = 'Boolean',
     GUID = 'GUID',
     DateTimeOffsetValueInUrl = 'DateTimeOffsetValueInUrl',

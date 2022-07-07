@@ -38,87 +38,92 @@ nullValue                  ; plain values up to int64Value
                  / geometryPolygon
 */
 describe('Primitive Literal Tests', () => {
-    [{
-        abnfType: "Boolean",
-        value: true
-    },
-    {
-        abnfType: "Boolean",
-        value: false
-    },
-    {
-        abnfType: "GUID",
-        value: "550E8400-E29B-11D4-A716-446655440000"
-    },
-    {
-        abnfType: "DateTimeOffsetValueInUrl",
-        value: "2022-07-02T13:10:20.0000Z"
-    },
-    {
-        abnfType: "DateValue",
-        value: "2022-07-02"
-    },
-    {
-        abnfType: "TimeOfDayValueInUrl",
-        value: "13:12:01.0000"
-    },
-    {
-        abnfType: "TimeOfDayValueInUrl",
-        value: "13:12:01"
-    },
-    {
-        abnfType: "TimeOfDayValueInUrl",
-        value: "13:12"
-    },
-    {
-        abnfType: "Decimal",
-        value: 1.2
-    },
-    {
-        abnfType: "Decimal",
-        value: -1.2
-    },
-    {
-        abnfType: "Integer",
-        value: 5
-    }, {
-        abnfType: "Integer",
-        value: -5
-    },
-    {
-        abnfType: "String",
-        value: "'Hello World!'",
-        expected: "Hello World!"
-    },
-    {
-        abnfType: "Duration",
-        value: "duration'P1DT12H3M25S'",
-    },
-    {
-        abnfType: "Duration",
-        value: "'P1DT12H3M25S'",
-    },
-    {
-        abnfType: "Binary",
-        value: "binary'A123AA=='"
-    }].forEach(testcase => {
-        testParsingAndAST({
-            type: `simple eq expression with ${testcase.abnfType} (${testcase.value})`, input: `Identifier eq ${testcase.value}`, expectedAST: {
-                nodeType: "OperatorNode",
-                op: "eq",
-                left: {
-                    nodeType: "SymbolNode",
-                    type: "Identifier",
-                    value: "Identifier"
-                },
-                right: {
-                    nodeType: "ConstantNode",
-                    type: testcase.abnfType,
-                    value: testcase.expected ? testcase.expected : testcase.value
+    [
+        {
+            abnfType: "Null",
+            value: null
+        },
+        {
+            abnfType: "Boolean",
+            value: true
+        },
+        {
+            abnfType: "Boolean",
+            value: false
+        },
+        {
+            abnfType: "GUID",
+            value: "550E8400-E29B-11D4-A716-446655440000"
+        },
+        {
+            abnfType: "DateTimeOffsetValueInUrl",
+            value: "2022-07-02T13:10:20.0000Z"
+        },
+        {
+            abnfType: "DateValue",
+            value: "2022-07-02"
+        },
+        {
+            abnfType: "TimeOfDayValueInUrl",
+            value: "13:12:01.0000"
+        },
+        {
+            abnfType: "TimeOfDayValueInUrl",
+            value: "13:12:01"
+        },
+        {
+            abnfType: "TimeOfDayValueInUrl",
+            value: "13:12"
+        },
+        {
+            abnfType: "Decimal",
+            value: 1.2
+        },
+        {
+            abnfType: "Decimal",
+            value: -1.2
+        },
+        {
+            abnfType: "Integer",
+            value: 5
+        }, {
+            abnfType: "Integer",
+            value: -5
+        },
+        {
+            abnfType: "String",
+            value: "'Hello World!'",
+            expected: "Hello World!"
+        },
+        {
+            abnfType: "Duration",
+            value: "duration'P1DT12H3M25S'",
+        },
+        {
+            abnfType: "Duration",
+            value: "'P1DT12H3M25S'",
+        },
+        {
+            abnfType: "Binary",
+            value: "binary'A123AA=='"
+        }].forEach(testcase => {
+            testParsingAndAST({
+                type: `simple eq expression with ${testcase.abnfType} (${testcase.value})`, input: `Identifier eq ${testcase.value}`, expectedAST: {
+                    nodeType: "OperatorNode",
+                    op: "eq",
+                    left: {
+                        nodeType: "SymbolNode",
+                        type: "Identifier",
+                        value: "Identifier"
+                    },
+                    right: {
+                        nodeType: "ConstantNode",
+                        type: testcase.abnfType,
+                        value: testcase.expected ? testcase.expected : testcase.value
+                    }
                 }
-            }
+            })
         })
-    })
     testParsingAndAST({
         type: "simple eq expression with enumValue (namespace.EnumName'Value')",
         input: "Identifier eq namespace.EnumName'Value'",
@@ -217,7 +222,7 @@ describe('complex literal tests', () => {
             right: {
                 nodeType: "ConstantNode",
                 type: "Array",
-                value: [{prop1: "value1"}]
+                value: [{ prop1: "value1" }]
             }
         }
     },
