@@ -2,28 +2,27 @@ import peggy from 'peggy';
 
 
 let selectParser = peggy.generate(`
-select         = selectItem ( COMMA BWS selectItem )*
-selectItem     = STAR
+select         = head:selectItem tail:( COMMA BWS @selectItem )* {return{ nodeType: "SelectNode", value: [head, ...tail]}}
+selectItem     = STAR 
                / allOperationsInSchema 
-               / ( ( qualifiedEntityTypeName / qualifiedComplexTypeName ) "/" )?
+               / ( ( odataIdentifierWithNamespace ) "/" )?
                  ( selectProperty
-                 / qualifiedActionName  
+                 / odataIdentifierWithNamespace  
                  / qualifiedFunctionName  
                  )
+
 selectProperty = odataIdentifier  
                / selectPath ( "/" selectProperty )?
-selectPath     = ( odataIdentifier ) ( "/" qualifiedComplexTypeName )? 
+selectPath     = ( odataIdentifier ) ( "/" odataIdentifierWithNamespace )? 
 
-qualifiedEntityTypeName     = namespace "." odataIdentifier
-qualifiedComplexTypeName    = namespace "." odataIdentifier
+odataIdentifierWithNamespace =  odataIdentifier ( "." odataIdentifier )+
 
-qualifiedActionName   = namespace "." odataIdentifier
-qualifiedFunctionName = namespace "." odataIdentifier ( OPEN parameterNames CLOSE )?
+qualifiedFunctionName = odataIdentifierWithNamespace ( OPEN parameterNames CLOSE )?
 
 parameterNames = odataIdentifier ( COMMA odataIdentifier )*
 
-allOperationsInSchema = namespace "." STAR 
-namespace     = odataIdentifier *( "." odataIdentifier )
+allOperationsInSchema = odataIdentifier ( "." odataIdentifier )* "." STAR 
+
 
 odataIdentifier             = identifierLeadingCharacter identifierCharacter*
 identifierLeadingCharacter  = ALPHA / "_"         

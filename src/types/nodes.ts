@@ -41,6 +41,7 @@ export type SymbolNode = {
 }
 
 export enum ConstantNodeTypes {
+    Null = 'Null',
     Boolean = 'Boolean',
     GUID = 'GUID',
     DateTimeOffsetValueInUrl = 'DateTimeOffsetValueInUrl',
@@ -263,15 +264,16 @@ export type SelectItemNode = SelectFunctionNode | SelectPathNode | SelectIdentif
 export type SelectFunctionNode = {
     nodeType: NodeTypes.SelectFunctionNode;
     func: string;
-    args: SelectIdentifierNode[]
+    args: SelectIdentifierNode[];
     
 }
 export type SelectPathNode = {
     nodeType: NodeTypes.SelectPathNode;
-    value: SelectIdentifierNode[]
+    value: SelectIdentifierNode[];
 }
 
 export type SelectIdentifierNode = {
     nodeType: NodeTypes.SelectIdentifierNode;
-    value: string
+    value: string;
+    isWildcard?: true;
 }
