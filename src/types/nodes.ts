@@ -17,8 +17,53 @@ export enum NodeTypes {
     ExpandNode = 'ExpandNode',
     ExpandIdentifierNode = 'ExpandIdentifierNode',
     ComputedNode = 'ComputedNode',
-    ComputedItemNode = 'ComputedItemNode'
+    ComputedItemNode = 'ComputedItemNode',
+    SelectNode = 'SelectNode',
+    SelectFunctionNode = 'SelectFunctionNode',
+    SelectPathNode = 'SelectPathNode',
+    SelectIdentifierNode = 'SelectIdentifierNode'
 }
+
+/** 
+ * General nodes
+ */
+
+ export type ConstantNode = {
+    nodeType: NodeTypes.ConstantNode;
+    type: ConstantNodeTypes;
+    value: any;
+}
+
+export type SymbolNode = {
+    nodeType: NodeTypes.SymbolNode;
+    type: SymbolNodeTypes;
+    value: string
+}
+
+export enum ConstantNodeTypes {
+    Null = 'Null',
+    Boolean = 'Boolean',
+    GUID = 'GUID',
+    DateTimeOffsetValueInUrl = 'DateTimeOffsetValueInUrl',
+    DateValue = 'DateValue',
+    TimeOfDayValueInUrl = 'TimeOfDayValueInUrl',
+    Decimal = 'Decimal',
+    Integer = 'Integer',
+    String = 'String',
+    Duration = 'Duration',
+    Binary = 'Binary',
+    Object = 'Object',
+    Array = 'Array'
+}
+
+export enum SymbolNodeTypes {
+    Identifier = 'Identifier',
+    MemberExpression = 'MemberExpression',
+    Collection = 'Collection',
+    TypeName = 'TypeName'
+}
+
+
 
 /**
  * Filter parser node
@@ -32,18 +77,6 @@ export type OperatorNode = {
     op: OperatorNodeOperators;
     left?: FilterNode;
     right: FilterNode;
-}
-
-export type ConstantNode = {
-    nodeType: NodeTypes.ConstantNode;
-    type: ConstantNodeTypes;
-    value: any;
-}
-
-export type SymbolNode = {
-    nodeType: NodeTypes.SymbolNode;
-    type: SymbolNodeTypes;
-    value: string
 }
 
 export type FuncNode2Args = {
@@ -105,28 +138,6 @@ export enum OperatorNodeOperators {
     Not = 'not'
 }
 
-export enum ConstantNodeTypes {
-    Null = 'Null',
-    Boolean = 'Boolean',
-    GUID = 'GUID',
-    DateTimeOffsetValueInUrl = 'DateTimeOffsetValueInUrl',
-    DateValue = 'DateValue',
-    TimeOfDayValueInUrl = 'TimeOfDayValueInUrl',
-    Decimal = 'Decimal',
-    Integer = 'Integer',
-    String = 'String',
-    Duration = 'Duration',
-    Binary = 'Binary',
-    Object = 'Object',
-    Array = 'Array'
-}
-
-export enum SymbolNodeTypes {
-    Identifier = 'Identifier',
-    MemberExpression = 'MemberExpression',
-    Collection = 'Collection',
-    TypeName = 'TypeName'
-}
 
 export enum FuncNames2Args {
     Concat = 'concat',
@@ -175,10 +186,6 @@ export enum FuncNamesVarArgs {
     Substring = 'substring',
     Case = 'case'
 }
-
-
-
-
 
 
 /**
@@ -235,4 +242,38 @@ export type ComputedItemNode = {
     nodeType: NodeTypes.ComputedItemNode,
     commonExpr: FilterNode,
     computedIdentifier: string
+}
+
+/**
+ * Select parser nodes
+ */
+
+ /*SelectNode = 'SelectNode',
+    SelectItemNode = 'SelectItemNode',
+    SelectFunctionNode = 'SelectFunctionNode',
+    SelectPathNode = 'SelectPathNode'
+    */
+export type SelectNode = {
+    nodeType: NodeTypes.SelectNode;
+    value: SelectItemNode[];
+
+}
+export type SelectItemNode = SelectFunctionNode | SelectPathNode | SelectIdentifierNode
+
+
+export type SelectFunctionNode = {
+    nodeType: NodeTypes.SelectFunctionNode;
+    func: string;
+    args: SelectIdentifierNode[];
+    
+}
+export type SelectPathNode = {
+    nodeType: NodeTypes.SelectPathNode;
+    value: SelectIdentifierNode[];
+}
+
+export type SelectIdentifierNode = {
+    nodeType: NodeTypes.SelectIdentifierNode;
+    value: string;
+    isWildcard?: true;
 }
