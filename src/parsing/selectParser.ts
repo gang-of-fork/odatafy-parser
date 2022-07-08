@@ -1,4 +1,5 @@
 import peggy from 'peggy';
+import { SelectNode } from '../types/nodes';
 
 
 let selectParser = peggy.generate(`
@@ -73,7 +74,7 @@ let selectParser = peggy.generate(`
   SP     = ' '
   HTAB   = '  '
 `)
-export function parseSelect(expr: string) {
+export function parseSelect(expr: string): SelectNode {
     return selectParser.parse(expr);
 }
 

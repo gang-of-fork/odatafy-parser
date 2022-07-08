@@ -11,7 +11,7 @@ start = head:computeItem tail:( COMMA @computeItem )* {return{nodeType: "compute
 computeItem = commonExpr:(commonExpr / value:$mathExpr {return {type: 'mathExpr', value: value}} / odataIdentifier) RWS "as" RWS computedIdentifier:$odataIdentifier {return {nodeType: "computedItemNode", commonExpr:commonExpr, computedIdentifier: computedIdentifier}}
 `, {allowedStartRules: ["start"]})
 
-export function parseComputed(expr: string) {
+export function parseComputed(expr: string):ComputedNode {
     expr = expressionPreProc(expr);
     let computedNode:ComputedNode = {
         nodeType: NodeTypes.ComputedNode,
