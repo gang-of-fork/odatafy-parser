@@ -17,7 +17,7 @@ export enum NodeTypes {
     ExpandNode = 'ExpandNode',
     ExpandIdentifierNode = 'ExpandIdentifierNode',
     ComputedNode = 'ComputedNode',
-    ComputerItemNode = 'ComputedItemNode',
+    ComputedItemNode = 'ComputedItemNode',
     SelectNode = 'SelectNode',
     SelectFunctionNode = 'SelectFunctionNode',
     SelectPathNode = 'SelectPathNode',
@@ -239,8 +239,8 @@ export type ComputedNode = {
 }
 
 export type ComputedItemNode = {
-    nodeType: NodeTypes.ComputerItemNode,
-    commonExpression: FilterNode,
+    nodeType: NodeTypes.ComputedItemNode,
+    commonExpr: FilterNode,
     computedIdentifier: string
 }
 

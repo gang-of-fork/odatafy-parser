@@ -10,7 +10,7 @@ function testParsingAndAST(testcase: { type: string, input: string, expectedAST:
 
 
 /* 
-nullValue                  ; plain values up to int64Value
+                 X nullValue                  ; plain values up to int64Value
                  X booleanValue 
                  X guidValue 
                  X dateTimeOffsetValueInUrl 
@@ -19,8 +19,8 @@ nullValue                  ; plain values up to int64Value
                  X decimalValue 
                  X Integer
                  X string                     ; single-quoted
-                 ! duration
-                 ! enum
+                 X duration
+                 X enum
                  X binary                     ; all others are quoted and prefixed 
                  / geographyCollection 
                  / geographyLineString 
@@ -38,87 +38,92 @@ nullValue                  ; plain values up to int64Value
                  / geometryPolygon
 */
 describe('Primitive Literal Tests', () => {
-    [{
-        abnfType: "Boolean",
-        value: true
-    },
-    {
-        abnfType: "Boolean",
-        value: false
-    },
-    {
-        abnfType: "GUID",
-        value: "550E8400-E29B-11D4-A716-446655440000"
-    },
-    {
-        abnfType: "DateTimeOffsetValueInUrl",
-        value: "2022-07-02T13:10:20.0000Z"
-    },
-    {
-        abnfType: "DateValue",
-        value: "2022-07-02"
-    },
-    {
-        abnfType: "TimeOfDayValueInUrl",
-        value: "13:12:01.0000"
-    },
-    {
-        abnfType: "TimeOfDayValueInUrl",
-        value: "13:12:01"
-    },
-    {
-        abnfType: "TimeOfDayValueInUrl",
-        value: "13:12"
-    },
-    {
-        abnfType: "Decimal",
-        value: 1.2
-    },
-    {
-        abnfType: "Decimal",
-        value: -1.2
-    },
-    {
-        abnfType: "Integer",
-        value: 5
-    }, {
-        abnfType: "Integer",
-        value: -5
-    },
-    {
-        abnfType: "String",
-        value: "'Hello World!'",
-        expected: "Hello World!"
-    },
-    {
-        abnfType: "Duration",
-        value: "duration'P1DT12H3M25S'",
-    },
-    {
-        abnfType: "Duration",
-        value: "'P1DT12H3M25S'",
-    },
-    {
-        abnfType: "Binary",
-        value: "binary'A123AA=='"
-    }].forEach(testcase => {
-        testParsingAndAST({
-            type: `simple eq expression with ${testcase.abnfType} (${testcase.value})`, input: `Identifier eq ${testcase.value}`, expectedAST: {
-                nodeType: "OperatorNode",
-                op: "eq",
-                left: {
-                    nodeType: "SymbolNode",
-                    type: "Identifier",
-                    value: "Identifier"
-                },
-                right: {
-                    nodeType: "ConstantNode",
-                    type: testcase.abnfType,
-                    value: testcase.expected ? testcase.expected : testcase.value
+    [
+        {
+            abnfType: "Null",
+            value: null
+        },
+        {
+            abnfType: "Boolean",
+            value: true
+        },
+        {
+            abnfType: "Boolean",
+            value: false
+        },
+        {
+            abnfType: "GUID",
+            value: "550E8400-E29B-11D4-A716-446655440000"
+        },
+        {
+            abnfType: "DateTimeOffsetValueInUrl",
+            value: "2022-07-02T13:10:20.0000Z"
+        },
+        {
+            abnfType: "DateValue",
+            value: "2022-07-02"
+        },
+        {
+            abnfType: "TimeOfDayValueInUrl",
+            value: "13:12:01.0000"
+        },
+        {
+            abnfType: "TimeOfDayValueInUrl",
+            value: "13:12:01"
+        },
+        {
+            abnfType: "TimeOfDayValueInUrl",
+            value: "13:12"
+        },
+        {
+            abnfType: "Decimal",
+            value: 1.2
+        },
+        {
+            abnfType: "Decimal",
+            value: -1.2
+        },
+        {
+            abnfType: "Integer",
+            value: 5
+        }, {
+            abnfType: "Integer",
+            value: -5
+        },
+        {
+            abnfType: "String",
+            value: "'Hello World!'",
+            expected: "Hello World!"
+        },
+        {
+            abnfType: "Duration",
+            value: "duration'P1DT12H3M25S'",
+        },
+        {
+            abnfType: "Duration",
+            value: "'P1DT12H3M25S'",
+        },
+        {
+            abnfType: "Binary",
+            value: "binary'A123AA=='"
+        }].forEach(testcase => {
+            testParsingAndAST({
+                type: `simple eq expression with ${testcase.abnfType} (${testcase.value})`, input: `Identifier eq ${testcase.value}`, expectedAST: {
+                    nodeType: "OperatorNode",
+                    op: "eq",
+                    left: {
+                        nodeType: "SymbolNode",
+                        type: "Identifier",
+                        value: "Identifier"
+                    },
+                    right: {
+                        nodeType: "ConstantNode",
+                        type: testcase.abnfType,
+                        value: testcase.expected ? testcase.expected : testcase.value
+                    }
                 }
-            }
+            })
         })
-    })
     testParsingAndAST({
         type: "simple eq expression with enumValue (namespace.EnumName'Value')",
         input: "Identifier eq namespace.EnumName'Value'",
@@ -144,7 +149,7 @@ describe('Primitive Literal Tests', () => {
 describe('complex literal tests', () => {
     [{
         type: "simple eq expression with Object-Expression",
-        input: "Identifier eq {\"prop1\": \"value1\", \"prop2\": \"value2\"}",
+        input: "Identifier eq {\"prop1\": \"value1\", \"prop2\": 2}",
         expectedAST: {
             nodeType: "OperatorNode",
             op: "eq",
@@ -158,7 +163,7 @@ describe('complex literal tests', () => {
                 type: "Object",
                 value: {
                     prop1: 'value1',
-                    prop2: 'value2'
+                    prop2: 2
                 }
             }
         }
@@ -187,7 +192,7 @@ describe('complex literal tests', () => {
     },
     {
         type: "simple eq expression with Array-expression",
-        input: "Identifier eq [\"1\", \"2\", \"3\"]",
+        input: "Identifier eq [\"1\", 2, \"3\"]",
         expectedAST: {
             nodeType: "OperatorNode",
             op: "eq",
@@ -199,7 +204,7 @@ describe('complex literal tests', () => {
             right: {
                 nodeType: "ConstantNode",
                 type: "Array",
-                value: ["1", "2", "3"]
+                value: ["1", 2, "3"]
             }
         }
     },
@@ -217,7 +222,7 @@ describe('complex literal tests', () => {
             right: {
                 nodeType: "ConstantNode",
                 type: "Array",
-                value: [{prop1: "value1"}]
+                value: [{ prop1: "value1" }]
             }
         }
     },

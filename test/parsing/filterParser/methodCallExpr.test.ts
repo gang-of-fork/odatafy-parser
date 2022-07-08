@@ -73,7 +73,7 @@ describe('filter-expressions with method calls', () => {
                 type: "basic function expression with isof (1Arg)",
                 input: "isof(NorthwindModel.BigOrder)",
                 expectedAST: {
-                    nodeType: "FunctionNodeVarArgs",
+                    nodeType: "FuncNodeVarArgs",
                     func: "isof",
                     args: [
                         {
@@ -88,7 +88,7 @@ describe('filter-expressions with method calls', () => {
                 type: "basic function expression with isof (2Arg)",
                 input: "isof(Customer,NorthwindModel.VIPCustomer)",
                 expectedAST: {
-                    nodeType: "FunctionNodeVarArgs",
+                    nodeType: "FuncNodeVarArgs",
                     func: "isof",
                     args: [
                         {
@@ -108,7 +108,7 @@ describe('filter-expressions with method calls', () => {
                 type: "basic function expression with cast (1Arg)",
                 input: "cast(NorthwindModel.BigOrder)",
                 expectedAST: {
-                    nodeType: "FunctionNodeVarArgs",
+                    nodeType: "FuncNodeVarArgs",
                     func: "cast",
                     args: [
                         {
@@ -122,8 +122,8 @@ describe('filter-expressions with method calls', () => {
             {
                 type: "basic function expression with cast (2Arg)",
                 input: "cast(Customer,NorthwindModel.VIPCustomer)",
-                expectedAST:  {
-                    nodeType: "FunctionNodeVarArgs",
+                expectedAST: {
+                    nodeType: "FuncNodeVarArgs",
                     func: "cast",
                     args: [
                         {
@@ -143,7 +143,7 @@ describe('filter-expressions with method calls', () => {
                 type: "basic function expression with substring (2Arg)",
                 input: "substring(CompanyName,1)",
                 expectedAST: {
-                    nodeType: "FunctionNodeVarArgs",
+                    nodeType: "FuncNodeVarArgs",
                     func: "substring",
                     args: [
                         {
@@ -163,7 +163,7 @@ describe('filter-expressions with method calls', () => {
                 type: "basic function expression with substring (3Arg)",
                 input: "substring(CompanyName,1,2)",
                 expectedAST: {
-                    nodeType: "FunctionNodeVarArgs",
+                    nodeType: "FuncNodeVarArgs",
                     func: "substring",
                     args: [
                         {
@@ -188,7 +188,7 @@ describe('filter-expressions with method calls', () => {
                 type: "basic function expression with case",
                 input: "case(X gt 0:1,X lt 0:-1,true:0)",
                 expectedAST: {
-                    nodeType: "FunctionNodeCase",
+                    nodeType: "FuncNodeCase",
                     args: [
                         {
                             cond: {
@@ -489,6 +489,35 @@ describe('filter-expressions with method calls', () => {
                         value: "Name"
                     }]
                 },
+            }
+        },
+        {
+            type: "method with Object as Argument",
+            input: "length({\"prop\": \"value\"})",
+            expectedAST: {
+                nodeType: "FuncNode1Args",
+                func: "length",
+                args: [{
+                    nodeType: "ConstantNode",
+                    type: "Object",
+                    value: {
+                        prop: "value"
+                    }
+                }]
+            }
+        },
+        {
+            type: "method with Array as Argument",
+            input: "length([\"1\",2,null])",
+            expectedAST: {
+                nodeType: "FuncNode1Args",
+                func: "length",
+                args: [{
+                    nodeType: "ConstantNode",
+                    type: "Array",
+                    value: ["1", 2, null]
+                }
+                ]
             }
         },].forEach(testcase => testParsingAndAST(testcase))
     })
