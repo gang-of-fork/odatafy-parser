@@ -1,6 +1,6 @@
 {
   "name": "odatafy-parser",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "generate odatafy ast from odata query parameters",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
