@@ -11,4 +11,4 @@ import { testMongoDB } from './prototype/mongodbGenerator';
 testMongoDB();
 */
 
-console.log(JSON.stringify(parseSelect("Name, Auto")))
+console.log(JSON.stringify(parseSelect("namespace.Adresse/namespace.Name"), null, 4))
