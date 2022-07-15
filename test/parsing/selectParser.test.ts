@@ -18,11 +18,11 @@ describe('Select Parser tests', () => {
                 nodeType: "SelectNode",
                 value: [{
                     nodeType: "SelectIdentifierNode",
-                    value: "Name",
+                    value: "Rating",
                 },
                 {
                     nodeType: "SelectIdentifierNode",
-                    value: "Name",
+                    value: "ReleaseDate",
                 }]
             }
         },
@@ -43,7 +43,7 @@ describe('Select Parser tests', () => {
                     nodeType: "SelectPathNode",
                     value: [{
                         nodeType: "SelectIdentifierNode",
-                        value: "Adresse.PreferredSupplier",
+                        value: "Namespace.PreferredSupplier",
                     },
                     {
                         nodeType: "SelectIdentifierNode",
@@ -78,7 +78,7 @@ describe('Select Parser tests', () => {
                 }]
             }
         },
-        /*
+        
         {
             type: "Example 131",
             input: "Addresses($filter=startswith(City,'H');$top=5;$orderby=Country/Name,City,Street)",
@@ -86,6 +86,7 @@ describe('Select Parser tests', () => {
 
             }
         },
+        /*
         {
             type: "Example 132",
             input: "ID,Model.ActionName,Model2.*",

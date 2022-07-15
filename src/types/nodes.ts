@@ -278,5 +278,5 @@ export type SelectIdentifierNode = {
 
 export type SelectOptionsUnprocessedNode = {
     nodeType: NodeTypes.SelectOptionsUnprocessedNode,
-    selectOptionString: string;
+    selectOptionsString: string;
 }
