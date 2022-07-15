@@ -21,7 +21,8 @@ export enum NodeTypes {
     SelectNode = 'SelectNode',
     SelectFunctionNode = 'SelectFunctionNode',
     SelectPathNode = 'SelectPathNode',
-    SelectIdentifierNode = 'SelectIdentifierNode'
+    SelectIdentifierNode = 'SelectIdentifierNode',
+    SelectOptionsUnprocessedNode = "SelectOptionsUnprocessedNode"
 }
 
 /** 
@@ -248,17 +249,13 @@ export type ComputedItemNode = {
  * Select parser nodes
  */
 
- /*SelectNode = 'SelectNode',
-    SelectItemNode = 'SelectItemNode',
-    SelectFunctionNode = 'SelectFunctionNode',
-    SelectPathNode = 'SelectPathNode'
-    */
+
 export type SelectNode = {
     nodeType: NodeTypes.SelectNode;
     value: SelectItemNode[];
 
 }
-export type SelectItemNode = SelectFunctionNode | SelectPathNode | SelectIdentifierNode
+export type SelectItemNode = SelectFunctionNode | SelectPathNode | SelectIdentifierNode | SelectOptionsUnprocessedNode
 
 
 export type SelectFunctionNode = {
@@ -276,4 +273,10 @@ export type SelectIdentifierNode = {
     nodeType: NodeTypes.SelectIdentifierNode;
     value: string;
     isWildcard?: true;
+}
+
+
+export type SelectOptionsUnprocessedNode = {
+    nodeType: NodeTypes.SelectOptionsUnprocessedNode,
+    selectOptionString: string;
 }

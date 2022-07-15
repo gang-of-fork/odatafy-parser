@@ -45,8 +45,12 @@ let selectParser = peggy.generate(`
                     / odataIdentifier 
                    )
   
-  selectProperty = head:(odataIdentifierWithNamespace / odataIdentifier) tail:( "/" @(odataIdentifierWithNamespace / odataIdentifier) )+ {return SelectPathNodeHelper([head, ...tail])}
+  selectProperty = head:(odataIdentifierWithNamespace / odataIdentifier) tail:( "/" @(ident:(odataIdentifierWithNamespace / odataIdentifier) selOps:selectOptions? {return selOp? {...ident, selectOptions: selOps}}) )+ {return SelectPathNodeHelper([head, ...tail])}
   
+  selectOptions = OPEN selectOptionArr:$textUntilTerminator CLOSE 
+  textUntilTerminator = (&haveTerminatorAhead .)*
+  haveTerminatorAhead = . (!")" .)* ")"
+
   odataIdentifierWithNamespace =  value:$(odataIdentifier ( "." odataIdentifier )+) {return SelectIdentifierNodeHelper(value)}
   
   qualifiedFunctionName = func:$odataIdentifierWithNamespace OPEN args:parameterNames CLOSE  {return SelectFunctionNodeHelper(func, args)}
