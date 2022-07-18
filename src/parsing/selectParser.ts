@@ -5,6 +5,8 @@ import filterParser from './filterParser';
 import orderbyParser from './orderbyParser';
 import skipParser from './skipParser';
 import topParser from './topParser';
+import computedParser from './computedParser';
+import expandParser from './expandParser';
 
 
 //TODO add annotations to path
@@ -119,7 +121,6 @@ export function parseSelect(expr: string): SelectNode {
     return ast
 }
 
-//TODO add annotations as type
 export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode: SelectOptionsUnprocessedNode): SelectOptionsNode {
   const parsedOptions = querystring.parse(SelectOptionsUnprocessedNode.value, ";")
                 let options: SelectOptions = {}
@@ -144,6 +145,16 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
                 if(parsedOptions.$select && typeof parsedOptions.$select == 'string') {
                   options.select = parseSelect(parsedOptions.$select);
                 }
+
+                if(parsedOptions.$computed && typeof parsedOptions.$computed == 'string') {
+                  options.computed = computedParser.parse(parsedOptions.$computed);
+                }
+
+                if(parsedOptions.$expand && typeof parsedOptions.$expand == 'string') {
+                  options.expand = expandParser.parse(parsedOptions.$expand);
+                }
+
+                //TODO annotations, inlinecount, search
                 return {
                   nodeType: NodeTypes.SelectOptionsNode,
                   value: options

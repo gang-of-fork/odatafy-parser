@@ -294,7 +294,7 @@ export type SelectOptions = {
     orderby?: OrderbyNode;
     skip?: number;
     top?: number;
-    compute?: ComputedNode;
+    computed?: ComputedNode;
     select?: SelectNode;
     expand?: ExpandNode;
     aliasAndValue?: any;
