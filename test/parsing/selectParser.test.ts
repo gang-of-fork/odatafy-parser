@@ -78,12 +78,61 @@ describe('Select Parser tests', () => {
                 }]
             }
         },
-        
+        //ADD path Expression back when orderbyparser is fixed
         {
             type: "Example 131",
-            input: "Addresses($filter=startswith(City,'H');$top=5;$orderby=Country/Name,City,Street)",
+            input: "Addresses($filter=startswith(City,'H');$top=5;$orderby=Name,City,Street)",
             expectedAST: <SelectNode>{
-
+                    nodeType: "SelectNode",
+                    value: [
+                        {
+                            nodeType: "SelectIdentifierNode",
+                            value: "Addresses",
+                            selectOptions: {
+                                nodeType: "SelectOptionsNode",
+                                value: {
+                                    filter: {
+                                        nodeType: "FuncNode2Args",
+                                        func: "startswith",
+                                        args: [
+                                            {
+                                                nodeType: "SymbolNode",
+                                                type: "Identifier",
+                                                value: "City"
+                                            },
+                                            {
+                                                nodeType: "ConstantNode",
+                                                type: "String",
+                                                value: "H"
+                                            }
+                                        ]
+                                    },
+                                    orderby: {
+                                        nodeType: "OrderbyNode",
+                                        value: [
+                                            {
+                                                nodeType: "OrderbyItemNode",
+                                                type: "asc",
+                                                value: "Name"
+                                            },
+                                            {
+                                                nodeType: "OrderbyItemNode",
+                                                type: "asc",
+                                                value: "City"
+                                            },
+                                            {
+                                                nodeType: "OrderbyItemNode",
+                                                type: "asc",
+                                                value: "Street"
+                                            }
+                                        ]
+                                    },
+                                    top: 5
+                                }
+                            }
+                        }
+                    ]
+                
             }
         },
         /*

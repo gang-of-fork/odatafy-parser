@@ -1,6 +1,13 @@
 import peggy from 'peggy';
-import { SelectNode } from '../types/nodes';
+import { NodeTypes, SelectNode, SelectOptions, SelectOptionsNode, SelectOptionsUnprocessedNode } from '../types/nodes';
+import querystring from 'querystring';
+import filterParser from './filterParser';
+import orderbyParser from './orderbyParser';
+import skipParser from './skipParser';
+import topParser from './topParser';
 
+
+//TODO add annotations to path
 
 let selectParser = peggy.generate(`
 {
@@ -36,7 +43,7 @@ let selectParser = peggy.generate(`
   function SelectOptionsUnprocessedNodeHelper(selectOptionsString) {
     return {
       nodeType: "SelectOptionsUnprocessedNode",
-      selectOptionsString: selectOptionsString
+      value: selectOptionsString
     }
   }
 }
@@ -89,7 +96,56 @@ SP     = ' '
 HTAB   = '  '
 `)
 export function parseSelect(expr: string): SelectNode {
-    return selectParser.parse(expr);
+    let ast = <SelectNode>selectParser.parse(expr);
+    for(let selectItem of ast.value) {
+      switch(selectItem.nodeType) {
+
+        case NodeTypes.SelectIdentifierNode:
+          if (selectItem.selectOptions && selectItem.selectOptions.nodeType == NodeTypes.SelectOptionsUnprocessedNode) {
+            selectItem.selectOptions = processSelectOptionsUnprocessedNode(selectItem.selectOptions)
+          }
+          break;
+
+        case NodeTypes.SelectPathNode:
+          for(let identNode of selectItem.value) {
+            if (identNode.selectOptions && identNode.selectOptions.nodeType == NodeTypes.SelectOptionsUnprocessedNode) {
+              identNode.selectOptions = processSelectOptionsUnprocessedNode(identNode.selectOptions)
+            }
+          }
+          break;
+      }
+    }
+    return ast
+}
+
+export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode: SelectOptionsUnprocessedNode): SelectOptionsNode {
+  const parsedOptions = querystring.parse(SelectOptionsUnprocessedNode.value, ";")
+                let options: SelectOptions = {}
+
+                //parse options
+                if(parsedOptions.$filter && typeof parsedOptions.$filter == 'string') {
+                    options.filter = filterParser.parse(parsedOptions.$filter);
+                }
+
+                if(parsedOptions.$orderby && typeof parsedOptions.$orderby == 'string') {
+                    options.orderby = orderbyParser.parse(parsedOptions.$orderby);
+                }
+
+                if(parsedOptions.$skip && typeof parsedOptions.$skip == 'string') {
+                    options.skip = skipParser.parse(parsedOptions.$skip);
+                }
+
+                if(parsedOptions.$top && typeof parsedOptions.$top == 'string') {
+                    options.top = topParser.parse(parsedOptions.$top);
+                }
+
+                if(parsedOptions.$select && typeof parsedOptions.$select == 'string') {
+                  options.select = parseSelect(parsedOptions.$select);
+                }
+                return {
+                  nodeType: NodeTypes.SelectOptionsNode,
+                  value: options
+                };
 }
 
 export default {
