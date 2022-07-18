@@ -81,7 +81,7 @@ describe('Select Parser tests', () => {
         //ADD path Expression back when orderbyparser is fixed
         {
             type: "Example 131",
-            input: "Addresses($filter=startswith(City,'H');$top=5;$orderby=Name,City,Street)",
+            input: "Addresses($filter=startswith(City,'H');$top=5;$orderby=Country/Name,City,Street)",
             expectedAST: <SelectNode>{
                     nodeType: "SelectNode",
                     value: [
@@ -113,7 +113,7 @@ describe('Select Parser tests', () => {
                                             {
                                                 nodeType: "OrderbyItemNode",
                                                 type: "asc",
-                                                value: "Name"
+                                                value: "Country/Name"
                                             },
                                             {
                                                 nodeType: "OrderbyItemNode",
