@@ -135,15 +135,28 @@ describe('Select Parser tests', () => {
                 
             }
         },
-        /*
+        
         {
             type: "Example 132",
             input: "ID,Model.ActionName,Model2.*",
             expectedAST: <SelectNode>{
-
+                nodeType: "SelectNode",
+                value: [{
+                    nodeType: "SelectIdentifierNode",
+                    value: "ID"
+                },
+                {
+                    nodeType: "SelectIdentifierNode",
+                    value: "Model.ActionName"
+                },
+                {
+                    nodeType: "SelectIdentifierNode",
+                    value: "Model2",
+                    isWildcard: true
+                }]
             }
         }
-    */].forEach(testParsingAndAST)
+    ].forEach(testParsingAndAST)
     });
 
     describe('additional tests', () => {

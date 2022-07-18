@@ -118,6 +118,7 @@ export function parseSelect(expr: string): SelectNode {
     return ast
 }
 
+//TODO add annotations as type
 export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode: SelectOptionsUnprocessedNode): SelectOptionsNode {
   const parsedOptions = querystring.parse(SelectOptionsUnprocessedNode.value, ";")
                 let options: SelectOptions = {}
