@@ -288,16 +288,16 @@ export type SelectOptionsNode = {
 }
 
 export type SelectOptions = {
+    aliasAndValue?: any;
+    computed?: ComputedNode;
+    expand?: ExpandNode;
     filter?: FilterNode;
-    search?: any;
     inlinecount?: any;
     orderby?: OrderbyNode;
+    search?: any;
+    select?: SelectNode;
     skip?: number;
     top?: number;
-    computed?: ComputedNode;
-    select?: SelectNode;
-    expand?: ExpandNode;
-    aliasAndValue?: any;
 }
 
 export enum SelectIdentifierFlags {
