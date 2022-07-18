@@ -1,6 +1,6 @@
 # odatafy-parser
 odata parser for odatafy framework.
-
+ 
 npm module to create ast from oData url parameters. It aims to support a subset with the most important operations from the official [oData Specification](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_Introduction).
 
 # odatafy
