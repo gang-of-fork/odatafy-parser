@@ -23,11 +23,11 @@ let selectParser = peggy.generate(`
       value: value
     }
   }
-  function SelectIdentifierNodeHelper(value, isWildcard = false) {
-    return isWildcard?{
+  function SelectIdentifierNodeHelper(value, flag) {
+    return flag?{
       nodeType: "SelectIdentifierNode",
       value: value,
-      isWildcard: true
+      flag: flag
     } : {
       nodeType: "SelectIdentifierNode",
       value: value,
@@ -53,19 +53,18 @@ select         = head:selectItem tail:( COMMA BWS @selectItem )* {return SelectN
 selectItem     = STAR {return undefined}
                / allOperationsInSchema 
                / (    
-                   selectProperty 
+                   selectPath 
                    / qualifiedFunctionName 
-                   / ident:odataIdentifierWithNamespace selOps:selectOptions? {return selOps? {...ident, selectOptions: selOps} : ident}
-                  / ident:odataIdentifier selOps:selectOptions? {return selOps? {...ident, selectOptions: selOps} : ident}
+                   / identNode:(selectPathPart) selOps:selectOptions? {return selOps? {...identNode, selectOptions: selOps} : identNode}
                  )
 
-selectProperty = head:(odataIdentifierWithNamespace / odataIdentifier) tail:( "/" @(ident:(odataIdentifierWithNamespace / odataIdentifier) selOps:selectOptions? {return selOps? {...ident, selectOptions: selOps} : ident}) )+ {return SelectPathNodeHelper([head, ...tail])}
+selectPath = head:(selectPathPart) tail:( "/" @(identNode:(selectPathPart) selOps:selectOptions? {return selOps? {...identNode, selectOptions: selOps} : identNode}) )+ {return SelectPathNodeHelper([head, ...tail])}
+selectPathPart = odataIdentifierWithNamespace / odataIdentifier / odataAnnotation
 
 selectOptions = OPEN selectOptionString:$textUntilTerminator CLOSE {return SelectOptionsUnprocessedNodeHelper(selectOptionString)}
 textUntilTerminator = ( &haveTerminatorAhead .)*
 haveTerminatorAhead = . ( !")" . )* ")"
 
-odataIdentifierWithNamespace =  value:$(odataIdentifier ( "." odataIdentifier )+) {return SelectIdentifierNodeHelper(value)}
 
 //avoid the matching with qualifiedFunctionName if the expression is actually an Identifier with selectOptions
 qualifiedFunctionName = func:$odataIdentifierWithNamespace OPEN args:parameterNames CLOSE  {return SelectFunctionNodeHelper(func, args)}
@@ -73,8 +72,10 @@ qualifiedFunctionName = func:$odataIdentifierWithNamespace OPEN args:parameterNa
 
 parameterNames = head:odataIdentifier tail:( COMMA @odataIdentifier )* {return [head, ...tail]}
 
-allOperationsInSchema =  value:$(odataIdentifier ( "." odataIdentifier )*) "." STAR {return SelectIdentifierNodeHelper(value, true)}
+allOperationsInSchema =  value:$(odataIdentifier ( "." odataIdentifier )*) "." STAR {return SelectIdentifierNodeHelper(value, "AllOperationsInSchema")}
 
+odataAnnotation = AT identNode:(odataIdentifierWithNamespace / odataIdentifier) {return {...identNode, flag: "Annotation"}}
+odataIdentifierWithNamespace =  value:$(odataIdentifier ( "." odataIdentifier )+) {return SelectIdentifierNodeHelper(value)}
 
 odataIdentifier             = value:$(identifierLeadingCharacter identifierCharacter*) {return SelectIdentifierNodeHelper(value)}
 identifierLeadingCharacter  = ALPHA / "_"         

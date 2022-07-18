@@ -272,11 +272,10 @@ export type SelectPathNode = {
 
 export type SelectIdentifierNode = {
     nodeType: NodeTypes.SelectIdentifierNode;
+    flag?: SelectIdentifierFlags;
     value: string;
-    isWildcard?: true;
     selectOptions?: SelectOptionsUnprocessedNode | SelectOptionsNode
 }
-
 
 export type SelectOptionsUnprocessedNode = {
     nodeType: NodeTypes.SelectOptionsUnprocessedNode,
@@ -299,4 +298,9 @@ export type SelectOptions = {
     select?: SelectNode;
     expand?: ExpandNode;
     aliasAndValue?: any;
+}
+
+export enum SelectIdentifierFlags {
+    AllOperationsInSchema = "AllOperationsInSchema", //Name.*
+    Annotation = "Annotation" //@Measures.Currency
 }
