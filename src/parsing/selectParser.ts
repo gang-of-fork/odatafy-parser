@@ -154,6 +154,17 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
                   options.expand = expandParser.parse(parsedOptions.$expand);
                 }
 
+                if(parsedOptions.$count && typeof parsedOptions.$count == 'string') {
+                  options.count = true
+                }
+                /* 
+                if(parsedOptions.$search && typeof parsedOptions.$search == 'string') {
+                  options.search = searchParser.parse(parsedOptions.$search);
+                }
+                */
+
+
+
                 //TODO annotations, inlinecount, search
                 return {
                   nodeType: NodeTypes.SelectOptionsNode,

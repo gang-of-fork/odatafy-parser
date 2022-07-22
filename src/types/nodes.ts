@@ -292,7 +292,7 @@ export type SelectOptions = {
     computed?: ComputedNode;
     expand?: ExpandNode;
     filter?: FilterNode;
-    inlinecount?: any;
+    count?: any;
     orderby?: OrderbyNode;
     search?: any;
     select?: SelectNode;
