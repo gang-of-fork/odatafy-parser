@@ -1,6 +1,6 @@
 import assert from "assert"
 import selectParser from "../../src/parsing/selectParser"
-import { NodeTypes, SelectIdentifierFlags, SelectNode } from "../../src/types/nodes"
+import { NodeTypes, SelectIdentifierFlags, SelectNode, SymbolNodeTypes } from "../../src/types/nodes"
 
 function testParsingAndAST(testcase: { type: string, input: string, expectedAST: any }) {
     it(`should parse ${testcase.type}: ${testcase.input}`, () => {
@@ -396,7 +396,48 @@ describe('Select Parser tests', () => {
                 }
             ]
         }
-    }].forEach(testParsingAndAST)
+    },
+    {
+        type: "Expressions with select options for skip, count, expand, computed, !search(deactivated)",
+        input: "Addresses($skip=0;$count=true;$expand=Addresses/Country;$computed=Name as LastName)",
+        expectedAST: <SelectNode>{
+            nodeType: NodeTypes.SelectNode,
+            value: [
+                {
+                    nodeType: NodeTypes.SelectIdentifierNode,
+                    value: "Addresses",
+                    selectOptions: {
+                        nodeType: NodeTypes.SelectOptionsNode,
+                        value: {
+                            skip: 0,
+                            count: true,
+                            expand: {
+                                nodeType: NodeTypes.ExpandNode,
+                                value: [{
+                                    nodeType: NodeTypes.ExpandIdentifierNode,
+                                    identifier: "Addresses/Country",
+                                    options: {}
+                                }]
+                            },
+                            computed: {
+                              nodeType: NodeTypes.ComputedNode,
+                              value: [{
+                                nodeType: NodeTypes.ComputedItemNode,
+                                commonExpr: {
+                                    nodeType: NodeTypes.SymbolNode,
+                                    type: SymbolNodeTypes.Identifier,
+                                    value: "Name"
+                                },
+                                computedIdentifier: "LastName"
+                              }]  
+                            }
+                        },
+                    }
+                }
+            ]
+
+        }
+    },].forEach(testParsingAndAST)
     })
 })
 

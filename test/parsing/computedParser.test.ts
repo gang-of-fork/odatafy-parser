@@ -1,5 +1,6 @@
 import assert from "assert"
 import computedParser from "../../src/parsing/computedParser"
+import { NodeTypes } from "../../src/types/nodes"
 
 function testParsingAndAST(testcase: { type: string, input: string, expectedAST: any }) {
     it(`should parse ${testcase.type}: ${testcase.input}`, () => {
@@ -16,7 +17,7 @@ describe('computedParser tests', () => {
             nodeType: "ComputedNode",
             value: [
                 {
-                    nodeType: "computedItemNode",
+                    nodeType: NodeTypes.ComputedItemNode,
                     commonExpr: {
                         nodeType: "SymbolNode",
                         type: "Identifier",
@@ -34,7 +35,7 @@ describe('computedParser tests', () => {
             nodeType: "ComputedNode",
             value: [
                 {
-                    nodeType: "computedItemNode",
+                    nodeType: NodeTypes.ComputedItemNode,
                     commonExpr: {
                         nodeType: "OperatorNode",
                         op: "add",
@@ -61,7 +62,7 @@ describe('computedParser tests', () => {
             nodeType: "ComputedNode",
             value: [
                 {
-                    nodeType: "computedItemNode",
+                    nodeType: NodeTypes.ComputedItemNode,
                     commonExpr: {
                         nodeType: "FuncNode2Args",
                         func: "concat",
@@ -90,7 +91,7 @@ describe('computedParser tests', () => {
             nodeType: "ComputedNode",
             value: [
                 {
-                    nodeType: "computedItemNode",
+                    nodeType: NodeTypes.ComputedItemNode,
                     commonExpr: {
                         nodeType: "OperatorNode",
                         op: "eq",
@@ -117,7 +118,7 @@ describe('computedParser tests', () => {
             nodeType: "ComputedNode",
             value: [
                 {
-                    nodeType: "computedItemNode",
+                    nodeType: NodeTypes.ComputedItemNode,
                     commonExpr: {
                         nodeType: "SymbolNode",
                         type: "Identifier",
@@ -126,7 +127,7 @@ describe('computedParser tests', () => {
                     computedIdentifier: "Alter"
                 },
                 {
-                    nodeType: "computedItemNode",
+                    nodeType: NodeTypes.ComputedItemNode,
                     commonExpr: {
                         nodeType: "SymbolNode",
                         type: "Identifier",
