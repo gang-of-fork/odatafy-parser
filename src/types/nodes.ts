@@ -21,7 +21,9 @@ export enum NodeTypes {
     SelectNode = 'SelectNode',
     SelectFunctionNode = 'SelectFunctionNode',
     SelectPathNode = 'SelectPathNode',
-    SelectIdentifierNode = 'SelectIdentifierNode'
+    SelectIdentifierNode = 'SelectIdentifierNode',
+    SelectOptionsUnprocessedNode = 'SelectOptionsUnprocessedNode',
+    SelectOptionsNode = 'SelectOptionsNode'
 }
 
 /** 
@@ -248,17 +250,13 @@ export type ComputedItemNode = {
  * Select parser nodes
  */
 
- /*SelectNode = 'SelectNode',
-    SelectItemNode = 'SelectItemNode',
-    SelectFunctionNode = 'SelectFunctionNode',
-    SelectPathNode = 'SelectPathNode'
-    */
+
 export type SelectNode = {
     nodeType: NodeTypes.SelectNode;
     value: SelectItemNode[];
 
 }
-export type SelectItemNode = SelectFunctionNode | SelectPathNode | SelectIdentifierNode
+export type SelectItemNode = SelectFunctionNode | SelectPathNode | SelectIdentifierNode | SelectOptionsUnprocessedNode
 
 
 export type SelectFunctionNode = {
@@ -274,6 +272,35 @@ export type SelectPathNode = {
 
 export type SelectIdentifierNode = {
     nodeType: NodeTypes.SelectIdentifierNode;
+    flag?: SelectIdentifierFlags;
     value: string;
-    isWildcard?: true;
+    selectOptions?: SelectOptionsUnprocessedNode | SelectOptionsNode
+}
+
+export type SelectOptionsUnprocessedNode = {
+    nodeType: NodeTypes.SelectOptionsUnprocessedNode,
+    value: string;
+}
+
+export type SelectOptionsNode = {
+    nodeType: NodeTypes.SelectOptionsNode,
+    value: SelectOptions;
+}
+
+export type SelectOptions = {
+    aliasAndValue?: any;
+    computed?: ComputedNode;
+    expand?: ExpandNode;
+    filter?: FilterNode;
+    count?: any;
+    orderby?: OrderbyNode;
+    search?: any;
+    select?: SelectNode;
+    skip?: number;
+    top?: number;
+}
+
+export enum SelectIdentifierFlags {
+    AllOperationsInSchema = "AllOperationsInSchema", //Name.*
+    Annotation = "Annotation" //@Measures.Currency
 }
