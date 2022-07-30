@@ -63,7 +63,7 @@ var multiExpressionResolve: any = {};
 
 export function escapeExpression(expr: string, depth = 0) {
     let result = "";
-    const andOrRegex = /( and | or )/;
+    const andOrRegex = /( AND | OR )/;
     let expressionsElements = expr.split(andOrRegex);
 
     for (let i = 0; i < expressionsElements.length; i++) {
@@ -82,8 +82,8 @@ export function escapeExpression(expr: string, depth = 0) {
 
         let not = false;
 
-        if (subExpr.startsWith("not ")) {
-            subExpr = subExpr.replace("not ", "");
+        if (subExpr.startsWith("NOT ")) {
+            subExpr = subExpr.replace("NOT ", "");
             not = true;
         }
 
@@ -108,7 +108,7 @@ export function escapeExpression(expr: string, depth = 0) {
 }
 
 export function reverseEscaped(expr: string, resolvers: { [key: string]: { toEscape: string, depth: number, not: boolean } }) {
-    const andOrRegex = /( and | or )/;
+    const andOrRegex = /( AND | OR )/;
     let expressionElements = expr.split(andOrRegex).reverse();
     expr = expressionElements.join("");
 
@@ -129,7 +129,7 @@ export function reverseEscaped(expr: string, resolvers: { [key: string]: { toEsc
         transformedResolversOnDepth.forEach(tRoD =>{
             let tRoDElements = tRoD.toEscape.split(andOrRegex).reverse();
             tRoD.toEscape = tRoDElements.join("");
-            expr = expr.replace(tRoD.key, `${tRoD.not? "not ": ""}(${tRoD.toEscape})`)
+            expr = expr.replace(tRoD.key, `${tRoD.not? "NOT ": ""}(${tRoD.toEscape})`)
         });
     }
 
@@ -168,7 +168,7 @@ export function reverseExprLogic(expr: string) {
     return result;
 }
 
-export default function expressionPreProc(expr: string) {
+export default function searchExpressionPreProc(expr: string) {
     return reverseExprLogic(expr);
 }
 

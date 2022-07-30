@@ -4,8 +4,8 @@
 */
 
 import peggy from 'peggy';
-import astPostProc from '../processing/astPostProc';
-import expressionPreProc from '../processing/expressionPreProc';
+import astPostProc from '../processing/filterAstPostProc';
+import filterExpressionPreProc from '../processing/filterExpressionPreProc';
 
 import { FilterNode } from '../types/nodes';
 
@@ -316,7 +316,7 @@ export default {
      * @returns ast for filter expression
      */
     parse: (input: string, options?: peggy.ParserOptions | undefined): FilterNode => {
-        input = expressionPreProc(input)
+        input = filterExpressionPreProc(input)
         let output = myParser.parse(input, options)
         output = astPostProc(output);
         return output;

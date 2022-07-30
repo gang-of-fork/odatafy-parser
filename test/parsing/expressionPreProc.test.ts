@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { Prefixes, getIdentifier, hasOnlyMatchingParentheses, escapeStrings, escapeFunctions } from '../../src/processing/expressionPreProc'
+import { Prefixes, getIdentifier, hasOnlyMatchingParentheses, escapeStrings, escapeFunctions } from '../../src/processing/filterExpressionPreProc'
 
 //tests if result conforms to given format via regexp
 

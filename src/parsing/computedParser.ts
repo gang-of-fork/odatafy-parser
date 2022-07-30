@@ -1,6 +1,6 @@
 import peggy from 'peggy';
-import astPostProc from '../processing/astPostProc';
-import expressionPreProc from '../processing/expressionPreProc';
+import astPostProc from '../processing/filterAstPostProc';
+import filterExpressionPreProc from '../processing/filterExpressionPreProc';
 import { ComputedNode, NodeTypes } from '../types/nodes';
 //import astPostProc from '../processing/astPostProc';
 import { filterGrammar } from './filterParser';
@@ -12,7 +12,7 @@ computeItem = commonExpr:(commonExpr / value:$mathExpr {return {type: 'mathExpr'
 `, {allowedStartRules: ["start"]})
 
 export function parseComputed(expr: string):ComputedNode {
-    expr = expressionPreProc(expr);
+    expr = filterExpressionPreProc(expr);
     let computedNode:ComputedNode = {
         nodeType: NodeTypes.ComputedNode,
         value: []
