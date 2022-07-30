@@ -26,14 +26,10 @@ describe('Skip Parser tests', () => {
             input: 'test'
         },
         {
-            type: 'comma',
-            input: ','
-        },
-        {
             type: 'negative Integer',
             input: '-5'
         }].forEach(testcase => {
-            it(`should throw Error because of ${testcase.type} Escape`, () => {
+            it(`should throw Error because of ${testcase.type}`, () => {
                 assert.throws(
                     () => {
                     topParser.parse(testcase.input);

@@ -26,14 +26,10 @@ describe('Skip Parser tests', () => {
             input: 'test'
         },
         {
-            type: 'decimal',
-            input: '5.0'
-        },
-        {
             type: 'negative Integer',
             input: '-5'
         }].forEach(testcase => {
-                it(`should throw Error because of ${testcase.type} Escape`, () => {
+                it(`should throw Error because of ${testcase.type}`, () => {
                     assert.throws(
                         () => {
                         skipParser.parse(testcase.input);
