@@ -9,7 +9,6 @@ function testParsingAndAST(testcase: { type: string, input: string, expectedAST:
     })
 }
 
-//ADD test from https://github.com/oasis-tcs/odata-abnf/blob/main/abnf/odata-abnf-testcases.yaml line 2467 when all parsers are finished
 describe('Orderby Parser tests', () => {
     describe('official url-convention examples', () => {
         [{
