@@ -26,6 +26,10 @@ describe('Skip Parser tests', () => {
             input: 'test'
         },
         {
+            type: 'comma',
+            input: ','
+        },
+        {
             type: 'negative Integer',
             input: '-5'
         }].forEach(testcase => {
