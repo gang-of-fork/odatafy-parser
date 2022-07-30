@@ -26,8 +26,8 @@ describe('Skip Parser tests', () => {
             input: 'test'
         },
         {
-            type: 'comma',
-            input: ','
+            type: 'decimal',
+            input: '5.0'
         },
         {
             type: 'negative Integer',
