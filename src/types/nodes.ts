@@ -18,6 +18,9 @@ export enum NodeTypes {
     ExpandIdentifierNode = 'ExpandIdentifierNode',
     ComputedNode = 'ComputedNode',
     ComputedItemNode = 'ComputedItemNode',
+    SearchNode = 'SearchNode',
+    SearchOperatorNode = 'SearchOperatorNode',
+    SearchItemNode = 'SearchItemNode',
     SelectNode = 'SelectNode',
     SelectFunctionNode = 'SelectFunctionNode',
     SelectPathNode = 'SelectPathNode',
@@ -303,4 +306,40 @@ export type SelectOptions = {
 export enum SelectIdentifierFlags {
     AllOperationsInSchema = "AllOperationsInSchema", //Name.*
     Annotation = "Annotation" //@Measures.Currency
+}
+
+/**
+ * Search parser nodes
+ *     SearchNode = 'SearchNode',
+    SearchOperatorNode = 'SearchOperatorNode',
+    SearchItemNode = 'SearchItemNode',
+ */
+
+export type SearchNode = {
+    nodeType: NodeTypes.SearchNode,
+    value: SearchOperatorNode | SearchItemNode
+}
+
+export type SearchOperatorNode = {
+    nodeType: NodeTypes.SearchOperatorNode,
+    op: SearchOperators,
+    left?: SearchNode,
+    right: SearchNode
+}
+
+export type SearchItemNode = {
+    nodeType: NodeTypes.SearchItemNode,
+    type: SearchItemTypes,
+    value: string
+}
+
+export enum SearchOperators {
+    And = "AND",
+    Or = "OR",
+    Not = "NOT"
+}
+
+export enum SearchItemTypes {
+    Phrase = "Phrase",
+    Word = "Word"
 }

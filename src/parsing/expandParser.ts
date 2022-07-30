@@ -7,7 +7,7 @@ import skipParser from './skipParser';
 import topParser from './topParser';
 import { ExpandNode, NodeTypes, ExpandItemOptions } from '../types/nodes';
 
-import { getIdentifier, Prefixes } from '../processing/expressionPreProc';
+import { getIdentifier, Prefixes } from '../processing/filterExpressionPreProc';
 
 export function parseExpand(expr: string): ExpandNode {
     /**
