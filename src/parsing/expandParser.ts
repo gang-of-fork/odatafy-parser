@@ -9,12 +9,8 @@ import { ExpandNode, NodeTypes, ExpandItemOptions } from '../types/nodes';
 
 import { getIdentifier, Prefixes } from '../processing/filterExpressionPreProc';
 
-/**
-     * Parser for filter expressions
-     * @param expr expand expression as string
-     * @returns Abstract Syntax Tree (AST) of type ExpandNode
-     */
-export function parseExpand(expr: string): ExpandNode {
+
+function parseExpand(expr: string): ExpandNode {
     /**
      * Preprocessing
      */
@@ -98,6 +94,7 @@ export default {
     /**
      * Parser for expand expressions
      * @param expr expand expression as string
+     * @example expandParser.parse("Products/$ref");
      * @returns Abstract Syntax Tree (AST) of type ExpandNode
      */
     parse: parseExpand

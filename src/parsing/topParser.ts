@@ -4,6 +4,7 @@ export default {
     /**
      * Parser for top expression
      * @param expr top expression as string
+     * @example topParser.parse("5");
      * @returns integer for top
      */
     parse: function(expr: string) {

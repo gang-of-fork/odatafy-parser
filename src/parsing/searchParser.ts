@@ -72,12 +72,7 @@ HTAB   = '  '
 
 `)
 
-/**
-   * Parser for search expressions
-   * @param expr search expression as string
-   * @returns Abstract Syntax Tree (AST) of type SearchNode
-   */
-export function parseSearch(expr: string) {
+function parseSearch(expr: string) {
     expr = searchExpressionPreProc(expr)
 
     let searchNode = searchParser.parse(expr);
@@ -89,6 +84,7 @@ export default {
     /**
        * Parser for search expressions
        * @param expr search expression as string
+       * @example searchParser.parse("blue OR green OR red")
        * @returns Abstract Syntax Tree (AST) of type SearchNode
        */
     parse: parseSearch

@@ -11,12 +11,8 @@ start = head:computeItem tail:( COMMA @computeItem )* {return{nodeType: "Compute
 computeItem = commonExpr:(commonExpr / value:$mathExpr {return {type: 'mathExpr', value: value}} / odataIdentifier) RWS "as" RWS computeIdentifier:$odataIdentifier {return {nodeType: "ComputeItemNode", commonExpr:commonExpr, computeIdentifier: computeIdentifier}}
 `, {allowedStartRules: ["start"]})
 
- /**
-     * Parser for compute expressions
-     * @param expr compute expression as string
-     * @returns Abstract Syntax Tree (AST) of type ComputeNode
-     */
-export function parseCompute(expr: string):ComputeNode {
+
+function parseCompute(expr: string):ComputeNode {
     expr = filterExpressionPreProc(expr);
     let computeNode:ComputeNode = {
         nodeType: NodeTypes.ComputeNode,
@@ -34,5 +30,11 @@ export function parseCompute(expr: string):ComputeNode {
 }
 
 export default {
+     /**
+     * Parser for compute expressions
+     * @param expr compute expression as string
+     * @example computeParser.parse("FirstName as Name")
+     * @returns Abstract Syntax Tree (AST) of type ComputeNode
+     */
     parse: parseCompute
 }

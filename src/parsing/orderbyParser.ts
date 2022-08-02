@@ -4,6 +4,7 @@ export default {
     /**
      * Parser for orderby expression
      * @param expr orderby expression as string
+     * @example orderbyParser.parse("Country/Name asc,Street desc")
      * @returns AbstractSyntaxTree (AST) of type OrderbyNode
      */
     parse: function parseOrderby(expr: string): OrderbyNode {

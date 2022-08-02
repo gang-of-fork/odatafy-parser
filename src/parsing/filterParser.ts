@@ -313,6 +313,7 @@ export default {
      * Parser for filter expressions
      * @param expr filter expression as string
      * @param options options for peggy.js parser
+     * @example filterParser.parse("Name eq 'Max'");
      * @returns Abstract Syntax Tree (AST) of type FilterNode
      */
     parse: (expr: string, options?: peggy.ParserOptions | undefined): FilterNode => {
