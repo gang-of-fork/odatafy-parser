@@ -72,6 +72,11 @@ HTAB   = '  '
 
 `)
 
+/**
+   * Parser for search expressions
+   * @param expr search expression as string
+   * @returns Abstract Syntax Tree (AST) of type SearchNode
+   */
 export function parseSearch(expr: string) {
     expr = searchExpressionPreProc(expr)
 
@@ -79,7 +84,12 @@ export function parseSearch(expr: string) {
 
     return searchNode;
 }
-
 export default {
+
+    /**
+       * Parser for search expressions
+       * @param expr search expression as string
+       * @returns Abstract Syntax Tree (AST) of type SearchNode
+       */
     parse: parseSearch
 }

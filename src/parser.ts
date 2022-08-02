@@ -8,7 +8,7 @@ import topParser from './parsing/topParser';
 import expandParser from './parsing/expandParser';
 import selectParser from './parsing/selectParser';
 
-import { FilterNode, OrderbyNode, ExpandNode, computeNode, SelectNode } from './types/nodes';
+import { FilterNode, OrderbyNode, ExpandNode, ComputeNode, SelectNode } from './types/nodes';
 
 export type oDataParameters = {
     filter?: string;
@@ -26,7 +26,7 @@ export type oDataParseResult = {
     skip?: number;
     top?: number; 
     expand?: ExpandNode;
-    compute?: computeNode;
+    compute?: ComputeNode;
     select?: SelectNode;
 }
 

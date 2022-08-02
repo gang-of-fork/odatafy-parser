@@ -98,6 +98,11 @@ BWS =  ( SP / HTAB / "%20" / "%09" )*
 SP     = ' '
 HTAB   = '  '
 `)
+/**
+     * Parser for select expressions
+     * @param expr select expression as string
+     * @returns Abstract Syntax Tree (AST) of type SelectNode
+     */
 export function parseSelect(expr: string): SelectNode {
     let ast = <SelectNode>selectParser.parse(expr);
     for(let selectItem of ast.value) {
@@ -163,9 +168,7 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
                 }
                 */
 
-
-
-                //TODO annotations, inlinecount, search
+                //TODO search
                 return {
                   nodeType: NodeTypes.SelectOptionsNode,
                   value: options
@@ -173,6 +176,11 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
 }
 
 export default {
+  /**
+     * Parser for select expressions
+     * @param expr select expression as string
+     * @returns Abstract Syntax Tree (AST) of type SelectNode
+     */
     parse: parseSelect
 }
 

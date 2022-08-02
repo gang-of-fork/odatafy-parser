@@ -311,13 +311,13 @@ let myParser = peggy.generate(filterGrammar, {trace: false});
 export default {
     /**
      * Parser for filter expressions
-     * @param input filter expression
+     * @param expr filter expression as string
      * @param options options for peggy.js parser
-     * @returns ast for filter expression
+     * @returns Abstract Syntax Tree (AST) of type FilterNode
      */
-    parse: (input: string, options?: peggy.ParserOptions | undefined): FilterNode => {
-        input = filterExpressionPreProc(input)
-        let output = myParser.parse(input, options)
+    parse: (expr: string, options?: peggy.ParserOptions | undefined): FilterNode => {
+        expr = filterExpressionPreProc(expr)
+        let output = myParser.parse(expr, options)
         output = astPostProc(output);
         return output;
     }

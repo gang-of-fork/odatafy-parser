@@ -14,10 +14,10 @@ describe('computeParser tests', () => {
         type: "compute Expression with Identifier",
         input: "Name as LastName",
         expectedAST: {
-            nodeType: "computeNode",
+            nodeType: NodeTypes.ComputeNode,
             value: [
                 {
-                    nodeType: NodeTypes.computeItemNode,
+                    nodeType: NodeTypes.ComputeItemNode,
                     commonExpr: {
                         nodeType: "SymbolNode",
                         type: "Identifier",
@@ -32,10 +32,10 @@ describe('computeParser tests', () => {
         type: "compute Expression with MathExpression",
         input: "Age add 1 as NewAge",
         expectedAST: {
-            nodeType: "computeNode",
+            nodeType: NodeTypes.ComputeNode,
             value: [
                 {
-                    nodeType: NodeTypes.computeItemNode,
+                    nodeType: NodeTypes.ComputeItemNode,
                     commonExpr: {
                         nodeType: "OperatorNode",
                         op: "add",
@@ -59,10 +59,10 @@ describe('computeParser tests', () => {
         type: "compute Expression with FunctionCall",
         input: "concat(Name,'Petersen') as LastName",
         expectedAST: {
-            nodeType: "computeNode",
+            nodeType: NodeTypes.ComputeNode,
             value: [
                 {
-                    nodeType: NodeTypes.computeItemNode,
+                    nodeType: NodeTypes.ComputeItemNode,
                     commonExpr: {
                         nodeType: "FuncNode2Args",
                         func: "concat",
@@ -88,10 +88,10 @@ describe('computeParser tests', () => {
         type: "compute Expression with filterExpression",
         input: "Age eq 18 as isOfLegalAge",
         expectedAST: {
-            nodeType: "computeNode",
+            nodeType: NodeTypes.ComputeNode,
             value: [
                 {
-                    nodeType: NodeTypes.computeItemNode,
+                    nodeType: NodeTypes.ComputeItemNode,
                     commonExpr: {
                         nodeType: "OperatorNode",
                         op: "eq",
@@ -115,10 +115,10 @@ describe('computeParser tests', () => {
         type: "multiple computeExpressions",
         input: "Age as Alter,Name as LastName",
         expectedAST: {
-            nodeType: "computeNode",
+            nodeType: NodeTypes.ComputeNode,
             value: [
                 {
-                    nodeType: NodeTypes.computeItemNode,
+                    nodeType: NodeTypes.ComputeItemNode,
                     commonExpr: {
                         nodeType: "SymbolNode",
                         type: "Identifier",
@@ -127,7 +127,7 @@ describe('computeParser tests', () => {
                     computeIdentifier: "Alter"
                 },
                 {
-                    nodeType: NodeTypes.computeItemNode,
+                    nodeType: NodeTypes.ComputeItemNode,
                     commonExpr: {
                         nodeType: "SymbolNode",
                         type: "Identifier",

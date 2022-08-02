@@ -3,7 +3,7 @@ import { isPositiveInteger } from './helpers';
 export default {
     /**
      * Parser for skip expressions
-     * @param expr skip expression
+     * @param expr skip expression as string
      * @returns integer number for skip
      */
     parse: function(expr: string) {

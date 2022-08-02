@@ -3,8 +3,8 @@ import { OrderbyNode, OrderDirection, NodeTypes } from '../types/nodes';
 export default {
     /**
      * Parser for orderby expression
-     * @param expr orderby expression
-     * @returns ast for orderby expression
+     * @param expr orderby expression as string
+     * @returns AbstractSyntaxTree (AST) of type OrderbyNode
      */
     parse: function parseOrderby(expr: string): OrderbyNode {
         const regexp = new RegExp("^(([a-zA-z/]+ (asc|desc),)|[a-zA-z/]+,)*(([a-zA-z/]+ (asc|desc))|[a-zA-z/]+)$", "gmy")

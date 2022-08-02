@@ -16,8 +16,8 @@ export enum NodeTypes {
     OrderbyItemNode = 'OrderbyItemNode',
     ExpandNode = 'ExpandNode',
     ExpandIdentifierNode = 'ExpandIdentifierNode',
-    computeNode = 'computeNode',
-    computeItemNode = 'computeItemNode',
+    ComputeNode = 'ComputeNode',
+    ComputeItemNode = 'ComputeItemNode',
     SearchNode = 'SearchNode',
     SearchOperatorNode = 'SearchOperatorNode',
     SearchItemNode = 'SearchItemNode',
@@ -235,16 +235,16 @@ export type ExpandItemOptions = {
 }
 
 /**
- * compute Parser Nodes
+ * Compute Parser Nodes
  */
 
-export type computeNode = {
-    nodeType: NodeTypes.computeNode,
-    value: computeItemNode[]
+export type ComputeNode = {
+    nodeType: NodeTypes.ComputeNode,
+    value: ComputeItemNode[]
 }
 
-export type computeItemNode = {
-    nodeType: NodeTypes.computeItemNode,
+export type ComputeItemNode = {
+    nodeType: NodeTypes.ComputeItemNode,
     commonExpr: FilterNode,
     computeIdentifier: string
 }
@@ -292,7 +292,7 @@ export type SelectOptionsNode = {
 
 export type SelectOptions = {
     aliasAndValue?: any;
-    compute?: computeNode;
+    compute?: ComputeNode;
     expand?: ExpandNode;
     filter?: FilterNode;
     count?: any;
