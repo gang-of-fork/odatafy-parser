@@ -420,9 +420,9 @@ describe('Select Parser tests', () => {
                                 }]
                             },
                             compute: {
-                              nodeType: NodeTypes.computeNode,
+                              nodeType: NodeTypes.ComputeNode,
                               value: [{
-                                nodeType: NodeTypes.computeItemNode,
+                                nodeType: NodeTypes.ComputeItemNode,
                                 commonExpr: {
                                     nodeType: NodeTypes.SymbolNode,
                                     type: SymbolNodeTypes.Identifier,
