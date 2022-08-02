@@ -5,7 +5,7 @@ import filterParser from './filterParser';
 import orderbyParser from './orderbyParser';
 import skipParser from './skipParser';
 import topParser from './topParser';
-import computedParser from './computedParser';
+import computeParser from './computeParser';
 import expandParser from './expandParser';
 
 
@@ -146,8 +146,8 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
                   options.select = parseSelect(parsedOptions.$select);
                 }
 
-                if(parsedOptions.$computed && typeof parsedOptions.$computed == 'string') {
-                  options.computed = computedParser.parse(parsedOptions.$computed);
+                if(parsedOptions.$compute && typeof parsedOptions.$compute == 'string') {
+                  options.compute = computeParser.parse(parsedOptions.$compute);
                 }
 
                 if(parsedOptions.$expand && typeof parsedOptions.$expand == 'string') {
