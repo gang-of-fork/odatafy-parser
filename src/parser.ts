@@ -1,6 +1,6 @@
 import url from 'url';
 
-import computedParser from './parsing/computedParser';
+import computeParser from './parsing/computeParser';
 import filterParser from './parsing/filterParser';
 import orderbyParser from './parsing/orderbyParser';
 import skipParser from './parsing/skipParser';
@@ -8,7 +8,7 @@ import topParser from './parsing/topParser';
 import expandParser from './parsing/expandParser';
 import selectParser from './parsing/selectParser';
 
-import { FilterNode, OrderbyNode, ExpandNode, ComputedNode, SelectNode } from './types/nodes';
+import { FilterNode, OrderbyNode, ExpandNode, computeNode, SelectNode } from './types/nodes';
 
 export type oDataParameters = {
     filter?: string;
@@ -16,7 +16,7 @@ export type oDataParameters = {
     skip?: string;
     top?: string;
     expand?: string;
-    computed?: string;
+    compute?: string;
     select?: string;
 }
 
@@ -26,7 +26,7 @@ export type oDataParseResult = {
     skip?: number;
     top?: number; 
     expand?: ExpandNode;
-    computed?: ComputedNode;
+    compute?: computeNode;
     select?: SelectNode;
 }
 
@@ -58,8 +58,8 @@ export function parseOData(parameters: oDataParameters): oDataParseResult {
         result.expand = expandParser.parse(parameters.expand);
     }
     
-    if(parameters.computed) {
-        result.computed = computedParser.parse(parameters.computed);
+    if(parameters.compute) {
+        result.compute = computeParser.parse(parameters.compute);
     }
 
     if(parameters.select) {
@@ -75,7 +75,7 @@ export function parseOData(parameters: oDataParameters): oDataParseResult {
  */
 export function parseODataUrl(oDataUrl: string): oDataParseResult {
     const query = url.parse(oDataUrl, true).query;
-    const validParams = [ 'filter', 'orderby', 'skip', 'top', 'expand', 'computed', 'select' ];
+    const validParams = [ 'filter', 'orderby', 'skip', 'top', 'expand', 'compute', 'select' ];
     const params = Object.keys(query);
 
     let parseParameters: oDataParameters = {}
@@ -94,4 +94,4 @@ export function parseODataUrl(oDataUrl: string): oDataParseResult {
     return parseOData(parseParameters);
 }
 
-export { filterParser, orderbyParser, skipParser, topParser, expandParser, computedParser, selectParser };
+export { filterParser, orderbyParser, skipParser, topParser, expandParser, computeParser, selectParser };

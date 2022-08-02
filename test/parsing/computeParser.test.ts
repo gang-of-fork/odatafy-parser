@@ -1,41 +1,41 @@
 import assert from "assert"
-import computedParser from "../../src/parsing/computedParser"
+import computeParser from "../../src/parsing/computeParser"
 import { NodeTypes } from "../../src/types/nodes"
 
 function testParsingAndAST(testcase: { type: string, input: string, expectedAST: any }) {
     it(`should parse ${testcase.type}: ${testcase.input}`, () => {
-        let ast = computedParser.parse(testcase.input)
+        let ast = computeParser.parse(testcase.input)
         assert.deepStrictEqual(ast, testcase.expectedAST)
     })
 }
 
-describe('computedParser tests', () => {
+describe('computeParser tests', () => {
     [{
-        type: "computed Expression with Identifier",
+        type: "compute Expression with Identifier",
         input: "Name as LastName",
         expectedAST: {
-            nodeType: "ComputedNode",
+            nodeType: "computeNode",
             value: [
                 {
-                    nodeType: NodeTypes.ComputedItemNode,
+                    nodeType: NodeTypes.computeItemNode,
                     commonExpr: {
                         nodeType: "SymbolNode",
                         type: "Identifier",
                         value: "Name"
                     },
-                    computedIdentifier: "LastName"
+                    computeIdentifier: "LastName"
                 }
             ]
         }
     },
     {
-        type: "computed Expression with MathExpression",
+        type: "compute Expression with MathExpression",
         input: "Age add 1 as NewAge",
         expectedAST: {
-            nodeType: "ComputedNode",
+            nodeType: "computeNode",
             value: [
                 {
-                    nodeType: NodeTypes.ComputedItemNode,
+                    nodeType: NodeTypes.computeItemNode,
                     commonExpr: {
                         nodeType: "OperatorNode",
                         op: "add",
@@ -50,19 +50,19 @@ describe('computedParser tests', () => {
                             value: 1
                         }
                     },
-                    computedIdentifier: "NewAge"
+                    computeIdentifier: "NewAge"
                 }
             ]
         }
     },
     {
-        type: "computed Expression with FunctionCall",
+        type: "compute Expression with FunctionCall",
         input: "concat(Name,'Petersen') as LastName",
         expectedAST: {
-            nodeType: "ComputedNode",
+            nodeType: "computeNode",
             value: [
                 {
-                    nodeType: NodeTypes.ComputedItemNode,
+                    nodeType: NodeTypes.computeItemNode,
                     commonExpr: {
                         nodeType: "FuncNode2Args",
                         func: "concat",
@@ -79,19 +79,19 @@ describe('computedParser tests', () => {
                             }
                         ]
                     },
-                    computedIdentifier: "LastName"
+                    computeIdentifier: "LastName"
                 }
             ]
         }
     },
     {
-        type: "computed Expression with filterExpression",
+        type: "compute Expression with filterExpression",
         input: "Age eq 18 as isOfLegalAge",
         expectedAST: {
-            nodeType: "ComputedNode",
+            nodeType: "computeNode",
             value: [
                 {
-                    nodeType: NodeTypes.ComputedItemNode,
+                    nodeType: NodeTypes.computeItemNode,
                     commonExpr: {
                         nodeType: "OperatorNode",
                         op: "eq",
@@ -106,34 +106,34 @@ describe('computedParser tests', () => {
                             value: 18
                         }
                     },
-                    computedIdentifier: "isOfLegalAge"
+                    computeIdentifier: "isOfLegalAge"
                 }
             ]
         }
     },
     {
-        type: "multiple computedExpressions",
+        type: "multiple computeExpressions",
         input: "Age as Alter,Name as LastName",
         expectedAST: {
-            nodeType: "ComputedNode",
+            nodeType: "computeNode",
             value: [
                 {
-                    nodeType: NodeTypes.ComputedItemNode,
+                    nodeType: NodeTypes.computeItemNode,
                     commonExpr: {
                         nodeType: "SymbolNode",
                         type: "Identifier",
                         value: "Age"
                     },
-                    computedIdentifier: "Alter"
+                    computeIdentifier: "Alter"
                 },
                 {
-                    nodeType: NodeTypes.ComputedItemNode,
+                    nodeType: NodeTypes.computeItemNode,
                     commonExpr: {
                         nodeType: "SymbolNode",
                         type: "Identifier",
                         value: "Name"
                     },
-                    computedIdentifier: "LastName"
+                    computeIdentifier: "LastName"
                 }
             ]
         }

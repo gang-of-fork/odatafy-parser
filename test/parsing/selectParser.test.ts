@@ -398,8 +398,8 @@ describe('Select Parser tests', () => {
         }
     },
     {
-        type: "Expressions with select options for skip, count, expand, computed, !search(deactivated)",
-        input: "Addresses($skip=0;$count=true;$expand=Addresses/Country;$computed=Name as LastName)",
+        type: "Expressions with select options for skip, count, expand, compute, !search(deactivated)",
+        input: "Addresses($skip=0;$count=true;$expand=Addresses/Country;$compute=Name as LastName)",
         expectedAST: <SelectNode>{
             nodeType: NodeTypes.SelectNode,
             value: [
@@ -419,16 +419,16 @@ describe('Select Parser tests', () => {
                                     options: {}
                                 }]
                             },
-                            computed: {
-                              nodeType: NodeTypes.ComputedNode,
+                            compute: {
+                              nodeType: NodeTypes.computeNode,
                               value: [{
-                                nodeType: NodeTypes.ComputedItemNode,
+                                nodeType: NodeTypes.computeItemNode,
                                 commonExpr: {
                                     nodeType: NodeTypes.SymbolNode,
                                     type: SymbolNodeTypes.Identifier,
                                     value: "Name"
                                 },
-                                computedIdentifier: "LastName"
+                                computeIdentifier: "LastName"
                               }]  
                             }
                         },

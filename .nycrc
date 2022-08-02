@@ -1,6 +1,6 @@
 {
   "watermarks": {
-    "statements": [60, 70]
+    "statements": [80, 90]
   },
   "all": true,
   "reporter": ["html","text"],
