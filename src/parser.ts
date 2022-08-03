@@ -8,7 +8,8 @@ import topParser from './parsing/topParser';
 import expandParser from './parsing/expandParser';
 import selectParser from './parsing/selectParser';
 
-import { FilterNode, OrderbyNode, ExpandNode, ComputeNode, SelectNode } from './types/nodes';
+import { FilterNode, OrderbyNode, ExpandNode, ComputeNode, SelectNode, SearchNode } from './types/nodes';
+import searchParser from './parsing/searchParser';
 
 export type oDataParameters = {
     filter?: string;
@@ -18,6 +19,7 @@ export type oDataParameters = {
     expand?: string;
     compute?: string;
     select?: string;
+    search?: string;
 }
 
 export type oDataParseResult = {
@@ -28,6 +30,7 @@ export type oDataParseResult = {
     expand?: ExpandNode;
     compute?: ComputeNode;
     select?: SelectNode;
+    search?: SearchNode;
 }
 
 /**
@@ -65,6 +68,10 @@ export function parseOData(parameters: oDataParameters): oDataParseResult {
     if(parameters.select) {
         result.select = selectParser.parse(parameters.select);
     }
+
+    if(parameters.search) {
+        result.search = searchParser.parse(parameters.search);
+    }
     return result;
 }
 
@@ -75,7 +82,7 @@ export function parseOData(parameters: oDataParameters): oDataParseResult {
  */
 export function parseODataUrl(oDataUrl: string): oDataParseResult {
     const query = url.parse(oDataUrl, true).query;
-    const validParams = [ 'filter', 'orderby', 'skip', 'top', 'expand', 'compute', 'select' ];
+    const validParams = [ 'filter', 'orderby', 'skip', 'top', 'expand', 'compute', 'select', 'search'];
     const params = Object.keys(query);
 
     let parseParameters: oDataParameters = {}
@@ -94,4 +101,4 @@ export function parseODataUrl(oDataUrl: string): oDataParseResult {
     return parseOData(parseParameters);
 }
 
-export { filterParser, orderbyParser, skipParser, topParser, expandParser, computeParser, selectParser };
+export { filterParser, orderbyParser, skipParser, topParser, expandParser, computeParser, selectParser, searchParser };
