@@ -315,10 +315,7 @@ export enum SelectIdentifierFlags {
     SearchItemNode = 'SearchItemNode',
  */
 
-export type SearchNode = {
-    nodeType: NodeTypes.SearchNode,
-    value: SearchOperatorNode | SearchItemNode
-}
+export type SearchNode = SearchOperatorNode | SearchItemNode
 
 export type SearchOperatorNode = {
     nodeType: NodeTypes.SearchOperatorNode,
