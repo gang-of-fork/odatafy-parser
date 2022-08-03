@@ -81,8 +81,7 @@ function parseExpand(expr: string): ExpandNode {
         if(!hasIdent) {
             result.value.push({
                 nodeType: NodeTypes.ExpandIdentifierNode,
-                identifier: exField,
-                options: {}
+                identifier: exField
             });
         }
     }

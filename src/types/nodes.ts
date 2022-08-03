@@ -18,7 +18,6 @@ export enum NodeTypes {
     ExpandIdentifierNode = 'ExpandIdentifierNode',
     ComputeNode = 'ComputeNode',
     ComputeItemNode = 'ComputeItemNode',
-    SearchNode = 'SearchNode',
     SearchOperatorNode = 'SearchOperatorNode',
     SearchItemNode = 'SearchItemNode',
     SelectNode = 'SelectNode',
@@ -224,7 +223,7 @@ export type ExpandNode = {
 export type ExpandItemNode = {
     nodeType: NodeTypes.ExpandIdentifierNode;
     identifier: string;
-    options: ExpandItemOptions
+    options?: ExpandItemOptions
 }
 
 export type ExpandItemOptions = {

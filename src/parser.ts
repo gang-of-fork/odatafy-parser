@@ -38,7 +38,7 @@ export type oDataParseResult = {
  * @param parameters oData url parameters
  * @returns parsed oData parameters
  */
-export function parseOData(parameters: oDataParameters): oDataParseResult {
+ function parseOData(parameters: oDataParameters): oDataParseResult {
     let result: oDataParseResult = {};
 
     if(parameters.filter) {

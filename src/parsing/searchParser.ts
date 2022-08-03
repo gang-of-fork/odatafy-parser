@@ -2,7 +2,7 @@ import peggy from 'peggy';
 import searchExpressionPreProc from '../processing/searchExpressionPreProc';
 
 let searchParser = peggy.generate(`
-search     = value:(searchExpr / searchExpr_incomplete) {return {nodeType: "SearchNode", value: value}}
+search     = node:(searchExpr / searchExpr_incomplete) {return node}
 
 searchExpr = ( 
                searchOrExpr
