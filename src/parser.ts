@@ -78,6 +78,8 @@ export type oDataParseResult = {
 /**
  * parse oData parameter expressions from url
  * @param oDataUrl oData url as string, from req.url
+ * @example //returns {top: 4}
+ * parseODataUrl("//https://services.odata.org/v2/northwind/northwind.svc/Customers?$top=4")
  * @returns parsed oData parameters
  */
 export function parseODataUrl(oDataUrl: string): oDataParseResult {
