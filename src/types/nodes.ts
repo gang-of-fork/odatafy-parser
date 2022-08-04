@@ -5,6 +5,14 @@
 export enum NodeTypes {
     OperatorNode = 'OperatorNode',
     ConstantNode = 'ConstantNode',
+    ConstantSpatialNode = 'ConstantSpatialNode',
+    CollectionNode = 'CollectionNode',
+    LineStringNode = 'LineStringNode',
+    MultiLineStringNode = 'MultiLineStringNode',
+    MultiPointNode = 'MultiPointNode',
+    MultiPolygonNode = 'MultiPolygonNode',
+    PointNode = 'PointNode',
+    PolygonNode = 'PolygonNode',
     SymbolNode = 'SymbolNode',
     FuncNode2Args = 'FuncNode2Args',
     FuncNode1Args = 'FuncNode1Args',
@@ -38,6 +46,64 @@ export enum NodeTypes {
     value: any;
 }
 
+export type ConstantSpatialNode = {
+    nodeType: NodeTypes.ConstantSpatialNode;
+    spatialType: ConstantSpatialNodeSpatialTypes;
+    value: SpatialNode
+}
+
+export type SpatialNode = CollectionNode | LineStringNode | MultiLineStringNode | MultiPointNode | MultiPolygonNode | PointNode | PolygonNode
+
+export type CollectionNode = {
+    nodeType: NodeTypes.CollectionNode,
+    srid?: number,
+    collection: SpatialNode[]
+}
+
+export type LineStringNode = {
+    nodeType: NodeTypes.LineStringNode,
+    srid?: number,
+    positions: PositionLiteral[]
+}
+
+export type PositionLiteral = {
+    lon: number,
+    lat: number,
+    alt?: number, 
+    /** 
+     * @description linear referencing measure
+    */
+    lrm?: number
+}
+
+export type MultiLineStringNode = {
+    nodeType: NodeTypes.MultiLineStringNode,
+    srid?: number,
+    lineStrings: LineStringNode[]
+
+}
+
+export type MultiPointNode = {
+    nodeType: NodeTypes.MultiPointNode,
+    points: PositionLiteral[]
+}
+
+export type MultiPolygonNode = {
+    nodeType: NodeTypes.MultiPolygonNode
+}
+
+export type PointNode = {
+    nodeType: NodeTypes.PointNode,
+    point: PositionLiteral
+}
+
+export type PolygonNode = {
+    nodeType: NodeTypes.PolygonNode
+    rings: RingLiteral[]
+}
+
+export type RingLiteral = PositionLiteral[];
+
 export type SymbolNode = {
     nodeType: NodeTypes.SymbolNode;
     type: SymbolNodeTypes;
@@ -58,6 +124,20 @@ export enum ConstantNodeTypes {
     Binary = 'Binary',
     Object = 'Object',
     Array = 'Array'
+}
+
+export enum ConstantSpatialNodeSpatialTypes {
+    Geography = 'Geography',
+    Geometry = 'Geometry'
+}
+
+export enum ConstantSpatialNodeTypes {
+    Collection = 'Collection',
+    MultiLineString = 'MultiLineString',
+    MultiPoint = 'MultiPoint',
+    MultiPolygon = 'MultiPolygon',
+    Point = 'Point',
+    Polygon = 'Polygon'
 }
 
 export enum SymbolNodeTypes {
