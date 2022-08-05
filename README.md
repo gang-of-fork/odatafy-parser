@@ -1,3 +1,6 @@
+# Under construction
+This package is still under construction. First stable version will be released soon.
+
 # odatafy-parser
 odata parser for odatafy framework.
  

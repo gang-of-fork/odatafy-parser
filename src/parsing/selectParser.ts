@@ -5,7 +5,7 @@ import filterParser from './filterParser';
 import orderbyParser from './orderbyParser';
 import skipParser from './skipParser';
 import topParser from './topParser';
-import computedParser from './computedParser';
+import computeParser from './computeParser';
 import expandParser from './expandParser';
 
 
@@ -98,7 +98,8 @@ BWS =  ( SP / HTAB / "%20" / "%09" )*
 SP     = ' '
 HTAB   = '  '
 `)
-export function parseSelect(expr: string): SelectNode {
+
+function parseSelect(expr: string): SelectNode {
     let ast = <SelectNode>selectParser.parse(expr);
     for(let selectItem of ast.value) {
       switch(selectItem.nodeType) {
@@ -146,8 +147,8 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
                   options.select = parseSelect(parsedOptions.$select);
                 }
 
-                if(parsedOptions.$computed && typeof parsedOptions.$computed == 'string') {
-                  options.computed = computedParser.parse(parsedOptions.$computed);
+                if(parsedOptions.$compute && typeof parsedOptions.$compute == 'string') {
+                  options.compute = computeParser.parse(parsedOptions.$compute);
                 }
 
                 if(parsedOptions.$expand && typeof parsedOptions.$expand == 'string') {
@@ -163,9 +164,7 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
                 }
                 */
 
-
-
-                //TODO annotations, inlinecount, search
+                //TODO search
                 return {
                   nodeType: NodeTypes.SelectOptionsNode,
                   value: options
@@ -173,6 +172,12 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
 }
 
 export default {
+  /**
+     * Parser for select expressions
+     * @param expr select expression as string
+     * @example selectParser.parse("Name,Age")
+     * @returns Abstract Syntax Tree (AST) of type SelectNode
+     */
     parse: parseSelect
 }
 

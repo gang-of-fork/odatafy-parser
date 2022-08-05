@@ -5,6 +5,14 @@
 export enum NodeTypes {
     OperatorNode = 'OperatorNode',
     ConstantNode = 'ConstantNode',
+    ConstantSpatialNode = 'ConstantSpatialNode',
+    CollectionNode = 'CollectionNode',
+    LineStringNode = 'LineStringNode',
+    MultiLineStringNode = 'MultiLineStringNode',
+    MultiPointNode = 'MultiPointNode',
+    MultiPolygonNode = 'MultiPolygonNode',
+    PointNode = 'PointNode',
+    PolygonNode = 'PolygonNode',
     SymbolNode = 'SymbolNode',
     FuncNode2Args = 'FuncNode2Args',
     FuncNode1Args = 'FuncNode1Args',
@@ -16,8 +24,10 @@ export enum NodeTypes {
     OrderbyItemNode = 'OrderbyItemNode',
     ExpandNode = 'ExpandNode',
     ExpandIdentifierNode = 'ExpandIdentifierNode',
-    ComputedNode = 'ComputedNode',
-    ComputedItemNode = 'ComputedItemNode',
+    ComputeNode = 'ComputeNode',
+    ComputeItemNode = 'ComputeItemNode',
+    SearchOperatorNode = 'SearchOperatorNode',
+    SearchItemNode = 'SearchItemNode',
     SelectNode = 'SelectNode',
     SelectFunctionNode = 'SelectFunctionNode',
     SelectPathNode = 'SelectPathNode',
@@ -35,6 +45,71 @@ export enum NodeTypes {
     type: ConstantNodeTypes;
     value: any;
 }
+
+export type ConstantSpatialNode = {
+    nodeType: NodeTypes.ConstantSpatialNode;
+    abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes;
+    value: SpatialNode
+}
+
+export type SpatialNode = CollectionNode | LineStringNode | MultiLineStringNode | MultiPointNode | MultiPolygonNode | PointNode | PolygonNode
+
+export type CollectionNode = {
+    nodeType: NodeTypes.CollectionNode,
+    srid?: number,
+    collection: SpatialNode[]
+}
+
+export type LineStringNode = {
+    nodeType: NodeTypes.LineStringNode,
+    srid?: number,
+    positions: PositionLiteral[]
+}
+
+export type PositionLiteral = {
+    lon: number,
+    lat: number,
+    alt: number, 
+    /** 
+     * @description linear referencing measure
+    */
+    lrm: number
+}
+
+export type MultiLineStringNode = {
+    nodeType: NodeTypes.MultiLineStringNode,
+    srid?: number,
+    lineStrings: LineStringNode[]
+
+}
+
+export type MultiPointNode = {
+    nodeType: NodeTypes.MultiPointNode,
+    srid?: number,
+    points: PositionLiteral[]
+}
+
+export type MultiPolygonNode = {
+    nodeType: NodeTypes.MultiPolygonNode,
+    srid?: number,
+    polygons: PolygonNode[];
+}
+
+export type PointNode = {
+    nodeType: NodeTypes.PointNode,
+    srid?: number,
+    point: PositionLiteral
+}
+
+export type PolygonNode = {
+    nodeType: NodeTypes.PolygonNode;
+    srid?:number;
+    rings: RingLiteral[];
+}
+
+export type RingLiteral = {
+    positions: PositionLiteral[];
+};
 
 export type SymbolNode = {
     nodeType: NodeTypes.SymbolNode;
@@ -58,6 +133,20 @@ export enum ConstantNodeTypes {
     Array = 'Array'
 }
 
+export enum ConstantSpatialNodeAbstractSpatialTypes {
+    Geography = 'Geography',
+    Geometry = 'Geometry'
+}
+
+export enum ConstantSpatialNodeTypes {
+    Collection = 'Collection',
+    MultiLineString = 'MultiLineString',
+    MultiPoint = 'MultiPoint',
+    MultiPolygon = 'MultiPolygon',
+    Point = 'Point',
+    Polygon = 'Polygon'
+}
+
 export enum SymbolNodeTypes {
     Identifier = 'Identifier',
     MemberExpression = 'MemberExpression',
@@ -71,8 +160,8 @@ export enum SymbolNodeTypes {
  * Filter parser node
  */
 
-export type FilterNode = OperatorNode | ConstantNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode | undefined
-export type FuncArg = ConstantNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode
+export type FilterNode = OperatorNode | ConstantNode | ConstantSpatialNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode | undefined
+export type FuncArg = ConstantNode | ConstantSpatialNode |SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode
 
 export type OperatorNode = {
     nodeType: NodeTypes.OperatorNode;
@@ -221,7 +310,7 @@ export type ExpandNode = {
 export type ExpandItemNode = {
     nodeType: NodeTypes.ExpandIdentifierNode;
     identifier: string;
-    options: ExpandItemOptions
+    options?: ExpandItemOptions
 }
 
 export type ExpandItemOptions = {
@@ -232,18 +321,18 @@ export type ExpandItemOptions = {
 }
 
 /**
- * Computed Parser Nodes
+ * Compute Parser Nodes
  */
 
-export type ComputedNode = {
-    nodeType: NodeTypes.ComputedNode,
-    value: ComputedItemNode[]
+export type ComputeNode = {
+    nodeType: NodeTypes.ComputeNode,
+    value: ComputeItemNode[]
 }
 
-export type ComputedItemNode = {
-    nodeType: NodeTypes.ComputedItemNode,
+export type ComputeItemNode = {
+    nodeType: NodeTypes.ComputeItemNode,
     commonExpr: FilterNode,
-    computedIdentifier: string
+    computeIdentifier: string
 }
 
 /**
@@ -289,7 +378,7 @@ export type SelectOptionsNode = {
 
 export type SelectOptions = {
     aliasAndValue?: any;
-    computed?: ComputedNode;
+    compute?: ComputeNode;
     expand?: ExpandNode;
     filter?: FilterNode;
     count?: any;
@@ -303,4 +392,37 @@ export type SelectOptions = {
 export enum SelectIdentifierFlags {
     AllOperationsInSchema = "AllOperationsInSchema", //Name.*
     Annotation = "Annotation" //@Measures.Currency
+}
+
+/**
+ * Search parser nodes
+ *     SearchNode = 'SearchNode',
+    SearchOperatorNode = 'SearchOperatorNode',
+    SearchItemNode = 'SearchItemNode',
+ */
+
+export type SearchNode = SearchOperatorNode | SearchItemNode
+
+export type SearchOperatorNode = {
+    nodeType: NodeTypes.SearchOperatorNode,
+    op: SearchOperators,
+    left?: SearchNode,
+    right: SearchNode
+}
+
+export type SearchItemNode = {
+    nodeType: NodeTypes.SearchItemNode,
+    type: SearchItemTypes,
+    value: string
+}
+
+export enum SearchOperators {
+    And = "AND",
+    Or = "OR",
+    Not = "NOT"
+}
+
+export enum SearchItemTypes {
+    Phrase = "Phrase",
+    Word = "Word"
 }
