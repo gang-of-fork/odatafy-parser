@@ -48,7 +48,7 @@ export enum NodeTypes {
 
 export type ConstantSpatialNode = {
     nodeType: NodeTypes.ConstantSpatialNode;
-    spatialType: ConstantSpatialNodeSpatialTypes;
+    abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes;
     value: SpatialNode
 }
 
@@ -89,7 +89,8 @@ export type MultiPointNode = {
 }
 
 export type MultiPolygonNode = {
-    nodeType: NodeTypes.MultiPolygonNode
+    nodeType: NodeTypes.MultiPolygonNode,
+    polygons: PolygonNode[];
 }
 
 export type PointNode = {
@@ -98,11 +99,14 @@ export type PointNode = {
 }
 
 export type PolygonNode = {
-    nodeType: NodeTypes.PolygonNode
-    rings: RingLiteral[]
+    nodeType: NodeTypes.PolygonNode;
+    srid?:number;
+    rings: RingLiteral[];
 }
 
-export type RingLiteral = PositionLiteral[];
+export type RingLiteral = {
+    positions: PositionLiteral[];
+};
 
 export type SymbolNode = {
     nodeType: NodeTypes.SymbolNode;
@@ -126,7 +130,7 @@ export enum ConstantNodeTypes {
     Array = 'Array'
 }
 
-export enum ConstantSpatialNodeSpatialTypes {
+export enum ConstantSpatialNodeAbstractSpatialTypes {
     Geography = 'Geography',
     Geometry = 'Geometry'
 }
@@ -153,8 +157,8 @@ export enum SymbolNodeTypes {
  * Filter parser node
  */
 
-export type FilterNode = OperatorNode | ConstantNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode | undefined
-export type FuncArg = ConstantNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode
+export type FilterNode = OperatorNode | ConstantNode | ConstantSpatialNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode | undefined
+export type FuncArg = ConstantNode | ConstantSpatialNode |SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode
 
 export type OperatorNode = {
     nodeType: NodeTypes.OperatorNode;
