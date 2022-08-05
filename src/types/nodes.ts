@@ -5,6 +5,14 @@
 export enum NodeTypes {
     OperatorNode = 'OperatorNode',
     ConstantNode = 'ConstantNode',
+    ConstantSpatialNode = 'ConstantSpatialNode',
+    CollectionNode = 'CollectionNode',
+    LineStringNode = 'LineStringNode',
+    MultiLineStringNode = 'MultiLineStringNode',
+    MultiPointNode = 'MultiPointNode',
+    MultiPolygonNode = 'MultiPolygonNode',
+    PointNode = 'PointNode',
+    PolygonNode = 'PolygonNode',
     SymbolNode = 'SymbolNode',
     FuncNode2Args = 'FuncNode2Args',
     FuncNode1Args = 'FuncNode1Args',
@@ -38,6 +46,71 @@ export enum NodeTypes {
     value: any;
 }
 
+export type ConstantSpatialNode = {
+    nodeType: NodeTypes.ConstantSpatialNode;
+    abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes;
+    value: SpatialNode
+}
+
+export type SpatialNode = CollectionNode | LineStringNode | MultiLineStringNode | MultiPointNode | MultiPolygonNode | PointNode | PolygonNode
+
+export type CollectionNode = {
+    nodeType: NodeTypes.CollectionNode,
+    srid?: number,
+    collection: SpatialNode[]
+}
+
+export type LineStringNode = {
+    nodeType: NodeTypes.LineStringNode,
+    srid?: number,
+    positions: PositionLiteral[]
+}
+
+export type PositionLiteral = {
+    lon: number,
+    lat: number,
+    alt: number, 
+    /** 
+     * @description linear referencing measure
+    */
+    lrm: number
+}
+
+export type MultiLineStringNode = {
+    nodeType: NodeTypes.MultiLineStringNode,
+    srid?: number,
+    lineStrings: LineStringNode[]
+
+}
+
+export type MultiPointNode = {
+    nodeType: NodeTypes.MultiPointNode,
+    srid?: number,
+    points: PositionLiteral[]
+}
+
+export type MultiPolygonNode = {
+    nodeType: NodeTypes.MultiPolygonNode,
+    srid?: number,
+    polygons: PolygonNode[];
+}
+
+export type PointNode = {
+    nodeType: NodeTypes.PointNode,
+    srid?: number,
+    point: PositionLiteral
+}
+
+export type PolygonNode = {
+    nodeType: NodeTypes.PolygonNode;
+    srid?:number;
+    rings: RingLiteral[];
+}
+
+export type RingLiteral = {
+    positions: PositionLiteral[];
+};
+
 export type SymbolNode = {
     nodeType: NodeTypes.SymbolNode;
     type: SymbolNodeTypes;
@@ -60,6 +133,20 @@ export enum ConstantNodeTypes {
     Array = 'Array'
 }
 
+export enum ConstantSpatialNodeAbstractSpatialTypes {
+    Geography = 'Geography',
+    Geometry = 'Geometry'
+}
+
+export enum ConstantSpatialNodeTypes {
+    Collection = 'Collection',
+    MultiLineString = 'MultiLineString',
+    MultiPoint = 'MultiPoint',
+    MultiPolygon = 'MultiPolygon',
+    Point = 'Point',
+    Polygon = 'Polygon'
+}
+
 export enum SymbolNodeTypes {
     Identifier = 'Identifier',
     MemberExpression = 'MemberExpression',
@@ -73,8 +160,8 @@ export enum SymbolNodeTypes {
  * Filter parser node
  */
 
-export type FilterNode = OperatorNode | ConstantNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode | undefined
-export type FuncArg = ConstantNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode
+export type FilterNode = OperatorNode | ConstantNode | ConstantSpatialNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode | undefined
+export type FuncArg = ConstantNode | ConstantSpatialNode |SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode
 
 export type OperatorNode = {
     nodeType: NodeTypes.OperatorNode;
