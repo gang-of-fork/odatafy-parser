@@ -69,11 +69,11 @@ export type LineStringNode = {
 export type PositionLiteral = {
     lon: number,
     lat: number,
-    alt?: number, 
+    alt: number, 
     /** 
      * @description linear referencing measure
     */
-    lrm?: number
+    lrm: number
 }
 
 export type MultiLineStringNode = {
@@ -85,16 +85,19 @@ export type MultiLineStringNode = {
 
 export type MultiPointNode = {
     nodeType: NodeTypes.MultiPointNode,
+    srid?: number,
     points: PositionLiteral[]
 }
 
 export type MultiPolygonNode = {
     nodeType: NodeTypes.MultiPolygonNode,
+    srid?: number,
     polygons: PolygonNode[];
 }
 
 export type PointNode = {
     nodeType: NodeTypes.PointNode,
+    srid?: number,
     point: PositionLiteral
 }
 
