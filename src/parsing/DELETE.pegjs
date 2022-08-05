@@ -221,7 +221,7 @@ primitiveLiteral = nullValue {return constantNodeHelper("Null", null)}
                  / geometryMultiPoint 
                  / geometryMultiPolygon 
                  / geometryPoint 
-                 / geometryPolygon )              
+                 / geometryPolygon ) {return {nodeType: "ConstantSpatialNode", abstractSpatialType: "Geometry", value: value}}             
 
 
 nullValue = 'null' 
@@ -270,9 +270,9 @@ binary      = "binary" SQUOTE binaryValue SQUOTE
     base64b8    = base64char ( 'A' / 'Q' / 'g' / 'w' ) ( "==" )?
     base64char  = ALPHA / DIGIT / "-" / "_"
 
-geographyCollection   = geographyPrefix SQUOTE fullCollectionLiteral SQUOTE
-fullCollectionLiteral = sridLiteral collectionLiteral
-collectionLiteral     = "Collection(" geoLiteral *( COMMA geoLiteral ) CLOSE
+geographyCollection   = geographyPrefix SQUOTE node:fullCollectionLiteral SQUOTE {return node}
+fullCollectionLiteral = srid: sridLiteral node:collectionLiteral {return {...srid, ...node}}
+collectionLiteral     = "Collection(" head:geoLiteral tail:( COMMA @geoLiteral )* CLOSE {return {nodeType: "CollectionNode",collection: [head, ...tail]}}
 geoLiteral            = collectionLiteral
                       / lineStringLiteral
                       / multiPointLiteral
@@ -281,14 +281,14 @@ geoLiteral            = collectionLiteral
                       / pointLiteral
                       / polygonLiteral
 
-geographyLineString   = geographyPrefix SQUOTE fullLineStringLiteral SQUOTE
-fullLineStringLiteral = sridLiteral lineStringLiteral
-lineStringLiteral     = "LineString" lineStringData
-lineStringData        = OPEN positionLiteral ( COMMA positionLiteral )+ CLOSE
+geographyLineString   = geographyPrefix SQUOTE node:fullLineStringLiteral SQUOTE {return node}
+fullLineStringLiteral = srid:sridLiteral node:lineStringLiteral {return {...node, ...srid}}
+lineStringLiteral     = "LineString" node:lineStringData {return node}
+lineStringData        = OPEN head:positionLiteral tail:( COMMA @positionLiteral )+ CLOSE {return {nodeType: "LineStringNode", positions: [head, ...tail]}}
 
-geographyMultiLineString   = geographyPrefix SQUOTE fullMultiLineStringLiteral SQUOTE
-fullMultiLineStringLiteral = sridLiteral multiLineStringLiteral
-multiLineStringLiteral     = "MultiLineString(" ( lineStringData *( COMMA lineStringData ) )? CLOSE
+geographyMultiLineString   = geographyPrefix SQUOTE node:fullMultiLineStringLiteral SQUOTE {return node}
+fullMultiLineStringLiteral = srid:sridLiteral node:multiLineStringLiteral {return {...srid, ...node}}
+multiLineStringLiteral     = "MultiLineString(" lineStrings:( head:lineStringData tail:( COMMA lineStringData )* {return [head, ...tail]} )? CLOSE {return {nodeType: "MultiLineStringNode", lineStrings: lineStrings}}
 
 geographyMultiPoint   = geographyPrefix SQUOTE node:fullMultiPointLiteral SQUOTE {return node}
 fullMultiPointLiteral = srid:sridLiteral node:multiPointLiteral {return {...srid, ...node}}
@@ -296,7 +296,7 @@ multiPointLiteral     = "MultiPoint("  points:( head:pointData tail:( COMMA @poi
 
 geographyMultiPolygon   = geographyPrefix SQUOTE fullMultiPolygonLiteral SQUOTE
 fullMultiPolygonLiteral = sridLiteral multiPolygonLiteral
-multiPolygonLiteral     = "MultiPolygon(" ( polygonData *( COMMA polygonData ) )? CLOSE
+multiPolygonLiteral     = "MultiPolygon(" polygons:( head:polygonData tail:( COMMA @polygonData ){return [head, ...tail]} )? CLOSE {return {nodeType: "MultiPolygonNode", polygons: polygons? polygons: []}}
 
 geographyPoint   = geographyPrefix SQUOTE node:fullPointLiteral SQUOTE {return node}
 fullPointLiteral = srid:sridLiteral node:pointLiteral {return {...srid, ...node}}
@@ -305,11 +305,11 @@ pointLiteral     ="Point" point:pointData {return {nodeType: "PointNode", point:
 pointData        = OPEN pos:positionLiteral CLOSE {return pos}
 positionLiteral  = lon:$(decimalValue/INT) SP lat:$(decimalValue/INT) alt:( SP @$(decimalValue/INT) )? lrm:( SP @$(decimalValue/INT) )?  {return {lon:Number(lon), lat:Number(lat), alt: Number(alt), lrm: Number(lrm)}}
 
-geographyPolygon   = geographyPrefix SQUOTE fullPolygonLiteral SQUOTE
-fullPolygonLiteral = sridLiteral polygonLiteral
-polygonLiteral     = "Polygon" polygonData
-polygonData        = OPEN ringLiteral *( COMMA ringLiteral ) CLOSE
-ringLiteral        = OPEN positionLiteral *( COMMA positionLiteral ) CLOSE
+geographyPolygon   = geographyPrefix SQUOTE node:fullPolygonLiteral SQUOTE {return node}
+fullPolygonLiteral = srid:sridLiteral node:polygonLiteral {return {...srid, ...node}}
+polygonLiteral     = "Polygon" node:polygonData {return node}
+polygonData        = OPEN head:ringLiteral tail:( COMMA @ringLiteral )* CLOSE {return {nodeType: "PolygonNode", rings: [head, ...tail]}}
+ringLiteral        = OPEN head:positionLiteral tail:( COMMA @positionLiteral )* CLOSE {return {positions:[head, ...tail]}}
 
 geometryCollection      = geometryPrefix SQUOTE fullCollectionLiteral      SQUOTE
 geometryLineString      = geometryPrefix SQUOTE fullLineStringLiteral      SQUOTE
