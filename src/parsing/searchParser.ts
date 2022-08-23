@@ -1,5 +1,6 @@
 import peggy from 'peggy';
 import searchExpressionPreProc from '../processing/searchExpressionPreProc';
+import { SearchNode } from '../types/nodes';
 
 let searchParser = peggy.generate(`
 search     = node:(searchExpr / searchExpr_incomplete) {return node}
@@ -72,7 +73,7 @@ HTAB   = '  '
 
 `)
 
-function parseSearch(expr: string) {
+function parseSearch(expr: string): SearchNode {
     expr = searchExpressionPreProc(expr)
 
     let searchNode = searchParser.parse(expr);
