@@ -7,7 +7,7 @@ export default {
      * @example topParser.parse("5");
      * @returns integer for top
      */
-    parse: function(expr: string):Number {
+    parse: function(expr: string):number {
         if(isPositiveInteger(expr)) {
             return parseInt(expr as string);
         }

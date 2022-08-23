@@ -7,7 +7,7 @@ export default {
      * @example skipParser.parse("5");
      * @returns integer number for skip
      */
-    parse: function(expr: string): Number {
+    parse: function(expr: string):number {
         if(isPositiveInteger(expr)) {
             return parseInt(expr as string);
         }
