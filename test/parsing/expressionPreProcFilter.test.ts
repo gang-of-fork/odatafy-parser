@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { Prefixes, getIdentifier, hasOnlyMatchingParentheses, escapeStrings, escapeFunctions } from '../../src/processing/filterExpressionPreProc'
+import { Prefixes, getIdentifier, hasOnlyMatchingParentheses, escapeStrings, escapeFunctions, reverseExprLogic } from '../../src/processing/filterExpressionPreProc'
 
 //tests if result conforms to given format via regexp
 
@@ -9,7 +9,7 @@ const Expr_Escape_Regex = /\§(.*?)\§/;
 const Multiexpr_Escape_Regex = /\&(.*?)\&/;
 
 
-describe('expressionPreProcessing tests', () => {
+describe('expressionPreProcessingFilter tests', () => {
 
     describe('test getIdentifier()', () => {
         [{
@@ -464,26 +464,47 @@ describe('expressionPreProcessing tests', () => {
     });
 
 
-
-    //waiting for refactoring
-    xdescribe('escapeExpression()', () => {
-        //let assertionValues: {[key:string]:any} = {}
-        it('TBD', () => { })
-    })
-
-    xdescribe('reverseEscaped()', () => {
-        it('TBD', () => { })
-    });
-
-    xdescribe('resolveExpression()', () => {
-        it('TBD', () => { })
-    });
-
-
-    //waiting for refactoring 
-    xdescribe('reverseExprLogic()', () => {
-        //let assertionValues: {[key:string]:any} = {        }
-        it('TBD', () => { })
+    describe('reverseExprLogic()', () => {
+        [{
+            input: "A eq 1 and B eq 2 and C eq 3",
+            expected: "C eq 3 and B eq 2 and A eq 1"
+        },
+        {
+            input: "A eq 1 or B eq 2 or C eq 3",
+            expected: "C eq 3 or B eq 2 or A eq 1"
+        },
+        {
+            input: "A eq 1 and B eq 2 or C eq 3",
+            expected: "C eq 3 or B eq 2 and A eq 1"
+        },
+        {
+            input: "A eq 'Fynn' and B eq 'Steffen' or C eq 'Robin'",
+            expected: "C eq 'Robin' or B eq 'Steffen' and A eq 'Fynn'"
+        },
+        {
+            input: "(A eq 'Fynn' and B eq 'Steffen') or C eq 'Robin'",
+            expected: "C eq 'Robin' or (B eq 'Steffen' and A eq 'Fynn')"
+        },
+        {
+            input: "A eq 'Fynn' and (B eq 'Steffen' or C eq 'Robin')",
+            expected: "(C eq 'Robin' or B eq 'Steffen') and A eq 'Fynn'"
+        }
+    ,{
+        input: "A eq 'Fynn' and (B eq 'Steffen' or C eq 'Robin' and D eq 'Maik')",
+        expected: "(D eq 'Maik' and C eq 'Robin' or B eq 'Steffen') and A eq 'Fynn'"
+    },
+    {
+        input: "A eq 'Fynn' and not (B eq 'Steffen' or C eq 'Robin' and D eq 'Maik')",
+        expected: "not (D eq 'Maik' and C eq 'Robin' or B eq 'Steffen') and A eq 'Fynn'"
+    },
+    {
+        input: "A eq lowercase('Fynn') and not (B eq 'Steffen' or C eq 'Robin' and D eq 'Maik')",
+        expected: "not (D eq 'Maik' and C eq 'Robin' or B eq 'Steffen') and A eq lowercase('Fynn')"
+    }].forEach(testcase => {
+            it(`should return ${testcase.expected} for expression ${testcase.input}`, () => {
+                assert.equal(reverseExprLogic(testcase.input), testcase.expected)
+            })
+        })
     })
 
 });
