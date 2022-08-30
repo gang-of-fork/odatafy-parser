@@ -19,7 +19,7 @@ searchParenExpr = OPEN BWS searchExpr:searchExpr BWS CLOSE {return searchExpr}
 searchNegateExpr = 'NOT' RWS right:searchExpr {return{nodeType: "SearchOperatorNode", op: "NOT", right: right}}
 
 searchOrExpr  = left:(searchParenExpr / searchNegateExpr / searchPhrase / searchWord) RWS 'OR' RWS right:searchExpr {return{nodeType: "SearchOperatorNode", op: "OR", left: left, right: right}}
-searchAndExpr = left:(searchParenExpr / searchNegateExpr / searchPhrase / searchWord) (RWS 'AND')? RWS right:searchExpr  {return{nodeType: "SearchOperatorNode", op: "OR", left: left, right: right}}
+searchAndExpr = left:(searchParenExpr / searchNegateExpr / searchPhrase / searchWord) (RWS 'AND')? RWS right:searchExpr  {return{nodeType: "SearchOperatorNode", op: "AND", left: left, right: right}}
 
 searchPhrase = quotation_mark ( qchar_no_AMP_DQUOTE / SP )* quotation_mark {return {nodeType: "SearchItemNode", type: "Phrase", value: value}}
 
