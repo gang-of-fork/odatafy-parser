@@ -26,7 +26,7 @@ searchPhrase = quotation_mark value:( qchar_no_AMP_DQUOTE / SP )* quotation_mark
 searchWord = value:$(searchChar ( searchChar / SQUOTE )*) {return {nodeType: "SearchItemNode", type: "Word", value: value}}
 searchChar = unreserved / pct_encoded_no_DQUOTE / "!" / "*" / "+" / "," / ":" / "@" / "/" / "?" / "$" / "=" 
 
-searchExpr_incomplete = SQUOTE ( SQUOTE_in_string / qchar_no_AMP_SQUOTE / quotation_mark / SP )* SQUOTE {return {nodeType: "SearchItemNode", type: "Phrase", value: value}}
+searchExpr_incomplete = SQUOTE value:( SQUOTE_in_string / qchar_no_AMP_SQUOTE / quotation_mark / SP )* SQUOTE {return {nodeType: "SearchItemNode", type: "Phrase", value: value}}
 
 
 qchar_no_AMP_SQUOTE       = unreserved / pct_encoded           / other_delims / ":" / "@" / "/" / "?" / "$" /       "="
