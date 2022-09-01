@@ -21,7 +21,7 @@ searchNegateExpr = 'NOT' RWS right:searchExpr {return{nodeType: "SearchOperatorN
 searchOrExpr  = left:(searchParenExpr / searchNegateExpr / searchPhrase / searchWord) RWS 'OR' RWS right:searchExpr {return{nodeType: "SearchOperatorNode", op: "OR", left: left, right: right}}
 searchAndExpr = left:(searchParenExpr / searchNegateExpr / searchPhrase / searchWord) (RWS 'AND')? RWS right:searchExpr  {return{nodeType: "SearchOperatorNode", op: "AND", left: left, right: right}}
 
-searchPhrase = quotation_mark value:( qchar_no_AMP_DQUOTE / SP )* quotation_mark {return {nodeType: "SearchItemNode", type: "Phrase", value: value}}
+searchPhrase = quotation_mark value:$( qchar_no_AMP_DQUOTE / SP )* quotation_mark {return {nodeType: "SearchItemNode", type: "Phrase", value: value}}
 
 searchWord = value:$(searchChar ( searchChar / SQUOTE )*) {return {nodeType: "SearchItemNode", type: "Word", value: value}}
 searchChar = unreserved / pct_encoded_no_DQUOTE / "!" / "*" / "+" / "," / ":" / "@" / "/" / "?" / "$" / "=" 
