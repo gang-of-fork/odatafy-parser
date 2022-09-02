@@ -75,15 +75,24 @@ describe("Search Parser tests", () => {
           value: "AND",
         },
       },
-      // {
-      //     type: "simple phrase",
-      //     input: "'blue%20green'",
-      //     expectedAST: <SearchNode>{
-      //         nodeType: NodeTypes.SearchItemNode,
-      //         type: SearchItemTypes.Phrase,
-      //         value: "'blue%20green'"
-      //     }
-      // },
+      {
+          type: "simple phrase",
+          input: "'blue%20green'",
+          expectedAST: <SearchNode>{
+              nodeType: NodeTypes.SearchItemNode,
+              type: SearchItemTypes.Phrase,
+              value: "blue%20green"
+          }
+      },
+      {
+          type: "phrase with unbalanced double-quotes - still ok",
+          input: "'\"blue\" \"green'",
+          expectedAST: <SearchNode>{
+              nodeType: NodeTypes.SearchItemNode,
+              type: SearchItemTypes.Phrase,
+              value: "\"blue\" \"green"
+          }
+      }
     ].forEach(testParsingAndAST);
   }),
     describe("Single Operator", () => {
@@ -177,6 +186,24 @@ describe("Search Parser tests", () => {
             },
           },
         },
+        {
+          type: "implicit AND",
+          input: "blue red",
+          expectedAST: <SearchNode>{
+            nodeType: NodeTypes.SearchOperatorNode,
+            op: SearchOperators.And,
+            left: {
+              nodeType: NodeTypes.SearchItemNode,
+              type: SearchItemTypes.Word,
+              value: "red",
+            },
+            right: {
+              nodeType: NodeTypes.SearchItemNode,
+              type: SearchItemTypes.Word,
+              value: "blue",
+            },
+          },
+        }
       ].forEach(testParsingAndAST);
     }),
     describe("Multi Operator", () => {
