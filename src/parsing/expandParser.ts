@@ -1,5 +1,13 @@
 import peggy from 'peggy';
-import { ExpandNode } from '../types/nodes';
+import querystring from 'querystring';
+import { ExpandNode, ExpandOptions, ExpandOptionsNode, ExpandOptionsUnprocessedNode, NodeTypes } from '../types/nodes';
+import computeParser from './computeParser';
+import filterParser from './filterParser';
+import orderbyParser from './orderbyParser';
+import searchParser from './searchParser';
+import selectParser from './selectParser';
+import skipParser from './skipParser';
+import topParser from './topParser';
 
 let expandParser = peggy.generate(`
 {
@@ -32,10 +40,10 @@ let expandParser = peggy.generate(`
         args: args
       }
     }
-    function ExpandOptionsUnprocessedNodeHelper(selectOptionsString, type) {
+    function ExpandOptionsUnprocessedNodeHelper(expandOptionsString, type) {
       return {
         nodeType: "ExpandOptionsUnprocessedNode",
-        value: selectOptionsString,
+        value: expandOptionsString,
         type: type
       }
     }
@@ -56,17 +64,17 @@ let expandParser = peggy.generate(`
   
   start = head:expandItem tail:(COMMA @expandItem)* {return ExpandNodeHelper([head, ...tail])}
   expandItem        = "$value" {return ExpandValueNodeHelper()}
-                    / odataIdentifier &COMMA
-                    / odataIdentifierWithNamespace &COMMA
+                    / @odataIdentifier !"/"
+                    / @odataIdentifierWithNamespace !"/"
                     / expandPath
                     //if there is a dollar sign, dont read the ident here so that it can be read later
   expandPath        = path1: ( @( odataIdentifier / odataIdentifierWithNamespace ) "/" !"$")*
                       path2: ( STAR options:( ref {return {ref: true}} / OPEN levels:levels CLOSE {return {levels: levels}} )? {return [ExpandStarNodeHelper(options)]}
                       / ident1:(odataIdentifier / odataAnnotation) ident2:( "/" @(odataIdentifier/odataIdentifierWithNamespace) )?
-                        selOps:( 
-                          type:(ref {return "ref"} / count {return "count"} / "" {return "default"})  optionString:expandOptions? {return ExpandOptionsUnprocessedNodeHelper(optionString, type)}
+                        expOps:( 
+                          type:(ref {return "ref"} / count {return "count"} / "" &OPEN {return "default"})  optionString:expandOptions? {return ExpandOptionsUnprocessedNodeHelper(optionString, type)}
                         )?    
-                        {return [ident1, ident2, selOps]}                
+                        {return [ident1, ident2, expOps]}                
                       )
                       {return ExpandPathNodeHelper([...path1, ...path2])}
   
@@ -104,21 +112,78 @@ let expandParser = peggy.generate(`
   SP     = ' '
   HTAB   = '  '
   
-`, {trace: true})
+`, {trace: false})
 
 function parseExpand(expr: string): ExpandNode {
+    let ast = <ExpandNode>expandParser.parse(expr);
+    for(let expandItem of ast.value) {
+        if(expandItem.nodeType == NodeTypes.ExpandPathNode) {
+            for(let i = 0; i < expandItem.value.length; i++) {
+                if(expandItem.value[i].nodeType == NodeTypes.ExpandOptionsUnprocessedNode) {
+                    expandItem.value[i] = processExpandOptionsUnprocessedNode(<ExpandOptionsUnprocessedNode>expandItem.value[i])
+                }
+            }
+        }
+    }
+    return ast
+}
 
-    let expandNode = expandParser.parse(expr);
+export function processExpandOptionsUnprocessedNode(expandOptionsUnprocessedNode: ExpandOptionsUnprocessedNode): ExpandOptionsNode {
+  const parsedOptions = querystring.parse(expandOptionsUnprocessedNode.value, ";")
+                let options: ExpandOptions = {}
 
-    return expandNode;
+                //parse options
+                if(parsedOptions.$filter && typeof parsedOptions.$filter == 'string') {
+                    options.filter = filterParser.parse(parsedOptions.$filter);
+                }
+
+                if(parsedOptions.$orderby && typeof parsedOptions.$orderby == 'string') {
+                    options.orderby = orderbyParser.parse(parsedOptions.$orderby);
+                }
+
+                if(parsedOptions.$skip && typeof parsedOptions.$skip == 'string') {
+                    options.skip = skipParser.parse(parsedOptions.$skip);
+                }
+
+                if(parsedOptions.$top && typeof parsedOptions.$top == 'string') {
+                    options.top = topParser.parse(parsedOptions.$top);
+                }
+
+                if(parsedOptions.$select && typeof parsedOptions.$select == 'string') {
+                  options.select = selectParser.parse(parsedOptions.$select);
+                }
+
+                if(parsedOptions.$compute && typeof parsedOptions.$compute == 'string') {
+                  options.compute = computeParser.parse(parsedOptions.$compute);
+                }
+
+                if(parsedOptions.$expand && typeof parsedOptions.$expand == 'string') {
+                  options.expand = parseExpand(parsedOptions.$expand);
+                }
+
+                if(parsedOptions.$count && typeof parsedOptions.$count == 'string') {
+                  options.count = true
+                }
+                if(parsedOptions.$search && typeof parsedOptions.$search == 'string') {
+                  options.search = searchParser.parse(parsedOptions.$search);
+                }
+                
+
+                //TODO search
+                return {
+                  nodeType: NodeTypes.ExpandOptionsNode,
+                  value: options,
+                  type: expandOptionsUnprocessedNode.type
+
+                };
 }
 export default {
 
     /**
-       * Parser for search expressions
-       * @param expr search expression as string
-       * @example searchParser.parse("blue OR green OR red")
-       * @returns Abstract Syntax Tree (AST) of type SearchNode
+       * Parser for expand expressions
+       * @param expr expand expression as string
+       * @example expandParser.parse("Items/$ref")
+       * @returns Abstract Syntax Tree (AST) of type ExpandNode
        */
     parse: parseExpand
 }

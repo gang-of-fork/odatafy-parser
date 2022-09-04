@@ -414,8 +414,15 @@ describe('Select Parser tests', () => {
                             expand: {
                                 nodeType: NodeTypes.ExpandNode,
                                 value: [{
-                                    nodeType: NodeTypes.ExpandIdentifierNode,
-                                    value: "Addresses/Country"
+                                    nodeType: NodeTypes.ExpandPathNode,
+                                    value: [{
+                                        nodeType: NodeTypes.ExpandIdentifierNode,
+                                        value: "Addresses"
+                                    },
+                                    {
+                                        nodeType: NodeTypes.ExpandIdentifierNode,
+                                        value: "Country"
+                                    }]
                                 }]
                             },
                             compute: {

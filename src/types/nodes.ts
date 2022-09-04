@@ -442,8 +442,7 @@ export type ExpandOptionsUnprocessedNode = {
 export type ExpandOptionsNode = {
     nodeType: NodeTypes.ExpandOptionsNode,
     value: ExpandOptions,
-    ref: boolean,
-    count: boolean
+    type: "default" | "ref" | "count"
 }
 export type ExpandStarNode =  {
     nodeType: NodeTypes.ExpandStarNode,
@@ -463,7 +462,7 @@ export type ExpandOptions = {
     count?: any;
     orderby?: OrderbyNode;
     search?: any;
-    select?: ExpandNode;
+    select?: SelectNode;
     skip?: number;
     top?: number;
 }
