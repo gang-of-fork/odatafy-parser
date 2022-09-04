@@ -50,8 +50,7 @@ let expandParser = peggy.generate(`
     function ExpandStarNodeHelper(options) {
       return {
         nodeType: "ExpandStarNode",
-        ref: options.ref,
-        levels: options.levels
+        options: options
       }
     }
     function ExpandValueNodeHelper() {
@@ -64,13 +63,13 @@ let expandParser = peggy.generate(`
   
   start = head:expandItem tail:(COMMA @expandItem)* {return ExpandNodeHelper([head, ...tail])}
   expandItem        = "$value" {return ExpandValueNodeHelper()}
-                    / @odataIdentifier !"/"
                     / @odataIdentifierWithNamespace !"/"
+                    / @odataIdentifier !("/" / ".")
                     / expandPath
                     //if there is a dollar sign, dont read the ident here so that it can be read later
-  expandPath        = path1: ( @( odataIdentifier / odataIdentifierWithNamespace ) "/" !"$")*
+  expandPath        = path1: ( @( odataIdentifierWithNamespace / odataIdentifier ) "/" !"$")*
                       path2: ( STAR options:( ref {return {ref: true}} / OPEN levels:levels CLOSE {return {levels: levels}} )? {return [ExpandStarNodeHelper(options)]}
-                      / ident1:(odataIdentifier / odataAnnotation) ident2:( "/" @(odataIdentifier/odataIdentifierWithNamespace) )?
+                      / ident1:(odataIdentifier / odataAnnotation) ident2:( "/" @(odataIdentifierWithNamespace/odataIdentifier) )?
                         expOps:( 
                           type:(ref {return "ref"} / count {return "count"} / "" &OPEN {return "default"})  optionString:expandOptions? {return ExpandOptionsUnprocessedNodeHelper(optionString, type)}
                         )?    

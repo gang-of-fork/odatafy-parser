@@ -46,7 +46,7 @@ export enum NodeTypes {
  * General nodes
  */
 
- export type ConstantNode = {
+export type ConstantNode = {
     nodeType: NodeTypes.ConstantNode;
     type: ConstantNodeTypes;
     value: any;
@@ -75,7 +75,7 @@ export type LineStringNode = {
 export type PositionLiteral = {
     lon: number,
     lat: number,
-    alt: number, 
+    alt: number,
     /** 
      * @description linear referencing measure
     */
@@ -109,7 +109,7 @@ export type PointNode = {
 
 export type PolygonNode = {
     nodeType: NodeTypes.PolygonNode;
-    srid?:number;
+    srid?: number;
     rings: RingLiteral[];
 }
 
@@ -167,7 +167,7 @@ export enum SymbolNodeTypes {
  */
 
 export type FilterNode = OperatorNode | ConstantNode | ConstantSpatialNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode | undefined
-export type FuncArg = ConstantNode | ConstantSpatialNode |SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode
+export type FuncArg = ConstantNode | ConstantSpatialNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode
 
 export type OperatorNode = {
     nodeType: NodeTypes.OperatorNode;
@@ -336,7 +336,7 @@ export type SelectFunctionNode = {
     nodeType: NodeTypes.SelectFunctionNode;
     func: string;
     args: SelectIdentifierNode[];
-    
+
 }
 export type SelectPathNode = {
     nodeType: NodeTypes.SelectPathNode;
@@ -413,7 +413,7 @@ export enum SearchItemTypes {
  */
 
 
- export type ExpandNode = {
+export type ExpandNode = {
     nodeType: NodeTypes.ExpandNode;
     value: ExpandItemNode[];
 
@@ -444,10 +444,12 @@ export type ExpandOptionsNode = {
     value: ExpandOptions,
     type: "default" | "ref" | "count"
 }
-export type ExpandStarNode =  {
+export type ExpandStarNode = {
     nodeType: NodeTypes.ExpandStarNode,
-    ref?: boolean,
-    levels?: number | "max"
+    options: {
+        ref?: boolean,
+        levels?: number | "max"
+    }
 }
 
 export type ExpandValueNode = {
