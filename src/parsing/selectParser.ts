@@ -7,6 +7,7 @@ import skipParser from './skipParser';
 import topParser from './topParser';
 import computeParser from './computeParser';
 import expandParser from './expandParser';
+import searchParser from './searchParser';
 
 
 //TODO add annotations to path
@@ -158,13 +159,11 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
                 if(parsedOptions.$count && typeof parsedOptions.$count == 'string') {
                   options.count = true
                 }
-                /* ALSO ADD TEST WHEN ACTIVATING
+      
                 if(parsedOptions.$search && typeof parsedOptions.$search == 'string') {
                   options.search = searchParser.parse(parsedOptions.$search);
                 }
-                */
-
-                //TODO search
+               
                 return {
                   nodeType: NodeTypes.SelectOptionsNode,
                   value: options

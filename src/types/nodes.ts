@@ -22,8 +22,6 @@ export enum NodeTypes {
     EnumValueNode = 'EnumValueNode',
     OrderbyNode = 'OrderbyNode',
     OrderbyItemNode = 'OrderbyItemNode',
-    ExpandNode = 'ExpandNode',
-    ExpandIdentifierNode = 'ExpandIdentifierNode',
     ComputeNode = 'ComputeNode',
     ComputeItemNode = 'ComputeItemNode',
     SearchOperatorNode = 'SearchOperatorNode',
@@ -33,14 +31,22 @@ export enum NodeTypes {
     SelectPathNode = 'SelectPathNode',
     SelectIdentifierNode = 'SelectIdentifierNode',
     SelectOptionsUnprocessedNode = 'SelectOptionsUnprocessedNode',
-    SelectOptionsNode = 'SelectOptionsNode'
+    SelectOptionsNode = 'SelectOptionsNode',
+    ExpandNode = 'ExpandNode',
+    ExpandFunctionNode = 'ExpandFunctionNode',
+    ExpandPathNode = 'ExpandPathNode',
+    ExpandIdentifierNode = 'ExpandIdentifierNode',
+    ExpandOptionsUnprocessedNode = 'ExpandOptionsUnprocessedNode',
+    ExpandOptionsNode = 'ExpandOptionsNode',
+    ExpandStarNode = 'ExpandStarNode',
+    ExpandValueNode = 'ExpandValueNode'
 }
 
 /** 
  * General nodes
  */
 
- export type ConstantNode = {
+export type ConstantNode = {
     nodeType: NodeTypes.ConstantNode;
     type: ConstantNodeTypes;
     value: any;
@@ -69,7 +75,7 @@ export type LineStringNode = {
 export type PositionLiteral = {
     lon: number,
     lat: number,
-    alt: number, 
+    alt: number,
     /** 
      * @description linear referencing measure
     */
@@ -103,7 +109,7 @@ export type PointNode = {
 
 export type PolygonNode = {
     nodeType: NodeTypes.PolygonNode;
-    srid?:number;
+    srid?: number;
     rings: RingLiteral[];
 }
 
@@ -161,7 +167,7 @@ export enum SymbolNodeTypes {
  */
 
 export type FilterNode = OperatorNode | ConstantNode | ConstantSpatialNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode | undefined
-export type FuncArg = ConstantNode | ConstantSpatialNode |SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode
+export type FuncArg = ConstantNode | ConstantSpatialNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode
 
 export type OperatorNode = {
     nodeType: NodeTypes.OperatorNode;
@@ -299,28 +305,6 @@ export type OrderbyItemNode = {
 }
 
 /**
- * Expand parser nodes
- */
-
-export type ExpandNode = {
-    nodeType: NodeTypes.ExpandNode;
-    value: ExpandItemNode[];
-}
-
-export type ExpandItemNode = {
-    nodeType: NodeTypes.ExpandIdentifierNode;
-    identifier: string;
-    options?: ExpandItemOptions
-}
-
-export type ExpandItemOptions = {
-    filter?: FilterNode;
-    orderby?: OrderbyNode;
-    skip?: number;
-    top?: number;
-}
-
-/**
  * Compute Parser Nodes
  */
 
@@ -352,7 +336,7 @@ export type SelectFunctionNode = {
     nodeType: NodeTypes.SelectFunctionNode;
     func: string;
     args: SelectIdentifierNode[];
-    
+
 }
 export type SelectPathNode = {
     nodeType: NodeTypes.SelectPathNode;
@@ -396,9 +380,6 @@ export enum SelectIdentifierFlags {
 
 /**
  * Search parser nodes
- *     SearchNode = 'SearchNode',
-    SearchOperatorNode = 'SearchOperatorNode',
-    SearchItemNode = 'SearchItemNode',
  */
 
 export type SearchNode = SearchOperatorNode | SearchItemNode
@@ -426,3 +407,69 @@ export enum SearchItemTypes {
     Phrase = "Phrase",
     Word = "Word"
 }
+
+/**
+ * Expand parser nodes
+ */
+
+
+export type ExpandNode = {
+    nodeType: NodeTypes.ExpandNode;
+    value: ExpandItemNode[];
+
+}
+export type ExpandItemNode = ExpandPathNode | ExpandValueNode | ExpandIdentifierNode
+
+
+export type ExpandPathNode = {
+    nodeType: NodeTypes.ExpandPathNode;
+    value: (ExpandIdentifierNode | ExpandStarNode | ExpandOptionsNode | ExpandOptionsUnprocessedNode)[];
+}
+
+export type ExpandIdentifierNode = {
+    nodeType: NodeTypes.ExpandIdentifierNode;
+    flag?: ExpandIdentifierFlags;
+    value: string;
+    selectOptions?: ExpandOptionsUnprocessedNode | ExpandOptionsNode
+}
+
+export type ExpandOptionsUnprocessedNode = {
+    nodeType: NodeTypes.ExpandOptionsUnprocessedNode,
+    value: string,
+    type: "default" | "ref" | "count"
+}
+
+export type ExpandOptionsNode = {
+    nodeType: NodeTypes.ExpandOptionsNode,
+    value: ExpandOptions,
+    type: "default" | "ref" | "count"
+}
+export type ExpandStarNode = {
+    nodeType: NodeTypes.ExpandStarNode,
+    options: {
+        ref?: boolean,
+        levels?: number | "max"
+    }
+}
+
+export type ExpandValueNode = {
+    nodeType: NodeTypes.ExpandValueNode
+}
+
+export type ExpandOptions = {
+    aliasAndValue?: any;
+    compute?: ComputeNode;
+    expand?: ExpandNode;
+    filter?: FilterNode;
+    count?: any;
+    orderby?: OrderbyNode;
+    search?: any;
+    select?: SelectNode;
+    skip?: number;
+    top?: number;
+}
+
+export enum ExpandIdentifierFlags {
+    Annotation = "Annotation" //@Measures.Currency
+}
+

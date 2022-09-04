@@ -24,7 +24,7 @@ describe('public API tests', () => {
                     nodeType: NodeTypes.ExpandNode,
                     value: [{
                         nodeType: NodeTypes.ExpandIdentifierNode,
-                        identifier: "Products"
+                        value: "Products"
                     }]
                 },
                 filter: {
