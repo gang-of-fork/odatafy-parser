@@ -18,6 +18,23 @@ function testParsingAndAST(testcase: {
   });
 }
 
+function testParsingANDAST_Failing(testcase: {
+  type: string;
+  input: string;
+  message: string;
+}) {
+  it (`should throw Error because of ${testcase.type}`, () => {
+    assert.throws(
+        () => {
+          searchParser.parse(testcase.input);
+        },
+        {
+          name: 'SyntaxError',
+          message: testcase.message
+        });
+  });
+}
+
 describe("Search Parser tests", () => {
   describe("No operator", () => {
     [
@@ -320,6 +337,51 @@ describe("Search Parser tests", () => {
             },
           },
         },
+        {
+          type: "(NOT) OR",
+          input: "(NOT blue) OR red",
+          expectedAST: <SearchNode>{
+            nodeType: NodeTypes.SearchOperatorNode,
+            op: SearchOperators.Or,
+            left: {
+              nodeType: NodeTypes.SearchItemNode,
+              type: SearchItemTypes.Word,
+              value: "red"
+            },
+            right: {
+              nodeType: NodeTypes.SearchOperatorNode,
+              op: SearchOperators.Not,
+              right: {
+                nodeType: NodeTypes.SearchItemNode,
+                type: SearchItemTypes.Word,
+                value: "blue",
+              },
+            },
+          },
+        },
       ].forEach(testParsingAndAST);
     });
+    describe('error tests', () => {
+      [{
+          type: 'phrase with unbalanced double-quotes',
+          input: '"blue',
+          message: `Expected " ", "!", "$", "%", "%22", "'", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", "=", "?", "@", "\\"", "_", "~", [0-9], [A-Z], or [a-z] but end of input found.`
+      },
+      {
+          type: 'simple term with unencoded ampersand',
+          input: 'more&more',
+          message: `Expected "  ", " ", "!", "$", "%", "%09", "%20", "%27", "'", "*", "+", ",", "-", ".", "/", ":", "=", "?", "@", "_", "~", [0-9], [A-Z], [a-z], or end of input but "&" found.`
+      },
+      {
+          type: 'simple term with unencoded hash',
+          input: '#1',
+          message: `Expected "!", "$", "%", "%22", "%27", "%28", "'", "(", "*", "+", ",", "-", ".", "/", ":", "=", "?", "@", "NOT", "\\"", "_", "~", [0-9], [A-Z], or [a-z] but "#" found.`
+      },
+      {
+        type: 'simple term with unencoded semicolon',
+        input: 'a;b',
+        message: `Expected "  ", " ", "!", "$", "%", "%09", "%20", "%27", "'", "*", "+", ",", "-", ".", "/", ":", "=", "?", "@", "_", "~", [0-9], [A-Z], [a-z], or end of input but ";" found.`
+      }
+    ].forEach(testParsingANDAST_Failing)
+  });
 });
