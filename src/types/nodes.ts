@@ -423,14 +423,15 @@ export type ExpandItemNode = ExpandPathNode | ExpandValueNode | ExpandIdentifier
 
 export type ExpandPathNode = {
     nodeType: NodeTypes.ExpandPathNode;
-    value: (ExpandIdentifierNode | ExpandStarNode | ExpandOptionsNode | ExpandOptionsUnprocessedNode)[];
+    value: (ExpandIdentifierNode | ExpandStarNode)[];
+    options?: ExpandOptionsUnprocessedNode | ExpandOptions
+    optionType?: "default" | "ref" | "count"
 }
 
 export type ExpandIdentifierNode = {
     nodeType: NodeTypes.ExpandIdentifierNode;
     flag?: ExpandIdentifierFlags;
     value: string;
-    selectOptions?: ExpandOptionsUnprocessedNode | ExpandOptionsNode
 }
 
 export type ExpandOptionsUnprocessedNode = {
@@ -439,11 +440,6 @@ export type ExpandOptionsUnprocessedNode = {
     type: "default" | "ref" | "count"
 }
 
-export type ExpandOptionsNode = {
-    nodeType: NodeTypes.ExpandOptionsNode,
-    value: ExpandOptions,
-    type: "default" | "ref" | "count"
-}
 export type ExpandStarNode = {
     nodeType: NodeTypes.ExpandStarNode,
     options: {
