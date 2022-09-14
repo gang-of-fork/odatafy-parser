@@ -27,17 +27,14 @@
   },
   "homepage": "https://github.com/Gang-of-Fork/odatafy-parser#readme",
   "devDependencies": {
-    "@types/chai": "^4.3.1",
-    "typescript": "^4.6.4",
-    "typedoc": "^0.22.18"
+    "typedoc": "^0.22.18",
+    "typescript": "^4.6.4"
   },
   "dependencies": {
-    "@odata/parser": "^0.2.11",
     "@types/assert": "^1.5.6",
     "@types/mocha": "^9.1.1",
+    "@types/node": "^18.7.18",
     "assert": "^2.0.0",
-    "chai": "^4.3.6",
-    "equation-parser": "^0.3.1",
     "find-matching-bracket": "^1.0.3",
     "mathjs": "^10.6.1",
     "mocha": "^10.0.0",

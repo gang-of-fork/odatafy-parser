@@ -1,6 +1,5 @@
 // this is by far the most amazing algorithm ever created in 6 hours
 //God intends that one shall never touch any of this code
-import matchBracket from 'find-matching-bracket';
 import crypto from 'crypto';
 
 export enum Prefixes {
@@ -33,25 +32,6 @@ export function escapeStrings(expr: string) {
     }
 
     return [escaped, stringResolve];
-}
-
-export function escapeFunctions(expr: string): [string, Record<string, string>] {
-    let escaped = expr;
-    let functionResolve: Record<string, string> = {}
-
-    const regex = /(concat|contains|endswith|indexof|matchesPattern|startswith|geo.distance|geo.intersects|hassubset|hassubsequence|length|tolower|toupper|trim|year|month|day|hour|minute|second|fractionalseconds|totalseconds|date|time|totaloffsetminutes|round|floor|ceiling|geo.length|mindatetime|maxdatetime|now)\(/g
-
-    while([...escaped.matchAll(regex)].length > 0) {
-        let matches = [...escaped.matchAll(regex)];
-        const end = matchBracket(escaped, <number>matches[0].index + (matches[0][0].length - 1));
-        const identifier = getIdentifier(Prefixes.Func_Escape)
-        const toEscape = escaped.substring(<number>matches[0].index, end + 1);
-
-        functionResolve[identifier] = toEscape;
-
-        escaped = escaped.substring(0, <number>matches[0].index) + identifier + escaped.substring(end + 1);
-    }
-    return [escaped, functionResolve];
 }
 
 export function hasOnlyMatchingParentheses(expr: string) {
@@ -136,14 +116,10 @@ export function reverseEscaped(expr: string, resolvers: { [key: string]: { toEsc
     return expr;
 }
 
-export function resolveExpression(expr: string, exprResolver: Record<string, string>, funcResolver: Record<string, string>, strResolver: Record<string, string>) {
+export function resolveExpression(expr: string, exprResolver: Record<string, string>, strResolver: Record<string, string>) {
 
     Object.keys(exprResolver).forEach(key => {
         expr = expr.replace(key, exprResolver[key])
-    });
-
-    Object.keys(funcResolver).forEach(key => {
-        expr = expr.replace(key, funcResolver[key])
     });
 
     Object.keys(strResolver).forEach(key => {
@@ -158,12 +134,10 @@ export function reverseExprLogic(expr: string) {
 
     let [strResult, stringResolver] = escapeStrings(expr);
 
-    let [funcResult, functionResolver] = escapeFunctions(strResult as string)
-
-    let exprResult = escapeExpression(funcResult);
+    let exprResult = escapeExpression(strResult as string);
     let reverseResult = reverseEscaped(exprResult, multiExpressionResolve);
 
-    let result = resolveExpression(reverseResult, expressionResolver, functionResolver, stringResolver as Record<string, string>)
+    let result = resolveExpression(reverseResult, expressionResolver, stringResolver as Record<string, string>)
 
     return result;
 }
@@ -172,6 +146,5 @@ export default function searchExpressionPreProc(expr: string) {
     return reverseExprLogic(expr);
 }
 
-//console.log(reverseExprLogic("Alter eq 5 and contains(XYZ, 'B') or NOT ((Name eq 'Fynn') or NOT (Name eq 'Robbyn' and Name lte 3 and Lol gt 5 ) ) or Mem gt 6"));
 
 
