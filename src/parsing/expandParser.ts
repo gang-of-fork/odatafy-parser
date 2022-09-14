@@ -120,10 +120,13 @@ function parseExpand(expr: string): ExpandNode {
     if (expandItem.nodeType == NodeTypes.ExpandPathNode) {
       if (expandItem.options) {
         let expandOptions = processExpandOptionsUnprocessedNode(<ExpandOptionsUnprocessedNode>expandItem.options)
-        expandItem.options = expandOptions.value;
-        expandItem.optionType = expandOptions.type;
+        if (expandOptions.value) {
+          expandItem.options = expandOptions.value;
+          expandItem.optionType = expandOptions.type;
+        }
+      } else {
+        delete expandItem.options
       }
-
     }
   }
   return ast
