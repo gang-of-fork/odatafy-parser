@@ -27,13 +27,10 @@ let selectParser = peggy.generate(`
     }
   }
   function SelectIdentifierNodeHelper(value, flag) {
-    return flag?{
+    return {
       nodeType: "SelectIdentifierNode",
       value: value,
-      flag: flag
-    } : {
-      nodeType: "SelectIdentifierNode",
-      value: value,
+      ...(flag && {flag: flag}) 
     }
   }
   function SelectFunctionNodeHelper(func, args) {
@@ -58,10 +55,10 @@ selectItem     = STAR {return undefined}
                / (    
                    selectPath 
                    / qualifiedFunctionName 
-                   / identNode:(selectPathPart) selOps:selectOptions? {return selOps? {...identNode, selectOptions: selOps} : identNode}
+                   / identNode:(selectPathPart) selOps:selectOptions? {return {...identNode, ...(selOps && {selectOptions: selOps} ) }}
                  )
 
-selectPath = head:(selectPathPart) tail:( "/" @(identNode:(selectPathPart) selOps:selectOptions? {return selOps? {...identNode, selectOptions: selOps} : identNode}) )+ {return SelectPathNodeHelper([head, ...tail])}
+selectPath = head:(selectPathPart) tail:( "/" @(identNode:(selectPathPart) selOps:selectOptions? {return {...identNode, ...(selOps && {selectOptions: selOps} ) }} ) )+ {return SelectPathNodeHelper([head, ...tail])}
 selectPathPart = odataIdentifierWithNamespace / odataIdentifier / odataAnnotation
 
 selectOptions = OPEN selectOptionString:$textUntilTerminator CLOSE {return SelectOptionsUnprocessedNodeHelper(selectOptionString)}
