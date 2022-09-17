@@ -25,13 +25,10 @@ let expandParser = peggy.generate(`
       }
     }
     function ExpandIdentifierNodeHelper(value, flag) {
-      return flag?{
+      return {
         nodeType: "ExpandIdentifierNode",
         value: value,
-        flag: flag
-      } : {
-        nodeType: "ExpandIdentifierNode",
-        value: value,
+        ...(flag && {flag: flag}) 
       }
     }
     function ExpandFunctionNodeHelper(func, args) {
