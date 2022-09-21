@@ -18,12 +18,18 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "Rating",
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        value: "Rating",
+                    }]
                 },
                 {
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "ReleaseDate",
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        value: "ReleaseDate",
+                    }]
                 }]
             }
         },
@@ -86,9 +92,12 @@ describe('Select Parser tests', () => {
                 nodeType: NodeTypes.SelectNode,
                 value: [
                     {
-                        nodeType: NodeTypes.SelectIdentifierNode,
-                        value: "Addresses",
-                        selectOptions: {
+                        nodeType: NodeTypes.SelectPathNode,
+                        value: [{
+                            nodeType: NodeTypes.SelectIdentifierNode,
+                            value: "Addresses",
+                        }],
+                        options:{
                             nodeType: NodeTypes.SelectOptionsNode,
                             value: {
                                 filter: {
@@ -142,17 +151,26 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "ID"
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        value: "ID"
+                    }]
                 },
                 {
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "Model.ActionName"
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        value: "Model.ActionName"
+                    }]
                 },
                 {
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "Model2",
-                    flag: SelectIdentifierFlags.AllOperationsInSchema
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        value: "Model2",
+                        flag: SelectIdentifierFlags.AllOperationsInSchema
+                    }]
                 }]
             }
         }
@@ -166,8 +184,11 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "Name",
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        value: "Name",
+                    }]
                 }]
             }
 
@@ -178,8 +199,11 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "namespace.Name",
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        value: "namespace.Name",
+                    }]
                 }]
             }
 
@@ -190,11 +214,14 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectFunctionNode,
-                    func: "namespace.function",
-                    args: [{
-                        nodeType: NodeTypes.SelectIdentifierNode,
-                        value: "arg"
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectFunctionNode,
+                        func: "namespace.function",
+                        args: [{
+                            nodeType: NodeTypes.SelectIdentifierNode,
+                            value: "arg"
+                        }]
                     }]
                 }]
             }
@@ -244,9 +271,12 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "Adresse",
-                    flag: SelectIdentifierFlags.AllOperationsInSchema
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        value: "Adresse",
+                        flag: SelectIdentifierFlags.AllOperationsInSchema
+                    }]
                 }]
             }
 
@@ -266,12 +296,18 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "Name"
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        value: "Name"
+                    }]
                 },
                 {
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "namespace.Adresse"
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        value: "namespace.Adresse"
+                    }]
                 },
                 {
                     nodeType: NodeTypes.SelectPathNode,
@@ -296,9 +332,12 @@ describe('Select Parser tests', () => {
                     }]
                 },
                 {
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "Adresse",
-                    flag: SelectIdentifierFlags.AllOperationsInSchema
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        value: "Adresse",
+                        flag: SelectIdentifierFlags.AllOperationsInSchema
+                    }]
                 }]
             }
 
@@ -309,10 +348,13 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    flag: SelectIdentifierFlags.Annotation,
-                    value: "Core.Messages",
-                    selectOptions: {
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        flag: SelectIdentifierFlags.Annotation,
+                        value: "Core.Messages"
+                    }],
+                    options: {
                         nodeType: NodeTypes.SelectOptionsNode,
                         value: {
                             top: 5
@@ -334,14 +376,14 @@ describe('Select Parser tests', () => {
                     }, {
                         nodeType: NodeTypes.SelectIdentifierNode,
                         flag: SelectIdentifierFlags.Annotation,
-                        value: "Core.Messages",
-                        selectOptions: {
-                            nodeType: NodeTypes.SelectOptionsNode,
-                            value: {
-                                top: 5
-                            }
+                        value: "Core.Messages"
+                    }],
+                    options: {
+                        nodeType: NodeTypes.SelectOptionsNode,
+                        value: {
+                            top: 5
                         }
-                    }]
+                    }
                 }]
             }
         },
@@ -350,16 +392,22 @@ describe('Select Parser tests', () => {
             input: "@Measures.Currency,@Core.MayImplement($top=2)",
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
+                value: [{
+                    nodeType: NodeTypes.SelectPathNode,
                     value: [{
                         nodeType: NodeTypes.SelectIdentifierNode,
                         flag: SelectIdentifierFlags.Annotation,
                         value: "Measures.Currency"
+                    }]
                 },
                 {
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    flag: SelectIdentifierFlags.Annotation,
-                    value: "Core.MayImplement",
-                    selectOptions: {
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        flag: SelectIdentifierFlags.Annotation,
+                        value: "Core.MayImplement",
+                    }],
+                    options: {
                         nodeType: NodeTypes.SelectOptionsNode,
                         value: {
                             top: 2
@@ -368,45 +416,54 @@ describe('Select Parser tests', () => {
                 }]
             }
         },
-    {
-        type: "nested select expression",
-        input: "Addresses($select=Street,City)",
-        expectedAST: <SelectNode> {
-            nodeType: NodeTypes.SelectNode,
-            value: [
-                {
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "Addresses",
-                    selectOptions: {
+        {
+            type: "nested select expression",
+            input: "Addresses($select=Street,City)",
+            expectedAST: <SelectNode>{
+                nodeType: NodeTypes.SelectNode,
+                value: [{
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        value: "Addresses"
+                    }],
+                    options: {
                         nodeType: NodeTypes.SelectOptionsNode,
                         value: {
                             select: {
-                                nodeType: NodeTypes.SelectNode, 
+                                nodeType: NodeTypes.SelectNode,
                                 value: [{
-                                    nodeType: NodeTypes.SelectIdentifierNode,
-                                    value: "Street"
+                                    nodeType: NodeTypes.SelectPathNode,
+                                    value: [{
+                                        nodeType: NodeTypes.SelectIdentifierNode,
+                                        value: "Street"
+                                    }]
                                 },
                                 {
-                                    nodeType: NodeTypes.SelectIdentifierNode,
-                                    value: "City"
+                                    nodeType: NodeTypes.SelectPathNode,
+                                    value: [{
+                                        nodeType: NodeTypes.SelectIdentifierNode,
+                                        value: "City"
+                                    }]
                                 }]
                             }
                         }
                     }
-                }
-            ]
-        }
-    },
-    {
-        type: "Expressions with select options for skip, count, expand, compute, !search(deactivated)",
-        input: "Addresses($skip=0;$count=true;$expand=Addresses/Country;$compute=Name as LastName)",
-        expectedAST: <SelectNode>{
-            nodeType: NodeTypes.SelectNode,
-            value: [
-                {
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "Addresses",
-                    selectOptions: {
+                }]
+            }
+        },
+        {
+            type: "Expressions with select options for skip, count, expand, compute, !search(deactivated)",
+            input: "Addresses($skip=0;$count=true;$expand=Addresses/Country;$compute=Name as LastName)",
+            expectedAST: <SelectNode>{
+                nodeType: NodeTypes.SelectNode,
+                value: [{
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectIdentifierNode,
+                        value: "Addresses"
+                    }],
+                    options: {
                         nodeType: NodeTypes.SelectOptionsNode,
                         value: {
                             skip: 0,
@@ -426,24 +483,23 @@ describe('Select Parser tests', () => {
                                 }]
                             },
                             compute: {
-                              nodeType: NodeTypes.ComputeNode,
-                              value: [{
-                                nodeType: NodeTypes.ComputeItemNode,
-                                commonExpr: {
-                                    nodeType: NodeTypes.SymbolNode,
-                                    type: SymbolNodeTypes.Identifier,
-                                    value: "Name"
-                                },
-                                computeIdentifier: "LastName"
-                              }]  
+                                nodeType: NodeTypes.ComputeNode,
+                                value: [{
+                                    nodeType: NodeTypes.ComputeItemNode,
+                                    commonExpr: {
+                                        nodeType: NodeTypes.SymbolNode,
+                                        type: SymbolNodeTypes.Identifier,
+                                        value: "Name"
+                                    },
+                                    computeIdentifier: "LastName"
+                                }]
                             }
                         },
                     }
-                }
-            ]
+                }]
+            }
 
-        }
-    },].forEach(testParsingAndAST)
+        },].forEach(testParsingAndAST)
     })
 })
 
