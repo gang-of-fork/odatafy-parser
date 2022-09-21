@@ -415,15 +415,15 @@ export enum SearchItemTypes {
 
 export type ExpandNode = {
     nodeType: NodeTypes.ExpandNode;
-    value: ExpandItemNode[];
+    value: ExpandPathNode[];
 
 }
-export type ExpandItemNode = ExpandPathNode | ExpandValueNode | ExpandIdentifierNode
+export type ExpandItemNode = ExpandValueNode | ExpandIdentifierNode | ExpandStarNode
 
 
 export type ExpandPathNode = {
     nodeType: NodeTypes.ExpandPathNode;
-    value: (ExpandIdentifierNode | ExpandStarNode)[];
+    value: ExpandItemNode[];
     options?: ExpandOptionsUnprocessedNode | ExpandOptions
     optionType?: "default" | "ref" | "count"
 }

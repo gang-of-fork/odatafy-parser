@@ -60,9 +60,9 @@ let expandParser = peggy.generate(`
   
   
   start = head:expandItem tail:(COMMA @expandItem)* {return ExpandNodeHelper([head, ...tail])}
-  expandItem        = "$value" {return ExpandValueNodeHelper()}
-                    / @odataIdentifierWithNamespace !("/" / "(")
-                    / @odataIdentifier !("/" / "." / "(")
+  expandItem        = "$value" {return ExpandPathNodeHelper([ExpandValueNodeHelper()])}
+                    / identNode:odataIdentifierWithNamespace !("/" / "(") {return ExpandPathNodeHelper([identNode])}
+                    / identNode:odataIdentifier !("/" / "." / "(") {return ExpandPathNodeHelper([identNode])}
                     / expandPath
                     //if there is a dollar sign, dont read the ident here so that it can be read later
   expandPath        = path1: ( @( odataIdentifierWithNamespace / odataIdentifier ) "/" !"$")*
