@@ -326,10 +326,15 @@ export type ComputeItemNode = {
 
 export type SelectNode = {
     nodeType: NodeTypes.SelectNode;
-    value: SelectItemNode[];
+    value: SelectPathNode[];
 
 }
-export type SelectItemNode = SelectFunctionNode | SelectPathNode | SelectIdentifierNode | SelectOptionsUnprocessedNode
+export type SelectPathNode = {
+    nodeType: NodeTypes.SelectPathNode;
+    value: SelectItemNode[];
+    options?: SelectOptionsNode | SelectOptionsUnprocessedNode
+}
+export type SelectItemNode = SelectIdentifierNode | SelectFunctionNode
 
 
 export type SelectFunctionNode = {
@@ -338,16 +343,11 @@ export type SelectFunctionNode = {
     args: SelectIdentifierNode[];
 
 }
-export type SelectPathNode = {
-    nodeType: NodeTypes.SelectPathNode;
-    value: SelectIdentifierNode[];
-}
 
 export type SelectIdentifierNode = {
     nodeType: NodeTypes.SelectIdentifierNode;
     flag?: SelectIdentifierFlags;
     value: string;
-    selectOptions?: SelectOptionsUnprocessedNode | SelectOptionsNode
 }
 
 export type SelectOptionsUnprocessedNode = {
@@ -367,7 +367,7 @@ export type SelectOptions = {
     filter?: FilterNode;
     count?: any;
     orderby?: OrderbyNode;
-    search?: any;
+    search?: SearchNode;
     select?: SelectNode;
     skip?: number;
     top?: number;

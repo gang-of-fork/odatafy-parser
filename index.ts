@@ -1,9 +1,9 @@
-import { expandParser } from './src/parser';
+import { selectParser } from './src/parser';
 
 export * from './src/types/nodes';
 export * from './src/parser';
 
-console.log(JSON.stringify(expandParser.parse("Address/Name"), null, 4))
+console.log(JSON.stringify(selectParser.parse("Address($top=3)"), null, 4))
 
 
 

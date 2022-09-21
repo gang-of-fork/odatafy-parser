@@ -20,10 +20,11 @@ let selectParser = peggy.generate(`
       value: value.filter(selectItem => selectItem != undefined)
     }
   }
-  function SelectPathNodeHelper(value) {
+  function SelectPathNodeHelper(value, options) {
     return {
       nodeType: "SelectPathNode",
-      value: value
+      value: value,
+      ...(options && {options: options})
     }
   }
   function SelectIdentifierNodeHelper(value, flag) {
@@ -51,14 +52,14 @@ let selectParser = peggy.generate(`
 //functionname and selectoption are not clashing, because function params need to have odataIdentifiers as params and selectoptions always contain EQs, which are not allowed in odataIdents
 select         = head:selectItem tail:( COMMA BWS @selectItem )* {return SelectNodeHelper([head, ...tail])}
 selectItem     = STAR {return undefined}
-               / allOperationsInSchema 
+               / identNode:allOperationsInSchema  {return SelectPathNodeHelper([identNode])}
                / (    
-                   selectPath 
-                   / qualifiedFunctionName 
-                   / identNode:(selectPathPart) selOps:selectOptions? {return {...identNode, ...(selOps && {selectOptions: selOps} ) }}
+                  identNode:qualifiedFunctionName {return SelectPathNodeHelper([identNode])}
+                 / selectPath 
+                 / identNode:(selectPathPart) selOps:selectOptions? {return SelectPathNodeHelper([identNode], selOps) }
                  )
 
-selectPath = head:(selectPathPart) tail:( "/" @(identNode:(selectPathPart) selOps:selectOptions? {return {...identNode, ...(selOps && {selectOptions: selOps} ) }} ) )+ {return SelectPathNodeHelper([head, ...tail])}
+selectPath = head:(selectPathPart) tail:( "/" @(identNode: selectPathPart ) )* selOps:selectOptions?  {return SelectPathNodeHelper([head, ...tail], selOps)}
 selectPathPart = odataIdentifierWithNamespace / odataIdentifier / odataAnnotation
 
 selectOptions = OPEN selectOptionString:$textUntilTerminator CLOSE {return SelectOptionsUnprocessedNodeHelper(selectOptionString)}
@@ -99,22 +100,9 @@ HTAB   = '  '
 
 function parseSelect(expr: string): SelectNode {
     let ast = <SelectNode>selectParser.parse(expr);
-    for(let selectItem of ast.value) {
-      switch(selectItem.nodeType) {
-
-        case NodeTypes.SelectIdentifierNode:
-          if (selectItem.selectOptions && selectItem.selectOptions.nodeType == NodeTypes.SelectOptionsUnprocessedNode) {
-            selectItem.selectOptions = processSelectOptionsUnprocessedNode(selectItem.selectOptions)
-          }
-          break;
-
-        case NodeTypes.SelectPathNode:
-          for(let identNode of selectItem.value) {
-            if (identNode.selectOptions && identNode.selectOptions.nodeType == NodeTypes.SelectOptionsUnprocessedNode) {
-              identNode.selectOptions = processSelectOptionsUnprocessedNode(identNode.selectOptions)
-            }
-          }
-          break;
+    for(let selectPath of ast.value) {
+      if(selectPath.options && selectPath.options.nodeType == NodeTypes.SelectOptionsUnprocessedNode) {
+        selectPath.options = processSelectOptionsUnprocessedNode(selectPath.options)
       }
     }
     return ast

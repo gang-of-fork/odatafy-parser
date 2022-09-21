@@ -56,8 +56,11 @@ describe('public API tests', () => {
                 },
                 select: {nodeType: NodeTypes.SelectNode,
                 value: [{
+                    nodeType: NodeTypes.SelectPathNode,
+                    value: [{
                     nodeType: NodeTypes.SelectIdentifierNode,
                     value: "Name"
+                    }]
                 }]},
                 skip: 1,
                 top: 1
