@@ -18,11 +18,15 @@ let expandParser = peggy.generate(`
       }
     }
     function ExpandPathNodeHelper(value, expOps) {
-      return {
-        nodeType: "ExpandPathNode",
+      return expOps && expOps.value != ""?{
+        nodeType: "ExpandPathNodeWithOptions",
         value: value.filter(expandPathItem => expandPathItem  != undefined),
         options:expOps
+      } : {
+        nodeType: "ExpandPathNode",
+        value: value.filter(expandPathItem => expandPathItem  != undefined)
       }
+
     }
     function ExpandIdentifierNodeHelper(value, flag) {
       return {
@@ -114,16 +118,10 @@ let expandParser = peggy.generate(`
 function parseExpand(expr: string): ExpandNode {
   let ast = <ExpandNode>expandParser.parse(expr);
   for (let expandItem of ast.value) {
-    if (expandItem.nodeType == NodeTypes.ExpandPathNode) {
-      if (expandItem.options) {
+    if (expandItem.nodeType == NodeTypes.ExpandPathNodeWithOptions) {
         let expandOptions = processExpandOptionsUnprocessedNode(<ExpandOptionsUnprocessedNode>expandItem.options)
-        if (expandOptions.value) {
-          expandItem.options = expandOptions.value;
-          expandItem.optionType = expandOptions.type;
-        }
-      } else {
-        delete expandItem.options
-      }
+        expandItem.options = expandOptions.value;
+        expandItem.optionType = expandOptions.type;
     }
   }
   return ast

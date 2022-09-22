@@ -92,53 +92,52 @@ describe('Select Parser tests', () => {
                 nodeType: NodeTypes.SelectNode,
                 value: [
                     {
-                        nodeType: NodeTypes.SelectPathNode,
+                        nodeType: NodeTypes.SelectPathNodeWithOptions,
                         value: [{
                             nodeType: NodeTypes.SelectIdentifierNode,
                             value: "Addresses",
                         }],
-                        options:{
-                            nodeType: NodeTypes.SelectOptionsNode,
-                            value: {
-                                filter: {
-                                    nodeType: NodeTypes.FuncNode2Args,
-                                    func: "startswith",
-                                    args: [
-                                        {
-                                            nodeType: NodeTypes.SymbolNode,
-                                            type: "Identifier",
-                                            value: "City"
-                                        },
-                                        {
-                                            nodeType: NodeTypes.ConstantNode,
-                                            type: "String",
-                                            value: "H"
-                                        }
-                                    ]
-                                },
-                                orderby: {
-                                    nodeType: NodeTypes.OrderbyNode,
-                                    value: [
-                                        {
-                                            nodeType: NodeTypes.OrderbyItemNode,
-                                            type: "asc",
-                                            value: "Country/Name"
-                                        },
-                                        {
-                                            nodeType: NodeTypes.OrderbyItemNode,
-                                            type: "asc",
-                                            value: "City"
-                                        },
-                                        {
-                                            nodeType: NodeTypes.OrderbyItemNode,
-                                            type: "asc",
-                                            value: "Street"
-                                        }
-                                    ]
-                                },
-                                top: 5
-                            }
+                        options: {
+
+                            filter: {
+                                nodeType: NodeTypes.FuncNode2Args,
+                                func: "startswith",
+                                args: [
+                                    {
+                                        nodeType: NodeTypes.SymbolNode,
+                                        type: "Identifier",
+                                        value: "City"
+                                    },
+                                    {
+                                        nodeType: NodeTypes.ConstantNode,
+                                        type: "String",
+                                        value: "H"
+                                    }
+                                ]
+                            },
+                            orderby: {
+                                nodeType: NodeTypes.OrderbyNode,
+                                value: [
+                                    {
+                                        nodeType: NodeTypes.OrderbyItemNode,
+                                        type: "asc",
+                                        value: "Country/Name"
+                                    },
+                                    {
+                                        nodeType: NodeTypes.OrderbyItemNode,
+                                        type: "asc",
+                                        value: "City"
+                                    },
+                                    {
+                                        nodeType: NodeTypes.OrderbyItemNode,
+                                        type: "asc",
+                                        value: "Street"
+                                    }
+                                ]
+                            },
+                            top: 5
                         }
+
                     }
                 ]
 
@@ -191,7 +190,6 @@ describe('Select Parser tests', () => {
                     }]
                 }]
             }
-
         },
         {
             type: "select expression with 1 Item - odataIdentifierWithNamespace",
@@ -206,7 +204,6 @@ describe('Select Parser tests', () => {
                     }]
                 }]
             }
-
         },
         {
             type: "select expression with 1 Item - Function",
@@ -225,7 +222,6 @@ describe('Select Parser tests', () => {
                     }]
                 }]
             }
-
         },
         {
             type: "select expression with 1 Item - Path with odataIdentifiers",
@@ -244,7 +240,6 @@ describe('Select Parser tests', () => {
                     }]
                 }]
             }
-
         },
         {
             type: "select expression with 1 Item - Path with odataIdentifiersWithNamespace",
@@ -263,7 +258,6 @@ describe('Select Parser tests', () => {
                     }]
                 }]
             }
-
         },
         {
             type: "select expression with 1 Item - allOperationsInSchema",
@@ -279,7 +273,6 @@ describe('Select Parser tests', () => {
                     }]
                 }]
             }
-
         },
         {
             type: "select expression with 1 Item - Wildcard",
@@ -340,7 +333,6 @@ describe('Select Parser tests', () => {
                     }]
                 }]
             }
-
         },
         {
             type: "select expression with annotation and options",
@@ -348,17 +340,14 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectPathNode,
+                    nodeType: NodeTypes.SelectPathNodeWithOptions,
                     value: [{
                         nodeType: NodeTypes.SelectIdentifierNode,
                         flag: SelectIdentifierFlags.Annotation,
                         value: "Core.Messages"
                     }],
                     options: {
-                        nodeType: NodeTypes.SelectOptionsNode,
-                        value: {
-                            top: 5
-                        }
+                        top: 5
                     }
                 }]
             }
@@ -369,7 +358,7 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectPathNode,
+                    nodeType: NodeTypes.SelectPathNodeWithOptions,
                     value: [{
                         nodeType: NodeTypes.SelectIdentifierNode,
                         value: "Address"
@@ -379,10 +368,9 @@ describe('Select Parser tests', () => {
                         value: "Core.Messages"
                     }],
                     options: {
-                        nodeType: NodeTypes.SelectOptionsNode,
-                        value: {
-                            top: 5
-                        }
+
+                        top: 5
+
                     }
                 }]
             }
@@ -401,17 +389,14 @@ describe('Select Parser tests', () => {
                     }]
                 },
                 {
-                    nodeType: NodeTypes.SelectPathNode,
+                    nodeType: NodeTypes.SelectPathNodeWithOptions,
                     value: [{
                         nodeType: NodeTypes.SelectIdentifierNode,
                         flag: SelectIdentifierFlags.Annotation,
                         value: "Core.MayImplement",
                     }],
                     options: {
-                        nodeType: NodeTypes.SelectOptionsNode,
-                        value: {
-                            top: 2
-                        }
+                        top: 2
                     }
                 }]
             }
@@ -422,31 +407,28 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectPathNode,
+                    nodeType: NodeTypes.SelectPathNodeWithOptions,
                     value: [{
                         nodeType: NodeTypes.SelectIdentifierNode,
                         value: "Addresses"
                     }],
                     options: {
-                        nodeType: NodeTypes.SelectOptionsNode,
-                        value: {
-                            select: {
-                                nodeType: NodeTypes.SelectNode,
+                        select: {
+                            nodeType: NodeTypes.SelectNode,
+                            value: [{
+                                nodeType: NodeTypes.SelectPathNode,
                                 value: [{
-                                    nodeType: NodeTypes.SelectPathNode,
-                                    value: [{
-                                        nodeType: NodeTypes.SelectIdentifierNode,
-                                        value: "Street"
-                                    }]
-                                },
-                                {
-                                    nodeType: NodeTypes.SelectPathNode,
-                                    value: [{
-                                        nodeType: NodeTypes.SelectIdentifierNode,
-                                        value: "City"
-                                    }]
+                                    nodeType: NodeTypes.SelectIdentifierNode,
+                                    value: "Street"
                                 }]
-                            }
+                            },
+                            {
+                                nodeType: NodeTypes.SelectPathNode,
+                                value: [{
+                                    nodeType: NodeTypes.SelectIdentifierNode,
+                                    value: "City"
+                                }]
+                            }]
                         }
                     }
                 }]
@@ -458,47 +440,44 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectPathNode,
+                    nodeType: NodeTypes.SelectPathNodeWithOptions,
                     value: [{
                         nodeType: NodeTypes.SelectIdentifierNode,
                         value: "Addresses"
                     }],
                     options: {
-                        nodeType: NodeTypes.SelectOptionsNode,
-                        value: {
-                            skip: 0,
-                            count: true,
-                            expand: {
-                                nodeType: NodeTypes.ExpandNode,
+
+                        skip: 0,
+                        count: true,
+                        expand: {
+                            nodeType: NodeTypes.ExpandNode,
+                            value: [{
+                                nodeType: NodeTypes.ExpandPathNode,
                                 value: [{
-                                    nodeType: NodeTypes.ExpandPathNode,
-                                    value: [{
-                                        nodeType: NodeTypes.ExpandIdentifierNode,
-                                        value: "Addresses"
-                                    },
-                                    {
-                                        nodeType: NodeTypes.ExpandIdentifierNode,
-                                        value: "Country"
-                                    }]
+                                    nodeType: NodeTypes.ExpandIdentifierNode,
+                                    value: "Addresses"
+                                },
+                                {
+                                    nodeType: NodeTypes.ExpandIdentifierNode,
+                                    value: "Country"
                                 }]
-                            },
-                            compute: {
-                                nodeType: NodeTypes.ComputeNode,
-                                value: [{
-                                    nodeType: NodeTypes.ComputeItemNode,
-                                    commonExpr: {
-                                        nodeType: NodeTypes.SymbolNode,
-                                        type: SymbolNodeTypes.Identifier,
-                                        value: "Name"
-                                    },
-                                    computeIdentifier: "LastName"
-                                }]
-                            }
+                            }]
                         },
-                    }
+                        compute: {
+                            nodeType: NodeTypes.ComputeNode,
+                            value: [{
+                                nodeType: NodeTypes.ComputeItemNode,
+                                commonExpr: {
+                                    nodeType: NodeTypes.SymbolNode,
+                                    type: SymbolNodeTypes.Identifier,
+                                    value: "Name"
+                                },
+                                computeIdentifier: "LastName"
+                            }]
+                        }
+                    },
                 }]
             }
-
         },].forEach(testParsingAndAST)
     })
 })

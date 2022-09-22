@@ -1,5 +1,5 @@
 import peggy from 'peggy';
-import { NodeTypes, SelectNode, SelectOptions, SelectOptionsNode, SelectOptionsUnprocessedNode } from '../types/nodes';
+import { NodeTypes, SelectNode, SelectOptions, SelectOptionsUnprocessedNode } from '../types/nodes';
 import querystring from 'querystring';
 import filterParser from './filterParser';
 import orderbyParser from './orderbyParser';
@@ -21,10 +21,13 @@ let selectParser = peggy.generate(`
     }
   }
   function SelectPathNodeHelper(value, options) {
-    return {
-      nodeType: "SelectPathNode",
+    return options?{
+      nodeType: "SelectPathNodeWithOptions",
       value: value,
-      ...(options && {options: options})
+      options: options
+    } : {
+      nodeType: "SelectPathNode",
+      value: value
     }
   }
   function SelectIdentifierNodeHelper(value, flag) {
@@ -101,14 +104,14 @@ HTAB   = '  '
 function parseSelect(expr: string): SelectNode {
     let ast = <SelectNode>selectParser.parse(expr);
     for(let selectPath of ast.value) {
-      if(selectPath.options && selectPath.options.nodeType == NodeTypes.SelectOptionsUnprocessedNode) {
-        selectPath.options = processSelectOptionsUnprocessedNode(selectPath.options)
+      if(selectPath.nodeType == NodeTypes.SelectPathNodeWithOptions) {
+        selectPath.options = processSelectOptionsUnprocessedNode(<SelectOptionsUnprocessedNode>selectPath.options)
       }
     }
     return ast
 }
 
-export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode: SelectOptionsUnprocessedNode): SelectOptionsNode {
+export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode: SelectOptionsUnprocessedNode): SelectOptions {
   const parsedOptions = querystring.parse(SelectOptionsUnprocessedNode.value, ";")
                 let options: SelectOptions = {}
 
@@ -149,10 +152,7 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
                   options.search = searchParser.parse(parsedOptions.$search);
                 }
                
-                return {
-                  nodeType: NodeTypes.SelectOptionsNode,
-                  value: options
-                };
+                return options;
 }
 
 export default {
