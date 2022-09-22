@@ -18,20 +18,21 @@ let expandParser = peggy.generate(`
       }
     }
     function ExpandPathNodeHelper(value, expOps) {
-      return {
-        nodeType: "ExpandPathNode",
+      return expOps && expOps.value != ""?{
+        nodeType: "ExpandPathNodeWithOptions",
         value: value.filter(expandPathItem => expandPathItem  != undefined),
         options:expOps
+      } : {
+        nodeType: "ExpandPathNode",
+        value: value.filter(expandPathItem => expandPathItem  != undefined)
       }
+
     }
     function ExpandIdentifierNodeHelper(value, flag) {
-      return flag?{
+      return {
         nodeType: "ExpandIdentifierNode",
         value: value,
-        flag: flag
-      } : {
-        nodeType: "ExpandIdentifierNode",
-        value: value,
+        ...(flag && {flag: flag}) 
       }
     }
     function ExpandFunctionNodeHelper(func, args) {
@@ -51,7 +52,7 @@ let expandParser = peggy.generate(`
     function ExpandStarNodeHelper(options) {
       return {
         nodeType: "ExpandStarNode",
-        options: options
+        ...(options && {options: options})
       }
     }
     function ExpandValueNodeHelper() {
@@ -63,13 +64,13 @@ let expandParser = peggy.generate(`
   
   
   start = head:expandItem tail:(COMMA @expandItem)* {return ExpandNodeHelper([head, ...tail])}
-  expandItem        = "$value" {return ExpandValueNodeHelper()}
-                    / @odataIdentifierWithNamespace !("/" / "(")
-                    / @odataIdentifier !("/" / "." / "(")
+  expandItem        = "$value" {return ExpandPathNodeHelper([ExpandValueNodeHelper()])}
+                    / identNode:odataIdentifierWithNamespace !("/" / "(") {return ExpandPathNodeHelper([identNode])}
+                    / identNode:odataIdentifier !("/" / "." / "(") {return ExpandPathNodeHelper([identNode])}
                     / expandPath
                     //if there is a dollar sign, dont read the ident here so that it can be read later
   expandPath        = path1: ( @( odataIdentifierWithNamespace / odataIdentifier ) "/" !"$")*
-                      path2: ( STAR options:( ref {return {ref: true}} / OPEN levels:levels CLOSE {return {levels: levels}} )? {return [ExpandStarNodeHelper(options)]}
+                      path2: ( STAR options:( ref {return {ref: true}} / OPEN levels:levels CLOSE {return {levels: levels}} )? {return {path: [ExpandStarNodeHelper(options)]}}
                       / ident1:(odataIdentifier / odataAnnotation) ident2:( "/" @(odataIdentifierWithNamespace/odataIdentifier) )?
                         expOps:( 
                           type:(ref {return "ref"} / count {return "count"} / "" &OPEN {return "default"})  optionString:expandOptions? {return ExpandOptionsUnprocessedNodeHelper(optionString, type)}
@@ -78,8 +79,8 @@ let expandParser = peggy.generate(`
                       )
                       {return ExpandPathNodeHelper([...path1, ...path2.path], path2.expOps)}
   
-  count = '/$count'
-  ref   = '/$ref'
+  count = "/$count"
+  ref   = "/$ref"
   
   odataAnnotation = AT identNode:(odataIdentifierWithNamespace / odataIdentifier) {return {...identNode, flag: "Annotation"}}
   
@@ -117,16 +118,10 @@ let expandParser = peggy.generate(`
 function parseExpand(expr: string): ExpandNode {
   let ast = <ExpandNode>expandParser.parse(expr);
   for (let expandItem of ast.value) {
-    if (expandItem.nodeType == NodeTypes.ExpandPathNode) {
-      if (expandItem.options) {
+    if (expandItem.nodeType == NodeTypes.ExpandPathNodeWithOptions) {
         let expandOptions = processExpandOptionsUnprocessedNode(<ExpandOptionsUnprocessedNode>expandItem.options)
-        if (expandOptions.value) {
-          expandItem.options = expandOptions.value;
-          expandItem.optionType = expandOptions.type;
-        }
-      } else {
-        delete expandItem.options
-      }
+        expandItem.options = expandOptions.value;
+        expandItem.optionType = expandOptions.type;
     }
   }
   return ast
