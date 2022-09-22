@@ -21,10 +21,13 @@ let selectParser = peggy.generate(`
     }
   }
   function SelectPathNodeHelper(value, options) {
-    return {
-      nodeType: "SelectPathNode",
+    return options?{
+      nodeType: "SelectPathNodeWithOptions",
       value: value,
-      ...(options && {options: options})
+      options: options
+    } : {
+      nodeType: "SelectPathNode",
+      value: value
     }
   }
   function SelectIdentifierNodeHelper(value, flag) {
@@ -101,7 +104,7 @@ HTAB   = '  '
 function parseSelect(expr: string): SelectNode {
     let ast = <SelectNode>selectParser.parse(expr);
     for(let selectPath of ast.value) {
-      if(selectPath.options && selectPath.options.nodeType == NodeTypes.SelectOptionsUnprocessedNode) {
+      if(selectPath.nodeType == NodeTypes.SelectPathNodeWithOptions &&  selectPath.options.nodeType == NodeTypes.SelectOptionsUnprocessedNode) {
         selectPath.options = processSelectOptionsUnprocessedNode(selectPath.options)
       }
     }

@@ -29,12 +29,14 @@ export enum NodeTypes {
     SelectNode = 'SelectNode',
     SelectFunctionNode = 'SelectFunctionNode',
     SelectPathNode = 'SelectPathNode',
+    SelectPathNodeWithOptions = 'SelectPathNodeWithOptions',
     SelectIdentifierNode = 'SelectIdentifierNode',
     SelectOptionsUnprocessedNode = 'SelectOptionsUnprocessedNode',
     SelectOptionsNode = 'SelectOptionsNode',
     ExpandNode = 'ExpandNode',
     ExpandFunctionNode = 'ExpandFunctionNode',
     ExpandPathNode = 'ExpandPathNode',
+    ExpandPathNodeWithOptions = 'ExpandPathNodeWithOptions',
     ExpandIdentifierNode = 'ExpandIdentifierNode',
     ExpandOptionsUnprocessedNode = 'ExpandOptionsUnprocessedNode',
     ExpandOptionsNode = 'ExpandOptionsNode',
@@ -326,14 +328,21 @@ export type ComputeItemNode = {
 
 export type SelectNode = {
     nodeType: NodeTypes.SelectNode;
-    value: SelectPathNode[];
+    value: (SelectPathNode | SelectPathNodeWithOptions )[];
 
 }
 export type SelectPathNode = {
     nodeType: NodeTypes.SelectPathNode;
     value: SelectItemNode[];
-    options?: SelectOptionsNode | SelectOptionsUnprocessedNode
 }
+
+export type SelectPathNodeWithOptions = {
+    nodeType: NodeTypes.SelectPathNodeWithOptions;
+    value: SelectItemNode[];
+    options: SelectOptionsNode | SelectOptionsUnprocessedNode
+}
+
+
 export type SelectItemNode = SelectIdentifierNode | SelectFunctionNode
 
 
@@ -415,7 +424,7 @@ export enum SearchItemTypes {
 
 export type ExpandNode = {
     nodeType: NodeTypes.ExpandNode;
-    value: ExpandPathNode[];
+    value: (ExpandPathNode | ExpandPathNodeWithOptions)[];
 
 }
 export type ExpandItemNode = ExpandValueNode | ExpandIdentifierNode | ExpandStarNode
@@ -424,9 +433,15 @@ export type ExpandItemNode = ExpandValueNode | ExpandIdentifierNode | ExpandStar
 export type ExpandPathNode = {
     nodeType: NodeTypes.ExpandPathNode;
     value: ExpandItemNode[];
-    options?: ExpandOptionsUnprocessedNode | ExpandOptions
-    optionType?: "default" | "ref" | "count"
 }
+
+export type ExpandPathNodeWithOptions = {
+    nodeType: NodeTypes.ExpandPathNodeWithOptions;
+    value: ExpandItemNode[];
+    options: ExpandOptionsUnprocessedNode | ExpandOptions
+    optionType: "default" | "ref" | "count"
+}
+
 
 export type ExpandIdentifierNode = {
     nodeType: NodeTypes.ExpandIdentifierNode;

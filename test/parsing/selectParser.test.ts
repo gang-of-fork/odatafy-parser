@@ -92,7 +92,7 @@ describe('Select Parser tests', () => {
                 nodeType: NodeTypes.SelectNode,
                 value: [
                     {
-                        nodeType: NodeTypes.SelectPathNode,
+                        nodeType: NodeTypes.SelectPathNodeWithOptions,
                         value: [{
                             nodeType: NodeTypes.SelectIdentifierNode,
                             value: "Addresses",
@@ -348,7 +348,7 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectPathNode,
+                    nodeType: NodeTypes.SelectPathNodeWithOptions,
                     value: [{
                         nodeType: NodeTypes.SelectIdentifierNode,
                         flag: SelectIdentifierFlags.Annotation,
@@ -369,7 +369,7 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectPathNode,
+                    nodeType: NodeTypes.SelectPathNodeWithOptions,
                     value: [{
                         nodeType: NodeTypes.SelectIdentifierNode,
                         value: "Address"
@@ -401,7 +401,7 @@ describe('Select Parser tests', () => {
                     }]
                 },
                 {
-                    nodeType: NodeTypes.SelectPathNode,
+                    nodeType: NodeTypes.SelectPathNodeWithOptions,
                     value: [{
                         nodeType: NodeTypes.SelectIdentifierNode,
                         flag: SelectIdentifierFlags.Annotation,
@@ -422,7 +422,7 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectPathNode,
+                    nodeType: NodeTypes.SelectPathNodeWithOptions,
                     value: [{
                         nodeType: NodeTypes.SelectIdentifierNode,
                         value: "Addresses"
@@ -458,7 +458,7 @@ describe('Select Parser tests', () => {
             expectedAST: <SelectNode>{
                 nodeType: NodeTypes.SelectNode,
                 value: [{
-                    nodeType: NodeTypes.SelectPathNode,
+                    nodeType: NodeTypes.SelectPathNodeWithOptions,
                     value: [{
                         nodeType: NodeTypes.SelectIdentifierNode,
                         value: "Addresses"
