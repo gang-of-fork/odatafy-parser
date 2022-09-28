@@ -2,8 +2,8 @@
 This package is still under construction. First stable version will be released soon.
 
 # odatafy-parser
-odata parser for odatafy framework.
- 
+This module is the odata parser for the odatafy framework. Click [here](https://gang-of-fork.github.io/odatafy-docs/) to learn more about odatafy.
+
 npm module to create ast from oData url parameters. It aims to support a subset with the most important operations from the official [oData Specification](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_Introduction).
 
 # odatafy
