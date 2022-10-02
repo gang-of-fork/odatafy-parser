@@ -47,7 +47,7 @@ describe("Expand Parser tests", () => {
               value: [
                 {
                   nodeType: NodeTypes.ExpandIdentifierNode,
-                  value: "Items/$ref",
+                  value: "Items",
                 },
               ],
             },
