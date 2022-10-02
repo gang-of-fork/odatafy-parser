@@ -7,7 +7,7 @@ describe('public API tests', () => {
         it('should parse ODataUrl correctly', () => {
             let url = "https://api.dualis-bot.robin-reyer.de/Users?compute=FirstName as Name&expand=Products&$filter=Name eq 'Sebastian'&orderby=Name asc&$search=Spengler&select=Name&$skip=1&top=1"
             let ast = parseODataUrl(url)
-            let expectedAST:oDataParseResult = {
+            let expectedAST: oDataParseResult = {
                 compute: {
                     nodeType: NodeTypes.ComputeNode,
                     value: [{
@@ -23,8 +23,11 @@ describe('public API tests', () => {
                 expand: {
                     nodeType: NodeTypes.ExpandNode,
                     value: [{
-                        nodeType: NodeTypes.ExpandIdentifierNode,
-                        identifier: "Products"
+                        nodeType: NodeTypes.ExpandPathNode,
+                        value: [{
+                            nodeType: NodeTypes.ExpandIdentifierNode,
+                            value: "Products"
+                        }]
                     }]
                 },
                 filter: {
@@ -54,27 +57,32 @@ describe('public API tests', () => {
                     type: SearchItemTypes.Word,
                     value: "Spengler"
                 },
-                select: {nodeType: NodeTypes.SelectNode,
-                value: [{
-                    nodeType: NodeTypes.SelectIdentifierNode,
-                    value: "Name"
-                }]},
+                select: {
+                    nodeType: NodeTypes.SelectNode,
+                    value: [{
+                        nodeType: NodeTypes.SelectPathNode,
+                        value: [{
+                            nodeType: NodeTypes.SelectIdentifierNode,
+                            value: "Name"
+                        }]
+                    }]
+                },
                 skip: 1,
                 top: 1
 
             }
-            assert.deepStrictEqual(ast,expectedAST)
+            assert.deepStrictEqual(ast, expectedAST)
         });
 
         it('should not parse url with duplicate queryoption', () => {
             let url = "https://api.dualis-bot.robin-reyer.de/Users?$skip=1&skip=1"
-            assert.throws(() => {parseODataUrl(url)})
+            assert.throws(() => { parseODataUrl(url) })
         })
 
         it('should only parse existing queryoptions', () => {
             let url = 'https://api.dualis-bot.robin-reyer.de/Users?$skip=1'
             let ast = parseODataUrl(url)
-            let expectedAST:oDataParseResult = {
+            let expectedAST: oDataParseResult = {
                 skip: 1
             }
             assert.deepStrictEqual(ast, expectedAST)

@@ -1,5 +1,5 @@
 import peggy from 'peggy';
-import { NodeTypes, SelectNode, SelectOptions, SelectOptionsNode, SelectOptionsUnprocessedNode } from '../types/nodes';
+import { NodeTypes, SelectNode, SelectOptions, SelectOptionsUnprocessedNode } from '../types/nodes';
 import querystring from 'querystring';
 import filterParser from './filterParser';
 import orderbyParser from './orderbyParser';
@@ -7,6 +7,7 @@ import skipParser from './skipParser';
 import topParser from './topParser';
 import computeParser from './computeParser';
 import expandParser from './expandParser';
+import searchParser from './searchParser';
 
 
 //TODO add annotations to path
@@ -19,20 +20,21 @@ let selectParser = peggy.generate(`
       value: value.filter(selectItem => selectItem != undefined)
     }
   }
-  function SelectPathNodeHelper(value) {
-    return {
+  function SelectPathNodeHelper(value, options) {
+    return options?{
+      nodeType: "SelectPathNodeWithOptions",
+      value: value,
+      options: options
+    } : {
       nodeType: "SelectPathNode",
       value: value
     }
   }
   function SelectIdentifierNodeHelper(value, flag) {
-    return flag?{
+    return {
       nodeType: "SelectIdentifierNode",
       value: value,
-      flag: flag
-    } : {
-      nodeType: "SelectIdentifierNode",
-      value: value,
+      ...(flag && {flag: flag}) 
     }
   }
   function SelectFunctionNodeHelper(func, args) {
@@ -53,14 +55,14 @@ let selectParser = peggy.generate(`
 //functionname and selectoption are not clashing, because function params need to have odataIdentifiers as params and selectoptions always contain EQs, which are not allowed in odataIdents
 select         = head:selectItem tail:( COMMA BWS @selectItem )* {return SelectNodeHelper([head, ...tail])}
 selectItem     = STAR {return undefined}
-               / allOperationsInSchema 
+               / identNode:allOperationsInSchema  {return SelectPathNodeHelper([identNode])}
                / (    
-                   selectPath 
-                   / qualifiedFunctionName 
-                   / identNode:(selectPathPart) selOps:selectOptions? {return selOps? {...identNode, selectOptions: selOps} : identNode}
+                  identNode:qualifiedFunctionName {return SelectPathNodeHelper([identNode])}
+                 / selectPath 
+                 / identNode:(selectPathPart) selOps:selectOptions? {return SelectPathNodeHelper([identNode], selOps) }
                  )
 
-selectPath = head:(selectPathPart) tail:( "/" @(identNode:(selectPathPart) selOps:selectOptions? {return selOps? {...identNode, selectOptions: selOps} : identNode}) )+ {return SelectPathNodeHelper([head, ...tail])}
+selectPath = head:(selectPathPart) tail:( "/" @(identNode: selectPathPart ) )* selOps:selectOptions?  {return SelectPathNodeHelper([head, ...tail], selOps)}
 selectPathPart = odataIdentifierWithNamespace / odataIdentifier / odataAnnotation
 
 selectOptions = OPEN selectOptionString:$textUntilTerminator CLOSE {return SelectOptionsUnprocessedNodeHelper(selectOptionString)}
@@ -101,28 +103,15 @@ HTAB   = '  '
 
 function parseSelect(expr: string): SelectNode {
     let ast = <SelectNode>selectParser.parse(expr);
-    for(let selectItem of ast.value) {
-      switch(selectItem.nodeType) {
-
-        case NodeTypes.SelectIdentifierNode:
-          if (selectItem.selectOptions && selectItem.selectOptions.nodeType == NodeTypes.SelectOptionsUnprocessedNode) {
-            selectItem.selectOptions = processSelectOptionsUnprocessedNode(selectItem.selectOptions)
-          }
-          break;
-
-        case NodeTypes.SelectPathNode:
-          for(let identNode of selectItem.value) {
-            if (identNode.selectOptions && identNode.selectOptions.nodeType == NodeTypes.SelectOptionsUnprocessedNode) {
-              identNode.selectOptions = processSelectOptionsUnprocessedNode(identNode.selectOptions)
-            }
-          }
-          break;
+    for(let selectPath of ast.value) {
+      if(selectPath.nodeType == NodeTypes.SelectPathNodeWithOptions) {
+        selectPath.options = processSelectOptionsUnprocessedNode(<SelectOptionsUnprocessedNode>selectPath.options)
       }
     }
     return ast
 }
 
-export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode: SelectOptionsUnprocessedNode): SelectOptionsNode {
+export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode: SelectOptionsUnprocessedNode): SelectOptions {
   const parsedOptions = querystring.parse(SelectOptionsUnprocessedNode.value, ";")
                 let options: SelectOptions = {}
 
@@ -158,17 +147,12 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
                 if(parsedOptions.$count && typeof parsedOptions.$count == 'string') {
                   options.count = true
                 }
-                /* ALSO ADD TEST WHEN ACTIVATING
+      
                 if(parsedOptions.$search && typeof parsedOptions.$search == 'string') {
                   options.search = searchParser.parse(parsedOptions.$search);
                 }
-                */
-
-                //TODO search
-                return {
-                  nodeType: NodeTypes.SelectOptionsNode,
-                  value: options
-                };
+               
+                return options;
 }
 
 export default {
