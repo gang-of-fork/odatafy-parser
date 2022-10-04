@@ -143,7 +143,7 @@ export function processExpandOptionsUnprocessedNode(expandOptionsUnprocessedNode
   const parsedOptions = querystring.parse(expandOptionsUnprocessedNode.value, ";")
   let options: ExpandOptions = {}
 
-  //parse options
+  //parse options with $
   if (parsedOptions.$filter && typeof parsedOptions.$filter == 'string') {
     options.filter = filterParser.parse(parsedOptions.$filter);
   }
@@ -182,6 +182,47 @@ export function processExpandOptionsUnprocessedNode(expandOptionsUnprocessedNode
 
   if (parsedOptions.$levels && typeof parsedOptions.$levels == 'string') {
     options.levels = levelsParser.parse(parsedOptions.$levels)
+  }
+
+  //parse options without $
+  if (parsedOptions.filter && typeof parsedOptions.filter == 'string') {
+    options.filter = filterParser.parse(parsedOptions.filter);
+  }
+
+  if (parsedOptions.orderby && typeof parsedOptions.orderby == 'string') {
+    options.orderby = orderbyParser.parse(parsedOptions.orderby);
+  }
+
+  if (parsedOptions.skip && typeof parsedOptions.skip == 'string') {
+    options.skip = skipParser.parse(parsedOptions.skip);
+  }
+
+  if (parsedOptions.top && typeof parsedOptions.top == 'string') {
+    options.top = topParser.parse(parsedOptions.top);
+  }
+
+  if (parsedOptions.select && typeof parsedOptions.select == 'string') {
+    options.select = selectParser.parse(parsedOptions.select);
+  }
+
+  if (parsedOptions.compute && typeof parsedOptions.compute == 'string') {
+    options.compute = computeParser.parse(parsedOptions.compute);
+  }
+
+  if (parsedOptions.expand && typeof parsedOptions.expand == 'string') {
+    options.expand = parseExpand(parsedOptions.expand);
+  }
+
+  if (parsedOptions.count && typeof parsedOptions.count == 'string') {
+    options.count = true
+  }
+
+  if (parsedOptions.search && typeof parsedOptions.search == 'string') {
+    options.search = searchParser.parse(parsedOptions.search);
+  }
+
+  if (parsedOptions.levels && typeof parsedOptions.levels == 'string') {
+    options.levels = levelsParser.parse(parsedOptions.levels)
   }
 
 

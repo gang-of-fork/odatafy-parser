@@ -127,7 +127,7 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
   const parsedOptions = querystring.parse(SelectOptionsUnprocessedNode.value, ";")
   let options: SelectOptions = {}
 
-  //parse options
+  //parse options wíth $
   if (parsedOptions.$filter && typeof parsedOptions.$filter == 'string') {
     options.filter = filterParser.parse(parsedOptions.$filter);
   }
@@ -162,6 +162,43 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
 
   if (parsedOptions.$search && typeof parsedOptions.$search == 'string') {
     options.search = searchParser.parse(parsedOptions.$search);
+  }
+
+  // parse options without $
+  if (parsedOptions.filter && typeof parsedOptions.filter == 'string') {
+    options.filter = filterParser.parse(parsedOptions.filter);
+  }
+
+  if (parsedOptions.orderby && typeof parsedOptions.orderby == 'string') {
+    options.orderby = orderbyParser.parse(parsedOptions.orderby);
+  }
+
+  if (parsedOptions.skip && typeof parsedOptions.skip == 'string') {
+    options.skip = skipParser.parse(parsedOptions.skip);
+  }
+
+  if (parsedOptions.top && typeof parsedOptions.top == 'string') {
+    options.top = topParser.parse(parsedOptions.top);
+  }
+
+  if (parsedOptions.select && typeof parsedOptions.select == 'string') {
+    options.select = parseSelect(parsedOptions.select);
+  }
+
+  if (parsedOptions.compute && typeof parsedOptions.compute == 'string') {
+    options.compute = computeParser.parse(parsedOptions.compute);
+  }
+
+  if (parsedOptions.expand && typeof parsedOptions.expand == 'string') {
+    options.expand = expandParser.parse(parsedOptions.expand);
+  }
+
+  if (parsedOptions.count && typeof parsedOptions.count == 'string') {
+    options.count = true
+  }
+
+  if (parsedOptions.search && typeof parsedOptions.search == 'string') {
+    options.search = searchParser.parse(parsedOptions.search);
   }
 
   return options;
