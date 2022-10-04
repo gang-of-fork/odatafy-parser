@@ -6,8 +6,10 @@
 import peggy from 'peggy';
 import astPostProc from '../processing/filterAstPostProc';
 import filterExpressionPreProc from '../processing/filterExpressionPreProc';
+import { OdatafyQueryOptions } from '../types/errors';
 
 import { FilterNode } from '../types/nodes';
+import { getOdatafyParserError } from '../utils';
 
 //import fs from "fs";
 //import path from "path"
@@ -390,9 +392,13 @@ export default {
      * @returns Abstract Syntax Tree (AST) of type FilterNode
      */
     parse: (expr: string, options?: peggy.ParserOptions | undefined): FilterNode => {
+        try{
         expr = filterExpressionPreProc(expr)
         let output = myParser.parse(expr, options)
         output = astPostProc(output);
         return output;
+        } catch (e) {
+            throw getOdatafyParserError("malformed filter expression", OdatafyQueryOptions.Filter)
+        }
     }
 }

@@ -1,3 +1,5 @@
+import { OdatafyQueryOptions } from '../types/errors';
+import { getOdatafyParserError } from '../utils';
 import { isPositiveInteger } from './helpers';
 
 export default {
@@ -12,6 +14,6 @@ export default {
             return parseInt(expr as string);
         }
 
-        throw new Error("skip must be a valid integer value");
+        throw getOdatafyParserError("skip must be a valid integer value", OdatafyQueryOptions.Skip)
     }
 }

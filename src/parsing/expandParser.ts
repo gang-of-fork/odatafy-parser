@@ -1,6 +1,8 @@
 import peggy from 'peggy';
 import querystring from 'querystring';
+import { OdatafyQueryOptions } from '../types/errors';
 import { ExpandNode, ExpandOptions, ExpandOptionsUnprocessedNode, NodeTypes } from '../types/nodes';
+import { getOdatafyParserError } from '../utils';
 import computeParser from './computeParser';
 import filterParser from './filterParser';
 import levelsParser from './levelsParser';
@@ -117,15 +119,24 @@ let expandParser = peggy.generate(`
 `, { trace: false })
 
 function parseExpand(expr: string): ExpandNode {
-  let ast = <ExpandNode>expandParser.parse(expr);
-  for (let expandItem of ast.value) {
-    if (expandItem.nodeType == NodeTypes.ExpandPathNodeWithOptions) {
+  let ast;
+  try {
+    ast = <ExpandNode>expandParser.parse(expr);
+  } catch (e) {
+    throw getOdatafyParserError("malformed expand expression", OdatafyQueryOptions.Expand)
+  }
+  try {
+    for (let expandItem of ast.value) {
+      if (expandItem.nodeType == NodeTypes.ExpandPathNodeWithOptions) {
         let expandOptions = processExpandOptionsUnprocessedNode(<ExpandOptionsUnprocessedNode>expandItem.options)
         expandItem.options = expandOptions.value;
         expandItem.optionType = expandOptions.type;
+      }
     }
+    return ast
+  } catch (e) {
+    throw getOdatafyParserError("malformed expand options", OdatafyQueryOptions.Expand)
   }
-  return ast
 }
 
 export function processExpandOptionsUnprocessedNode(expandOptionsUnprocessedNode: ExpandOptionsUnprocessedNode) {
@@ -169,7 +180,7 @@ export function processExpandOptionsUnprocessedNode(expandOptionsUnprocessedNode
     options.search = searchParser.parse(parsedOptions.$search);
   }
 
-  if(parsedOptions.$levels && typeof parsedOptions.$levels == 'string') {
+  if (parsedOptions.$levels && typeof parsedOptions.$levels == 'string') {
     options.levels = levelsParser.parse(parsedOptions.$levels)
   }
 

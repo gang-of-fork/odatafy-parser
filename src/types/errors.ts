@@ -10,7 +10,7 @@ export type OdatafyError = {
     area: "SystemQueryOptions",
 
     //which Queryoption (e.g. skip, filter) Expression causes a problem
-    queryOption?: string
+    queryOption?: string,
 
     //custom error message
     message: string
@@ -26,4 +26,16 @@ export enum OdatafyModules {
 export enum OdatafyErrorNames {
     ParserException = "ParserException",
     //...
+}
+
+export enum OdatafyQueryOptions {
+    Compute = "compute",
+    Expand = "expand",
+    Filter = "filter",
+    Levels = "levels",
+    OrderBy = "orderby",
+    Search = "search",
+    Select = "select",
+    Skip = "skip",
+    Top = "top"
 }

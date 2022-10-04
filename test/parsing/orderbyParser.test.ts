@@ -13,10 +13,6 @@ function testError(testcase: { type: string, input: string }) {
     it(`should throw Error because of ${testcase.type}`, () => {
         assert.throws(() => {
             orderbyParser.parse(testcase.input);
-            },
-            {
-                name: 'Error',
-                message: "malformed orderby: " + testcase.input
             }
         ); 
     })   

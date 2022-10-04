@@ -8,6 +8,8 @@ import topParser from './topParser';
 import computeParser from './computeParser';
 import expandParser from './expandParser';
 import searchParser from './searchParser';
+import { getOdatafyParserError } from '../utils';
+import { OdatafyQueryOptions } from '../types/errors';
 
 
 //TODO add annotations to path
@@ -102,57 +104,67 @@ HTAB   = '  '
 `)
 
 function parseSelect(expr: string): SelectNode {
-    let ast = <SelectNode>selectParser.parse(expr);
-    for(let selectPath of ast.value) {
-      if(selectPath.nodeType == NodeTypes.SelectPathNodeWithOptions) {
+  let ast;
+  try {
+    ast = <SelectNode>selectParser.parse(expr);
+  } catch (e) {
+    throw getOdatafyParserError("malformed select expression", OdatafyQueryOptions.Select)
+  }
+  
+  try {
+    for (let selectPath of ast.value) {
+      if (selectPath.nodeType == NodeTypes.SelectPathNodeWithOptions) {
         selectPath.options = processSelectOptionsUnprocessedNode(<SelectOptionsUnprocessedNode>selectPath.options)
       }
     }
     return ast
+  } catch (e) {
+    throw getOdatafyParserError("malformed select options", OdatafyQueryOptions.Select)
+  }
 }
 
 export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode: SelectOptionsUnprocessedNode): SelectOptions {
   const parsedOptions = querystring.parse(SelectOptionsUnprocessedNode.value, ";")
-                let options: SelectOptions = {}
+  let options: SelectOptions = {}
 
-                //parse options
-                if(parsedOptions.$filter && typeof parsedOptions.$filter == 'string') {
-                    options.filter = filterParser.parse(parsedOptions.$filter);
-                }
+  //parse options
+  if (parsedOptions.$filter && typeof parsedOptions.$filter == 'string') {
+    options.filter = filterParser.parse(parsedOptions.$filter);
+  }
 
-                if(parsedOptions.$orderby && typeof parsedOptions.$orderby == 'string') {
-                    options.orderby = orderbyParser.parse(parsedOptions.$orderby);
-                }
+  if (parsedOptions.$orderby && typeof parsedOptions.$orderby == 'string') {
+    options.orderby = orderbyParser.parse(parsedOptions.$orderby);
+  }
 
-                if(parsedOptions.$skip && typeof parsedOptions.$skip == 'string') {
-                    options.skip = skipParser.parse(parsedOptions.$skip);
-                }
+  if (parsedOptions.$skip && typeof parsedOptions.$skip == 'string') {
+    options.skip = skipParser.parse(parsedOptions.$skip);
+  }
 
-                if(parsedOptions.$top && typeof parsedOptions.$top == 'string') {
-                    options.top = topParser.parse(parsedOptions.$top);
-                }
+  if (parsedOptions.$top && typeof parsedOptions.$top == 'string') {
+    options.top = topParser.parse(parsedOptions.$top);
+  }
 
-                if(parsedOptions.$select && typeof parsedOptions.$select == 'string') {
-                  options.select = parseSelect(parsedOptions.$select);
-                }
+  if (parsedOptions.$select && typeof parsedOptions.$select == 'string') {
+    options.select = parseSelect(parsedOptions.$select);
+  }
 
-                if(parsedOptions.$compute && typeof parsedOptions.$compute == 'string') {
-                  options.compute = computeParser.parse(parsedOptions.$compute);
-                }
+  if (parsedOptions.$compute && typeof parsedOptions.$compute == 'string') {
+    options.compute = computeParser.parse(parsedOptions.$compute);
+  }
 
-                if(parsedOptions.$expand && typeof parsedOptions.$expand == 'string') {
-                  options.expand = expandParser.parse(parsedOptions.$expand);
-                }
+  if (parsedOptions.$expand && typeof parsedOptions.$expand == 'string') {
+    options.expand = expandParser.parse(parsedOptions.$expand);
+  }
 
-                if(parsedOptions.$count && typeof parsedOptions.$count == 'string') {
-                  options.count = true
-                }
-      
-                if(parsedOptions.$search && typeof parsedOptions.$search == 'string') {
-                  options.search = searchParser.parse(parsedOptions.$search);
-                }
-               
-                return options;
+  if (parsedOptions.$count && typeof parsedOptions.$count == 'string') {
+    options.count = true
+  }
+
+  if (parsedOptions.$search && typeof parsedOptions.$search == 'string') {
+    options.search = searchParser.parse(parsedOptions.$search);
+  }
+
+  return options;
 }
 
 export default {
@@ -162,7 +174,7 @@ export default {
      * @example selectParser.parse("Name,Age")
      * @returns Abstract Syntax Tree (AST) of type SelectNode
      */
-    parse: parseSelect
+  parse: parseSelect
 }
 
 
