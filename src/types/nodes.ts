@@ -29,12 +29,13 @@ export enum NodeTypes {
     SelectNode = 'SelectNode',
     SelectFunctionNode = 'SelectFunctionNode',
     SelectPathNode = 'SelectPathNode',
+    SelectPathNodeWithOptions = 'SelectPathNodeWithOptions',
     SelectIdentifierNode = 'SelectIdentifierNode',
     SelectOptionsUnprocessedNode = 'SelectOptionsUnprocessedNode',
-    SelectOptionsNode = 'SelectOptionsNode',
     ExpandNode = 'ExpandNode',
     ExpandFunctionNode = 'ExpandFunctionNode',
     ExpandPathNode = 'ExpandPathNode',
+    ExpandPathNodeWithOptions = 'ExpandPathNodeWithOptions',
     ExpandIdentifierNode = 'ExpandIdentifierNode',
     ExpandOptionsUnprocessedNode = 'ExpandOptionsUnprocessedNode',
     ExpandOptionsNode = 'ExpandOptionsNode',
@@ -323,43 +324,92 @@ export type ComputeItemNode = {
  * Select parser nodes
  */
 
-
+/**
+ * SelectNodes are representing a $select
+ * 
+ * ```$select=... ```
+ * 
+ * => Would create a SelectNode
+ */
 export type SelectNode = {
     nodeType: NodeTypes.SelectNode;
-    value: SelectItemNode[];
-
+    value: (SelectPathNode | SelectPathNodeWithOptions )[];
 }
-export type SelectItemNode = SelectFunctionNode | SelectPathNode | SelectIdentifierNode | SelectOptionsUnprocessedNode
+
+/**
+ * SelectPathNodes are representing one selectItem (seperated by comma) each
+ * 
+ * ``` $select=Name,Adress/Street```
+ * 
+ * => Would create two SelectPathNodes
+ * 
+ */
+export type SelectPathNode = {
+    nodeType: NodeTypes.SelectPathNode;
+    value: SelectItemNode[];
+}
+
+/**
+ * SelectPathNodeWithOptions are representing one selectItem (seperated by comma) each, that have options
+ * 
+ * ```$select=Name,Adress/Street($top=5)```
+ * 
+ * => Would create a SelectPathNode for Name and a SelectPathNodeWithOptions for Adress/Street($top=5)
+ */
+export type SelectPathNodeWithOptions = {
+    nodeType: NodeTypes.SelectPathNodeWithOptions;
+    value: SelectItemNode[];
+    options: SelectOptions | SelectOptionsUnprocessedNode
+}
 
 
+export type SelectItemNode = SelectIdentifierNode | SelectFunctionNode
+
+/**
+ * SelectFunctionNodes are representing a function
+ * 
+ * ``` $select=MostPopularName(Location,Kind)```
+ * 
+ * => Would create a SelectFunctionNode inside a SelectPathNode
+ */
 export type SelectFunctionNode = {
     nodeType: NodeTypes.SelectFunctionNode;
     func: string;
     args: SelectIdentifierNode[];
 
 }
-export type SelectPathNode = {
-    nodeType: NodeTypes.SelectPathNode;
-    value: SelectIdentifierNode[];
-}
 
+/**
+ * SelectIdentifierNodes are representing an Identifier each
+ * 
+ * ```$select=Name,namespace.name,@Measures.currency```
+ * 
+ * => Would create a SelectIdentifierNode inside a SelectPathNode for Name and namespace.name and a SelectIdentifierNode with the flag set for @Measures.currency
+ * 
+ * => Flag will be set if the identifier is a annotation (@)
+ */
 export type SelectIdentifierNode = {
     nodeType: NodeTypes.SelectIdentifierNode;
     flag?: SelectIdentifierFlags;
     value: string;
-    selectOptions?: SelectOptionsUnprocessedNode | SelectOptionsNode
 }
 
+/**
+ * for internal processing
+ */
 export type SelectOptionsUnprocessedNode = {
     nodeType: NodeTypes.SelectOptionsUnprocessedNode,
     value: string;
 }
 
-export type SelectOptionsNode = {
-    nodeType: NodeTypes.SelectOptionsNode,
-    value: SelectOptions;
-}
-
+/**
+ * SelectOptionsNodes are representing SelectOptions
+ * 
+ * ```$select=Name($top=4)```
+ * 
+ * => Would create a SelectIdentifierNode inside a SelectPathNodeWithOptions for Name
+ * 
+ */
 export type SelectOptions = {
     aliasAndValue?: any;
     compute?: ComputeNode;
@@ -367,7 +417,7 @@ export type SelectOptions = {
     filter?: FilterNode;
     count?: any;
     orderby?: OrderbyNode;
-    search?: any;
+    search?: SearchNode;
     select?: SelectNode;
     skip?: number;
     top?: number;
@@ -412,34 +462,79 @@ export enum SearchItemTypes {
  * Expand parser nodes
  */
 
-
+/**
+ * ExpandNodes are representing a $expand
+ * 
+ * ```$expand=... ```
+ * 
+ * => Would create an ExpandNode
+ */
 export type ExpandNode = {
     nodeType: NodeTypes.ExpandNode;
-    value: ExpandItemNode[];
+    value: (ExpandPathNode | ExpandPathNodeWithOptions)[];
 
 }
-export type ExpandItemNode = ExpandPathNode | ExpandValueNode | ExpandIdentifierNode
+export type ExpandItemNode = ExpandValueNode | ExpandIdentifierNode | ExpandStarNode
 
-
+/**
+ * ExpandPathNodes are representing one expandItem (seperated by comma) each
+ * 
+ * ``` $expand=Name,Adress/Street```
+ * 
+ * => Would create two ExpandPathNodes
+ * 
+ */
 export type ExpandPathNode = {
     nodeType: NodeTypes.ExpandPathNode;
-    value: (ExpandIdentifierNode | ExpandStarNode)[];
-    options?: ExpandOptionsUnprocessedNode | ExpandOptions
-    optionType?: "default" | "ref" | "count"
+    value: ExpandItemNode[];
 }
 
+/**
+ * ExpandPathNodeWithOptions are representing one expandItem (seperated by comma) each, that have options
+ * 
+ * ```$expand=Name,Adress/Street($top=5)```
+ * 
+ * => Would create an ExpandPathNode for Name and an ExpandPathNodeWithOptions for Adress/Street($top=5)
+ */
+export type ExpandPathNodeWithOptions = {
+    nodeType: NodeTypes.ExpandPathNodeWithOptions;
+    value: ExpandItemNode[];
+    options: ExpandOptionsUnprocessedNode | ExpandOptions
+    optionType: "default" | "ref" | "count"
+}
+
+/**
+ * ExpandIdentifierNodes are representing an Identifier each
+ * 
+ * ```$expand=Name,namespace.name,@Measures.currency```
+ * 
+ * => Would create an ExpandIdentifierNode inside an ExpandPathNode for Name and namespace.name and a ExpandIdentifierNode with the flag set for @Measures.currency
+ * 
+ * => Flag will be set if the identifier is a annotation (@)
+ */
 export type ExpandIdentifierNode = {
     nodeType: NodeTypes.ExpandIdentifierNode;
     flag?: ExpandIdentifierFlags;
     value: string;
 }
 
+/**
+ * for internal processing
+ */
 export type ExpandOptionsUnprocessedNode = {
     nodeType: NodeTypes.ExpandOptionsUnprocessedNode,
     value: string,
     type: "default" | "ref" | "count"
 }
 
+/**
+ * ExpandStarNodes are representing Wildcards
+ * 
+ * ```$expand=*,*\/$ref,*($levels=2)```
+ * 
+ * => Would create an ExpandStarNode inside an ExpandPathNode for each of the three expressions
+ *
+ */
 export type ExpandStarNode = {
     nodeType: NodeTypes.ExpandStarNode,
     options: {
@@ -448,10 +543,26 @@ export type ExpandStarNode = {
     }
 }
 
+/**
+ * ExpandValueNodes are representing $value
+ * 
+ * ```$expand=$value```
+ * 
+ * => Would create an ExpandValueNode inside an ExpandPathNode 
+ *
+ */
 export type ExpandValueNode = {
     nodeType: NodeTypes.ExpandValueNode
 }
 
+/**
+ * ExpandOptions are representing ExpandOptions
+ * 
+ * ```$expand=Name($top=4)```
+ * 
+ * => Would create an ExpandIdentifierNode inside a ExpandPathNodeWithOptions for Name
+ * 
+ */
 export type ExpandOptions = {
     aliasAndValue?: any;
     compute?: ComputeNode;
@@ -463,6 +574,7 @@ export type ExpandOptions = {
     select?: SelectNode;
     skip?: number;
     top?: number;
+    levels?: number | "max"
 }
 
 export enum ExpandIdentifierFlags {
