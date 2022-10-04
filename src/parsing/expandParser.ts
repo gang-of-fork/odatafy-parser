@@ -3,6 +3,7 @@ import querystring from 'querystring';
 import { ExpandNode, ExpandOptions, ExpandOptionsUnprocessedNode, NodeTypes } from '../types/nodes';
 import computeParser from './computeParser';
 import filterParser from './filterParser';
+import levelsParser from './levelsParser';
 import orderbyParser from './orderbyParser';
 import searchParser from './searchParser';
 import selectParser from './selectParser';
@@ -163,8 +164,13 @@ export function processExpandOptionsUnprocessedNode(expandOptionsUnprocessedNode
   if (parsedOptions.$count && typeof parsedOptions.$count == 'string') {
     options.count = true
   }
+
   if (parsedOptions.$search && typeof parsedOptions.$search == 'string') {
     options.search = searchParser.parse(parsedOptions.$search);
+  }
+
+  if(parsedOptions.$levels && typeof parsedOptions.$levels == 'string') {
+    options.levels = levelsParser.parse(parsedOptions.$levels)
   }
 
 
