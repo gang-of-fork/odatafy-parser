@@ -148,11 +148,29 @@ describe("Expand Parser tests", () => {
                   ],
                 },
               },
-              optionType: "default"
+              optionType: "default",
             },
           ],
         },
       },
     ].forEach(testParsingAndAST);
   });
+
+  // describe("error tests", () => {
+  //   [
+  //     {
+  //       type: "no $select after $ref",
+  //       input: "Customer/$ref($select=Name)"
+  //      }
+  //   ].forEach(testcase => {
+  //   it(`should throw Error because of ${testcase.type}`, () => {
+  //     assert.throws(
+  //         () => {
+  //         expandParser.parse(testcase.input);
+  //         },
+  //         {
+  //         name: 'peg$SyntaxError',
+  //         message: 'Expected "$value", "%2A", "%40", "*", "@", "_", or [a-z,A-Z] but "$" found'
+  //   });
+  // });
 });
