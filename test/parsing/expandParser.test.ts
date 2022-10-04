@@ -1,6 +1,12 @@
 import assert from "assert";
 import expandParser from "../../src/parsing/expandParser";
-import { NodeTypes, ExpandNode } from "../../src/types/nodes";
+import {
+  NodeTypes,
+  ExpandNode,
+  OperatorNodeOperators,
+  SymbolNodeTypes,
+  ConstantNodeTypes,
+} from "../../src/types/nodes";
 
 function testParsingAndAST(testcase: {
   type: string;
@@ -149,6 +155,191 @@ describe("Expand Parser tests", () => {
                 },
               },
               optionType: "default",
+            },
+          ],
+        },
+      },
+    ].forEach(testParsingAndAST);
+  });
+
+  describe("options testcases", () => {
+    [
+      {
+        type: "recursive expansion",
+        input: "Customer($levels=4)",
+        expectedAST: <ExpandNode>{
+          nodeType: NodeTypes.ExpandNode,
+          value: [
+            {
+              nodeType: NodeTypes.ExpandPathNodeWithOptions,
+              optionType: "default",
+              options: {
+                levels: 4,
+              },
+              value: [
+                {
+                  nodeType: NodeTypes.ExpandIdentifierNode,
+                  value: "Customer",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        type: "recursive expansion - no $ prefix",
+        input: "Customer(levels=4)",
+        expectedAST: <ExpandNode>{
+          nodeType: NodeTypes.ExpandNode,
+          value: [
+            {
+              nodeType: NodeTypes.ExpandPathNodeWithOptions,
+              optionType: "default",
+              options: {
+                levels: 4,
+              },
+              value: [
+                {
+                  nodeType: NodeTypes.ExpandIdentifierNode,
+                  value: "Customer",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        type: "Expand - $count",
+        input: "Items($count=true)",
+        expectedAST: <ExpandNode>{
+          nodeType: NodeTypes.ExpandNode,
+          value: [
+            {
+              nodeType: NodeTypes.ExpandPathNodeWithOptions,
+              optionType: "default",
+              options: {
+                count: true,
+              },
+              value: [
+                {
+                  nodeType: NodeTypes.ExpandIdentifierNode,
+                  value: "Items",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        type: "Expand - $count and $filter",
+        input: "Items/$count($filter=Name eq 'Hugo')",
+        expectedAST: <ExpandNode>{
+          nodeType: NodeTypes.ExpandNode,
+          value: [
+            {
+              nodeType: NodeTypes.ExpandPathNodeWithOptions,
+              optionType: "count",
+              options: {
+                filter: {
+                  nodeType: NodeTypes.OperatorNode,
+                  op: OperatorNodeOperators.Eq,
+                  left: {
+                    nodeType: NodeTypes.SymbolNode,
+                    type: SymbolNodeTypes.Identifier,
+                    value: "Name",
+                  },
+                  right: {
+                    nodeType: NodeTypes.ConstantNode,
+                    type: ConstantNodeTypes.String,
+                    value: "Hugo",
+                  },
+                },
+              },
+              value: [
+                {
+                  nodeType: NodeTypes.ExpandIdentifierNode,
+                  value: "Items",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        type: "Expand - $skip",
+        input: "Items($skip=4)",
+        expectedAST: <ExpandNode>{
+          nodeType: NodeTypes.ExpandNode,
+          value: [
+            {
+              nodeType: NodeTypes.ExpandPathNodeWithOptions,
+              optionType: "default",
+              options: {
+                skip: 4,
+              },
+              value: [
+                {
+                  nodeType: NodeTypes.ExpandIdentifierNode,
+                  value: "Items",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        type: "Expand - $top",
+        input: "Items($top=4)",
+        expectedAST: <ExpandNode>{
+          nodeType: NodeTypes.ExpandNode,
+          value: [
+            {
+              nodeType: NodeTypes.ExpandPathNodeWithOptions,
+              optionType: "default",
+              options: {
+                top: 4,
+              },
+              value: [
+                {
+                  nodeType: NodeTypes.ExpandIdentifierNode,
+                  value: "Items",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        type: "Expand - $select",
+        input: "Items($select=Product)",
+        expectedAST: <ExpandNode>{
+          nodeType: NodeTypes.ExpandNode,
+          value: [
+            {
+              nodeType: NodeTypes.ExpandPathNodeWithOptions,
+              optionType: "default",
+              options: {
+                select: {
+                  nodeType: NodeTypes.SelectNode,
+                  value: [
+                    {
+                      nodeType: NodeTypes.SelectPathNode,
+                      value: [
+                        {
+                          nodeType: NodeTypes.SelectIdentifierNode,
+                          value: "Product",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+              value: [
+                {
+                  nodeType: NodeTypes.ExpandIdentifierNode,
+                  value: "Items",
+                },
+              ],
             },
           ],
         },
