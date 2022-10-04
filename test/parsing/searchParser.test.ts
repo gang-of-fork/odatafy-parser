@@ -21,16 +21,11 @@ function testParsingAndAST(testcase: {
 function testParsingANDAST_Failing(testcase: {
   type: string;
   input: string;
-  message: string;
 }) {
   it (`should throw Error because of ${testcase.type}`, () => {
     assert.throws(
         () => {
           searchParser.parse(testcase.input);
-        },
-        {
-          name: 'SyntaxError',
-          message: testcase.message
         });
   });
 }
@@ -368,22 +363,18 @@ describe("Search Parser tests", () => {
       [{
           type: 'phrase with unbalanced double-quotes',
           input: '"blue',
-          message: `Expected " ", "!", "$", "%", "%22", "'", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", "=", "?", "@", "\\"", "_", "~", [0-9], [A-Z], or [a-z] but end of input found.`
       },
       {
           type: 'simple term with unencoded ampersand',
           input: 'more&more',
-          message: `Expected "  ", " ", "!", "$", "%", "%09", "%20", "%27", "'", "*", "+", ",", "-", ".", "/", ":", "=", "?", "@", "_", "~", [0-9], [A-Z], [a-z], or end of input but "&" found.`
       },
       {
           type: 'simple term with unencoded hash',
           input: '#1',
-          message: `Expected "!", "$", "%", "%22", "%27", "%28", "'", "(", "*", "+", ",", "-", ".", "/", ":", "=", "?", "@", "NOT", "\\"", "_", "~", [0-9], [A-Z], or [a-z] but "#" found.`
       },
       {
         type: 'simple term with unencoded semicolon',
         input: 'a;b',
-        message: `Expected "  ", " ", "!", "$", "%", "%09", "%20", "%27", "'", "*", "+", ",", "-", ".", "/", ":", "=", "?", "@", "_", "~", [0-9], [A-Z], [a-z], or end of input but ";" found.`
       }
     ].forEach(testParsingANDAST_Failing)
   });

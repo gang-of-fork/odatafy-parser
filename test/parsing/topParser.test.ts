@@ -32,12 +32,8 @@ describe('Skip Parser tests', () => {
             it(`should throw Error because of ${testcase.type}`, () => {
                 assert.throws(
                     () => {
-                    topParser.parse(testcase.input);
-                    },
-                    {
-                    name: 'Error',
-                    message: 'top must be a valid integer value'
-                });
+                        topParser.parse(testcase.input);
+                    });
             });
         })
     });

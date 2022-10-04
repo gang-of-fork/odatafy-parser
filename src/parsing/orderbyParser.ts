@@ -1,4 +1,6 @@
+import { OdatafyQueryOptions } from '../types/errors';
 import { OrderbyNode, OrderDirection, NodeTypes } from '../types/nodes';
+import { getOdatafyParserError } from '../utils';
 
 export default {
     /**
@@ -22,7 +24,7 @@ export default {
                 })
             };
         } else {
-            throw new Error("malformed orderby: " + expr);
+            throw getOdatafyParserError("malformed orderby expression", OdatafyQueryOptions.OrderBy);
         }
     }
 }
