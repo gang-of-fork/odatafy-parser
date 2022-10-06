@@ -574,6 +574,7 @@ export type ExpandOptions = {
     select?: SelectNode;
     skip?: number;
     top?: number;
+    levels?: number | "max"
 }
 
 export enum ExpandIdentifierFlags {
