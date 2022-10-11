@@ -10,6 +10,8 @@ import selectParser from './parsing/selectParser';
 
 import { FilterNode, OrderbyNode, ExpandNode, ComputeNode, SelectNode, SearchNode } from './types/nodes';
 import searchParser from './parsing/searchParser';
+import { getOdatafyParserError } from './utils';
+import { ParsedUrlQuery } from 'querystring';
 
 export type oDataParameters = {
     filter?: string;
@@ -83,7 +85,12 @@ export type oDataParseResult = {
  * @returns parsed oData parameters
  */
 export function parseODataUrl(oDataUrl: string): oDataParseResult {
-    const query = url.parse(oDataUrl, true).query;
+    let query:ParsedUrlQuery;
+    try{
+        query = url.parse(oDataUrl, true).query;
+    } catch(e) {
+        throw getOdatafyParserError("malformed URL")
+    }
     const validParams = [ 'filter', 'orderby', 'skip', 'top', 'expand', 'compute', 'select', 'search'];
     const params = Object.keys(query);
 
@@ -92,7 +99,7 @@ export function parseODataUrl(oDataUrl: string): oDataParseResult {
     validParams.forEach((param: string) =>{
         //check if url 
         if(params.includes(param) && params.includes('$' + param)) {
-            throw new Error(`Malformed oData url, cannot contain param: ${param} and param: $${param}`)
+            throw getOdatafyParserError(`Malformed oData url, cannot contain param: ${param} and param: $${param}`)
         }
 
         if(params.includes(param) || params.includes('$' + param)) {
@@ -100,7 +107,7 @@ export function parseODataUrl(oDataUrl: string): oDataParseResult {
         }
     });
 
-    return parseOData(parseParameters);
+return parseOData(parseParameters);
 }
 
 export { filterParser, orderbyParser, skipParser, topParser, expandParser, computeParser, selectParser, searchParser };

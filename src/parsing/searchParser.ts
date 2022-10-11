@@ -1,6 +1,8 @@
 import peggy from 'peggy';
 import searchExpressionPreProc from '../processing/searchExpressionPreProc';
+import { OdatafyQueryOptions } from '../types/errors';
 import { SearchNode } from '../types/nodes';
+import { getOdatafyParserError } from '../utils';
 
 let searchParser = peggy.generate(`
 search     = node:(searchExpr / searchExpr_incomplete) {return node}
@@ -73,12 +75,17 @@ HTAB   = '  '
 
 `)
 
-function parseSearch(expr: string): SearchNode {
+function parseSearch(expr: string):SearchNode {
+    try {
     expr = searchExpressionPreProc(expr)
 
-    let searchNode = searchParser.parse(expr);
+    let searchNode = <SearchNode>searchParser.parse(expr);
 
     return searchNode;
+    }
+    catch(e) {
+        throw getOdatafyParserError("malformed search expression", OdatafyQueryOptions.Search)
+    }
 }
 export default {
 

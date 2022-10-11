@@ -33,11 +33,8 @@ describe('Skip Parser tests', () => {
                     assert.throws(
                         () => {
                         skipParser.parse(testcase.input);
-                        },
-                        {
-                        name: 'Error',
-                        message: 'skip must be a valid integer value'
-                });
+                        }, 
+                );
             });
         })
     });
