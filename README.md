@@ -1,6 +1,3 @@
-# Under construction
-This package is still under construction. First stable version will be released soon.
-
 # odatafy-parser
 This module is the odata parser for the odatafy framework. Click [here](https://gang-of-fork.github.io/odatafy-docs/) to learn more about odatafy.
 
