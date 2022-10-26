@@ -167,8 +167,8 @@ export enum SymbolNodeTypes {
  * Filter parser node
  */
 
-export type FilterNode = OperatorNode | ConstantNode | ConstantSpatialNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode | undefined
-export type FuncArg = ConstantNode | ConstantSpatialNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | EnumValueNode
+export type FilterNode = OperatorNode | ConstantNode | ConstantSpatialNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | FuncNodeVarArgs | EnumValueNode | undefined
+export type FuncArg = ConstantNode | ConstantSpatialNode | SymbolNode | FuncNode2Args | FuncNode1Args | FuncNode0Args | FuncNodeVarArgs | EnumValueNode
 
 export type OperatorNode = {
     nodeType: NodeTypes.OperatorNode;
