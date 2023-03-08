@@ -16,7 +16,7 @@ import {
   SelectNode,
   SearchNode
 } from './types/nodes';
-import searchParser from "./parsing/searchParser";
+import searchParser from './parsing/searchParser';
 import { getOdatafyParserError } from './utils';
 import { ParsedUrlQuery } from 'querystring';
 
