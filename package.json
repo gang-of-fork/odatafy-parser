@@ -15,7 +15,7 @@
     "build": "tsc",
     "build-and-run": "tsc && node dist/index.js",
     "docs": "npx typedoc index.ts",
-    "lint": "eslint . --ext .ts --fix",
+    "lint": "eslint . --ext .ts",
     "prettier-format": "prettier --config .prettierrc \"./src/**/*.ts\" --write"
   },
   "husky": {
