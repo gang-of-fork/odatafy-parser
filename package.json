@@ -14,7 +14,15 @@
     "test": "nyc mocha -r ts-node/register --exit  \"./test/**/*.test.ts\" --timeout 0",
     "build": "tsc",
     "build-and-run": "tsc && node dist/index.js",
-    "docs": "npx typedoc index.ts"
+    "docs": "npx typedoc index.ts",
+    "lint": "eslint . --ext .ts",
+    "prettier-format": "prettier --config .prettierrc \"./src/**/*.ts\" --write",
+    "prepare": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run prettier-format && npm run lint"
+    }
   },
   "repository": {
     "type": "git",
@@ -27,6 +35,13 @@
   },
   "homepage": "https://github.com/Gang-of-Fork/odatafy-parser#readme",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
+    "eslint": "^8.35.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.0",
+    "prettier": "^2.8.4",
     "typedoc": "^0.22.18",
     "typescript": "^4.6.4"
   },

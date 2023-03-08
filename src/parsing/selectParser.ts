@@ -1,5 +1,10 @@
 import peggy from 'peggy';
-import { NodeTypes, SelectNode, SelectOptions, SelectOptionsUnprocessedNode } from '../types/nodes';
+import {
+  NodeTypes,
+  SelectNode,
+  SelectOptions,
+  SelectOptionsUnprocessedNode
+} from '../types/nodes';
 import querystring from 'querystring';
 import filterParser from './filterParser';
 import orderbyParser from './orderbyParser';
@@ -11,10 +16,9 @@ import searchParser from './searchParser';
 import { getOdatafyParserError } from '../utils';
 import { OdatafyQueryOptions } from '../types/errors';
 
-
 //TODO add annotations to path
 
-let selectParser = peggy.generate(`
+const selectParser = peggy.generate(`
 {
   function SelectNodeHelper(value) {
     return {
@@ -101,31 +105,44 @@ RWS = ( SP / HTAB / "%20" / "%09" )+
 BWS =  ( SP / HTAB / "%20" / "%09" )* 
 SP     = ' '
 HTAB   = '  '
-`)
+`);
 
 function parseSelect(expr: string): SelectNode {
   let ast;
   try {
     ast = <SelectNode>selectParser.parse(expr);
   } catch (e) {
-    throw getOdatafyParserError("malformed select expression", OdatafyQueryOptions.Select)
+    throw getOdatafyParserError(
+      'malformed select expression',
+      OdatafyQueryOptions.Select
+    );
   }
-  
+
   try {
-    for (let selectPath of ast.value) {
+    for (const selectPath of ast.value) {
       if (selectPath.nodeType == NodeTypes.SelectPathNodeWithOptions) {
-        selectPath.options = processSelectOptionsUnprocessedNode(<SelectOptionsUnprocessedNode>selectPath.options)
+        selectPath.options = processSelectOptionsUnprocessedNode(
+          <SelectOptionsUnprocessedNode>selectPath.options
+        );
       }
     }
-    return ast
+    return ast;
   } catch (e) {
-    throw getOdatafyParserError("malformed select options", OdatafyQueryOptions.Select)
+    throw getOdatafyParserError(
+      'malformed select options',
+      OdatafyQueryOptions.Select
+    );
   }
 }
 
-export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode: SelectOptionsUnprocessedNode): SelectOptions {
-  const parsedOptions = querystring.parse(SelectOptionsUnprocessedNode.value, ";")
-  let options: SelectOptions = {}
+export function processSelectOptionsUnprocessedNode(
+  SelectOptionsUnprocessedNode: SelectOptionsUnprocessedNode
+): SelectOptions {
+  const parsedOptions = querystring.parse(
+    SelectOptionsUnprocessedNode.value,
+    ';'
+  );
+  const options: SelectOptions = {};
 
   //parse options wíth $
   if (parsedOptions.$filter && typeof parsedOptions.$filter == 'string') {
@@ -157,7 +174,7 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
   }
 
   if (parsedOptions.$count && typeof parsedOptions.$count == 'string') {
-    options.count = true
+    options.count = true;
   }
 
   if (parsedOptions.$search && typeof parsedOptions.$search == 'string') {
@@ -194,7 +211,7 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
   }
 
   if (parsedOptions.count && typeof parsedOptions.count == 'string') {
-    options.count = true
+    options.count = true;
   }
 
   if (parsedOptions.search && typeof parsedOptions.search == 'string') {
@@ -206,13 +223,10 @@ export function processSelectOptionsUnprocessedNode(SelectOptionsUnprocessedNode
 
 export default {
   /**
-     * Parser for select expressions
-     * @param expr select expression as string
-     * @example selectParser.parse("Name,Age")
-     * @returns Abstract Syntax Tree (AST) of type SelectNode
-     */
+   * Parser for select expressions
+   * @param expr select expression as string
+   * @example selectParser.parse("Name,Age")
+   * @returns Abstract Syntax Tree (AST) of type SelectNode
+   */
   parse: parseSelect
-}
-
-
-
+};

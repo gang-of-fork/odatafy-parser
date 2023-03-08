@@ -4,7 +4,7 @@ import { OdatafyQueryOptions } from '../types/errors';
 import { SearchNode } from '../types/nodes';
 import { getOdatafyParserError } from '../utils';
 
-let searchParser = peggy.generate(`
+const searchParser = peggy.generate(`
 search     = node:(searchExpr / searchExpr_incomplete) {return node}
 
 searchExpr = ( 
@@ -73,27 +73,28 @@ DQUOTE = '"'
 SP     = ' ' 
 HTAB   = '  ' 
 
-`)
+`);
 
-function parseSearch(expr: string):SearchNode {
-    try {
-    expr = searchExpressionPreProc(expr)
+function parseSearch(expr: string): SearchNode {
+  try {
+    expr = searchExpressionPreProc(expr);
 
-    let searchNode = <SearchNode>searchParser.parse(expr);
+    const searchNode = <SearchNode>searchParser.parse(expr);
 
     return searchNode;
-    }
-    catch(e) {
-        throw getOdatafyParserError("malformed search expression", OdatafyQueryOptions.Search)
-    }
+  } catch (e) {
+    throw getOdatafyParserError(
+      'malformed search expression',
+      OdatafyQueryOptions.Search
+    );
+  }
 }
 export default {
-
-    /**
-       * Parser for search expressions
-       * @param expr search expression as string
-       * @example searchParser.parse("blue OR green OR red")
-       * @returns Abstract Syntax Tree (AST) of type SearchNode
-       */
-    parse: parseSearch
-}
+  /**
+   * Parser for search expressions
+   * @param expr search expression as string
+   * @example searchParser.parse("blue OR green OR red")
+   * @returns Abstract Syntax Tree (AST) of type SearchNode
+   */
+  parse: parseSearch
+};
