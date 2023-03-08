@@ -1,7 +1,7 @@
 /*
-* parser for $filter-Expressions
-* NOTE: STRING MUST BE URL-DECODED EXACTLY ONCE
-*/
+ * parser for $filter-Expressions
+ * NOTE: STRING MUST BE URL-DECODED EXACTLY ONCE
+ */
 
 import peggy from 'peggy';
 import astPostProc from '../processing/filterAstPostProc';
@@ -15,8 +15,6 @@ import { getOdatafyParserError } from '../utils';
 //import path from "path"
 
 //const grammar = fs.readFileSync(path.join(__dirname, "filterParser.pegjs")).toString();
-
-
 
 export const filterGrammar = `
 
@@ -378,28 +376,33 @@ A_to_F = "A" / "B" / "C" / "D" / "E" / "F"
 DQUOTE = '"'
 SP     = ' '
 HTAB   = '  '
-`
+`;
 
-
-export let rawParser = peggy.generate(filterGrammar, { trace: false });
-let myParser = peggy.generate(filterGrammar, {trace: false});
+export const rawParser = peggy.generate(filterGrammar, { trace: false });
+const myParser = peggy.generate(filterGrammar, { trace: false });
 
 export default {
-    /**
-     * Parser for filter expressions
-     * @param expr filter expression as string
-     * @param options options for peggy.js parser
-     * @example filterParser.parse("Name eq 'Max'");
-     * @returns Abstract Syntax Tree (AST) of type FilterNode
-     */
-    parse: (expr: string, options?: peggy.ParserOptions | undefined): FilterNode => {
-        try{
-        expr = filterExpressionPreProc(expr)
-        let output = myParser.parse(expr, options)
-        output = astPostProc(output);
-        return output;
-        } catch (e) {
-            throw getOdatafyParserError("malformed filter expression", OdatafyQueryOptions.Filter)
-        }
+  /**
+   * Parser for filter expressions
+   * @param expr filter expression as string
+   * @param options options for peggy.js parser
+   * @example filterParser.parse("Name eq 'Max'");
+   * @returns Abstract Syntax Tree (AST) of type FilterNode
+   */
+  parse: (
+    expr: string,
+    options?: peggy.ParserOptions | undefined
+  ): FilterNode => {
+    try {
+      expr = filterExpressionPreProc(expr);
+      let output = myParser.parse(expr, options);
+      output = astPostProc(output);
+      return output;
+    } catch (e) {
+      throw getOdatafyParserError(
+        'malformed filter expression',
+        OdatafyQueryOptions.Filter
+      );
     }
-}
+  }
+};

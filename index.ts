@@ -1,4 +1,2 @@
 export * from './src/types/nodes';
-export * from './src/parser';
-
-
+export * from "./src/parser";
