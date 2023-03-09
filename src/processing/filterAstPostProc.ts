@@ -2,6 +2,7 @@ import matchBracket from 'find-matching-bracket';
 import crypto from 'crypto';
 import math, { parse } from 'mathjs';
 import { ConstantNodeTypes, FilterNode, OperatorNodeOperators, NodeTypes, SymbolNodeTypes } from '../types/nodes';
+import { validateFuncNode, isFuncNodeWithArgs } from './validations';
 
 //STR and FUNC_ESCAPE switched, because % is reserved in mathjs and in mathExpressions, strings can only occur in functions, so the string escape symbol does not matter
 //TODO adjust the grammar, so that strings cannot be part of a mathExpr
@@ -151,6 +152,15 @@ export function cleanAST(ast: any): FilterNode {
 }
 
 export function processAST(ast: any): FilterNode {
+
+    if(isFuncNodeWithArgs(ast)) {
+        try {
+            validateFuncNode(ast);
+        } catch(e) {
+            console.log(e);
+        }
+        
+    }
 
     if (ast.type == "mathExpr") {
         ast = cleanAST(parseMathExpression(ast.value));
