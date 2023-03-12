@@ -3,44 +3,44 @@
  */
 
 export enum NodeTypes {
-  OperatorNode = 'OperatorNode',
-  ConstantNode = 'ConstantNode',
-  ConstantSpatialNode = 'ConstantSpatialNode',
-  CollectionNode = 'CollectionNode',
-  LineStringNode = 'LineStringNode',
-  MultiLineStringNode = 'MultiLineStringNode',
-  MultiPointNode = 'MultiPointNode',
-  MultiPolygonNode = 'MultiPolygonNode',
-  PointNode = 'PointNode',
-  PolygonNode = 'PolygonNode',
-  SymbolNode = 'SymbolNode',
-  FuncNode2Args = 'FuncNode2Args',
-  FuncNode1Args = 'FuncNode1Args',
-  FuncNode0Args = 'FuncNode0Args',
-  FuncNodeVarArgs = 'FuncNodeVarArgs',
-  FuncNodeCase = 'FuncNodeCase',
-  EnumValueNode = 'EnumValueNode',
-  OrderbyNode = 'OrderbyNode',
-  OrderbyItemNode = 'OrderbyItemNode',
-  ComputeNode = 'ComputeNode',
-  ComputeItemNode = 'ComputeItemNode',
-  SearchOperatorNode = 'SearchOperatorNode',
-  SearchItemNode = 'SearchItemNode',
-  SelectNode = 'SelectNode',
-  SelectFunctionNode = 'SelectFunctionNode',
-  SelectPathNode = 'SelectPathNode',
-  SelectPathNodeWithOptions = 'SelectPathNodeWithOptions',
-  SelectIdentifierNode = 'SelectIdentifierNode',
-  SelectOptionsUnprocessedNode = 'SelectOptionsUnprocessedNode',
-  ExpandNode = 'ExpandNode',
-  ExpandFunctionNode = 'ExpandFunctionNode',
-  ExpandPathNode = 'ExpandPathNode',
-  ExpandPathNodeWithOptions = 'ExpandPathNodeWithOptions',
-  ExpandIdentifierNode = 'ExpandIdentifierNode',
-  ExpandOptionsUnprocessedNode = 'ExpandOptionsUnprocessedNode',
-  ExpandOptionsNode = 'ExpandOptionsNode',
-  ExpandStarNode = 'ExpandStarNode',
-  ExpandValueNode = 'ExpandValueNode'
+    OperatorNode = 'OperatorNode',
+    ConstantNode = 'ConstantNode',
+    ConstantSpatialNode = 'ConstantSpatialNode',
+    CollectionNode = 'CollectionNode',
+    LineStringNode = 'LineStringNode',
+    MultiLineStringNode = 'MultiLineStringNode',
+    MultiPointNode = 'MultiPointNode',
+    MultiPolygonNode = 'MultiPolygonNode',
+    PointNode = 'PointNode',
+    PolygonNode = 'PolygonNode',
+    SymbolNode = 'SymbolNode',
+    FuncNode2Args = 'FuncNode2Args',
+    FuncNode1Args = 'FuncNode1Args',
+    FuncNode0Args = 'FuncNode0Args',
+    FuncNodeVarArgs = 'FuncNodeVarArgs',
+    FuncNodeCase = 'FuncNodeCase',
+    EnumValueNode = 'EnumValueNode',
+    OrderbyNode = 'OrderbyNode',
+    OrderbyItemNode = 'OrderbyItemNode',
+    ComputeNode = 'ComputeNode',
+    ComputeItemNode = 'ComputeItemNode',
+    SearchOperatorNode = 'SearchOperatorNode',
+    SearchItemNode = 'SearchItemNode',
+    SelectNode = 'SelectNode',
+    SelectFunctionNode = 'SelectFunctionNode',
+    SelectPathNode = 'SelectPathNode',
+    SelectPathNodeWithOptions = 'SelectPathNodeWithOptions',
+    SelectIdentifierNode = 'SelectIdentifierNode',
+    SelectOptionsUnprocessedNode = 'SelectOptionsUnprocessedNode',
+    ExpandNode = 'ExpandNode',
+    ExpandFunctionNode = 'ExpandFunctionNode',
+    ExpandPathNode = 'ExpandPathNode',
+    ExpandPathNodeWithOptions = 'ExpandPathNodeWithOptions',
+    ExpandIdentifierNode = 'ExpandIdentifierNode',
+    ExpandOptionsUnprocessedNode = 'ExpandOptionsUnprocessedNode',
+    ExpandOptionsNode = 'ExpandOptionsNode',
+    ExpandStarNode = 'ExpandStarNode',
+    ExpandValueNode = 'ExpandValueNode'
 }
 
 /**
@@ -48,123 +48,123 @@ export enum NodeTypes {
  */
 
 export type ConstantNode = {
-  nodeType: NodeTypes.ConstantNode;
-  type: ConstantNodeTypes;
-  value: any;
+    nodeType: NodeTypes.ConstantNode;
+    type: ConstantNodeTypes;
+    value: any;
 };
 
 export type ConstantSpatialNode = {
-  nodeType: NodeTypes.ConstantSpatialNode;
-  abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes;
-  value: SpatialNode;
+    nodeType: NodeTypes.ConstantSpatialNode;
+    abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes;
+    value: SpatialNode;
 };
 
 export type SpatialNode =
-  | CollectionNode
-  | LineStringNode
-  | MultiLineStringNode
-  | MultiPointNode
-  | MultiPolygonNode
-  | PointNode
-  | PolygonNode;
+    | CollectionNode
+    | LineStringNode
+    | MultiLineStringNode
+    | MultiPointNode
+    | MultiPolygonNode
+    | PointNode
+    | PolygonNode;
 
 export type CollectionNode = {
-  nodeType: NodeTypes.CollectionNode;
-  srid?: number;
-  collection: SpatialNode[];
+    nodeType: NodeTypes.CollectionNode;
+    srid?: number;
+    collection: SpatialNode[];
 };
 
 export type LineStringNode = {
-  nodeType: NodeTypes.LineStringNode;
-  srid?: number;
-  positions: PositionLiteral[];
+    nodeType: NodeTypes.LineStringNode;
+    srid?: number;
+    positions: PositionLiteral[];
 };
 
 export type PositionLiteral = {
-  lon: number;
-  lat: number;
-  alt: number;
-  /**
-   * @description linear referencing measure
-   */
-  lrm: number;
+    lon: number;
+    lat: number;
+    alt: number;
+    /**
+     * @description linear referencing measure
+     */
+    lrm: number;
 };
 
 export type MultiLineStringNode = {
-  nodeType: NodeTypes.MultiLineStringNode;
-  srid?: number;
-  lineStrings: LineStringNode[];
+    nodeType: NodeTypes.MultiLineStringNode;
+    srid?: number;
+    lineStrings: LineStringNode[];
 };
 
 export type MultiPointNode = {
-  nodeType: NodeTypes.MultiPointNode;
-  srid?: number;
-  points: PositionLiteral[];
+    nodeType: NodeTypes.MultiPointNode;
+    srid?: number;
+    points: PositionLiteral[];
 };
 
 export type MultiPolygonNode = {
-  nodeType: NodeTypes.MultiPolygonNode;
-  srid?: number;
-  polygons: PolygonNode[];
+    nodeType: NodeTypes.MultiPolygonNode;
+    srid?: number;
+    polygons: PolygonNode[];
 };
 
 export type PointNode = {
-  nodeType: NodeTypes.PointNode;
-  srid?: number;
-  point: PositionLiteral;
+    nodeType: NodeTypes.PointNode;
+    srid?: number;
+    point: PositionLiteral;
 };
 
 export type PolygonNode = {
-  nodeType: NodeTypes.PolygonNode;
-  srid?: number;
-  rings: RingLiteral[];
+    nodeType: NodeTypes.PolygonNode;
+    srid?: number;
+    rings: RingLiteral[];
 };
 
 export type RingLiteral = {
-  positions: PositionLiteral[];
+    positions: PositionLiteral[];
 };
 
 export type SymbolNode = {
-  nodeType: NodeTypes.SymbolNode;
-  type: SymbolNodeTypes;
-  value: string;
+    nodeType: NodeTypes.SymbolNode;
+    type: SymbolNodeTypes;
+    value: string;
 };
 
 export enum ConstantNodeTypes {
-  Null = 'Null',
-  Boolean = 'Boolean',
-  GUID = 'GUID',
-  DateTimeOffsetValueInUrl = 'DateTimeOffsetValueInUrl',
-  DateValue = 'DateValue',
-  TimeOfDayValueInUrl = 'TimeOfDayValueInUrl',
-  Decimal = 'Decimal',
-  Integer = 'Integer',
-  String = 'String',
-  Duration = 'Duration',
-  Binary = 'Binary',
-  Object = 'Object',
-  Array = 'Array'
+    Null = 'Null',
+    Boolean = 'Boolean',
+    GUID = 'GUID',
+    DateTimeOffsetValueInUrl = 'DateTimeOffsetValueInUrl',
+    DateValue = 'DateValue',
+    TimeOfDayValueInUrl = 'TimeOfDayValueInUrl',
+    Decimal = 'Decimal',
+    Integer = 'Integer',
+    String = 'String',
+    Duration = 'Duration',
+    Binary = 'Binary',
+    Object = 'Object',
+    Array = 'Array'
 }
 
 export enum ConstantSpatialNodeAbstractSpatialTypes {
-  Geography = 'Geography',
-  Geometry = 'Geometry'
+    Geography = 'Geography',
+    Geometry = 'Geometry'
 }
 
 export enum ConstantSpatialNodeTypes {
-  Collection = 'Collection',
-  MultiLineString = 'MultiLineString',
-  MultiPoint = 'MultiPoint',
-  MultiPolygon = 'MultiPolygon',
-  Point = 'Point',
-  Polygon = 'Polygon'
+    Collection = 'Collection',
+    MultiLineString = 'MultiLineString',
+    MultiPoint = 'MultiPoint',
+    MultiPolygon = 'MultiPolygon',
+    Point = 'Point',
+    Polygon = 'Polygon'
 }
 
 export enum SymbolNodeTypes {
-  Identifier = 'Identifier',
-  MemberExpression = 'MemberExpression',
-  Collection = 'Collection',
-  TypeName = 'TypeName'
+    Identifier = 'Identifier',
+    MemberExpression = 'MemberExpression',
+    Collection = 'Collection',
+    TypeName = 'TypeName'
 }
 
 /**
@@ -172,157 +172,157 @@ export enum SymbolNodeTypes {
  */
 
 export type FilterNode =
-  | OperatorNode
-  | ConstantNode
-  | ConstantSpatialNode
-  | SymbolNode
-  | FuncNode2Args
-  | FuncNode1Args
-  | FuncNode0Args
-  | FuncNodeVarArgs
-  | EnumValueNode
-  | undefined;
+    | OperatorNode
+    | ConstantNode
+    | ConstantSpatialNode
+    | SymbolNode
+    | FuncNode2Args
+    | FuncNode1Args
+    | FuncNode0Args
+    | FuncNodeVarArgs
+    | EnumValueNode
+    | undefined;
 export type FuncArg =
-  | ConstantNode
-  | ConstantSpatialNode
-  | SymbolNode
-  | FuncNode2Args
-  | FuncNode1Args
-  | FuncNode0Args
-  | FuncNodeVarArgs
-  | EnumValueNode;
+    | ConstantNode
+    | ConstantSpatialNode
+    | SymbolNode
+    | FuncNode2Args
+    | FuncNode1Args
+    | FuncNode0Args
+    | FuncNodeVarArgs
+    | EnumValueNode;
 
 export type OperatorNode = {
-  nodeType: NodeTypes.OperatorNode;
-  op: OperatorNodeOperators;
-  left?: FilterNode;
-  right: FilterNode;
+    nodeType: NodeTypes.OperatorNode;
+    op: OperatorNodeOperators;
+    left?: FilterNode;
+    right: FilterNode;
 };
 
 export type FuncNode2Args = {
-  nodeType: NodeTypes.FuncNode2Args;
-  func: FuncNames2Args;
-  args: [FuncArg, FuncArg];
+    nodeType: NodeTypes.FuncNode2Args;
+    func: FuncNames2Args;
+    args: [FuncArg, FuncArg];
 };
 
 export type FuncNode1Args = {
-  nodeType: NodeTypes.FuncNode1Args;
-  func: FuncNames1Args;
-  args: [FuncArg];
+    nodeType: NodeTypes.FuncNode1Args;
+    func: FuncNames1Args;
+    args: [FuncArg];
 };
 
 export type FuncNode0Args = {
-  nodeType: NodeTypes.FuncNode0Args;
-  func: FuncNames0Args;
+    nodeType: NodeTypes.FuncNode0Args;
+    func: FuncNames0Args;
 };
 
 export type FuncNodeVarArgs = {
-  nodeType: NodeTypes.FuncNodeVarArgs;
-  func: FuncNamesVarArgs;
-  args: FuncArg[];
+    nodeType: NodeTypes.FuncNodeVarArgs;
+    func: FuncNamesVarArgs;
+    args: FuncArg[];
 };
 
 export type FuncNodeCase = {
-  nodeType: NodeTypes.FuncNodeCase;
-  args: CaseFuncArg[];
+    nodeType: NodeTypes.FuncNodeCase;
+    args: CaseFuncArg[];
 };
 
 export type CaseFuncArg = {
-  cond: FilterNode;
-  value: FuncArg;
+    cond: FilterNode;
+    value: FuncArg;
 };
 
 export type EnumValueNode = {
-  nodeType: NodeTypes.EnumValueNode;
-  type: 'EnumValue';
-  enumTypeName?: string;
-  enumValue: string;
+    nodeType: NodeTypes.EnumValueNode;
+    type: 'EnumValue';
+    enumTypeName?: string;
+    enumValue: string;
 };
 
 export enum OperatorNodeOperators {
-  And = 'and',
-  Or = 'or',
-  Eq = 'eq',
-  Ne = 'ne',
-  Ge = 'ge',
-  Le = 'le',
-  Gt = 'gt',
-  Lt = 'lt',
-  Add = 'add',
-  Sub = 'sub',
-  Mul = 'mul',
-  Div = 'div',
-  Divby = 'divby',
-  Mod = 'mod',
-  Has = 'has',
-  Not = 'not'
+    And = 'and',
+    Or = 'or',
+    Eq = 'eq',
+    Ne = 'ne',
+    Ge = 'ge',
+    Le = 'le',
+    Gt = 'gt',
+    Lt = 'lt',
+    Add = 'add',
+    Sub = 'sub',
+    Mul = 'mul',
+    Div = 'div',
+    Divby = 'divby',
+    Mod = 'mod',
+    Has = 'has',
+    Not = 'not'
 }
 
 export enum FuncNames2Args {
-  Concat = 'concat',
-  Contains = 'contains',
-  Endswith = 'endswith',
-  Indexof = 'indexof',
-  MatchesPattern = 'matchesPattern',
-  Startswith = 'startswith',
-  Geo_distance = 'geo.distance',
-  Geo_intersects = 'geo.intersects',
-  Hassubset = 'hassubset',
-  Hassubsequence = 'hassubsequence'
+    Concat = 'concat',
+    Contains = 'contains',
+    Endswith = 'endswith',
+    Indexof = 'indexof',
+    MatchesPattern = 'matchesPattern',
+    Startswith = 'startswith',
+    Geo_distance = 'geo.distance',
+    Geo_intersects = 'geo.intersects',
+    Hassubset = 'hassubset',
+    Hassubsequence = 'hassubsequence'
 }
 
 export enum FuncNames1Args {
-  Length = 'length',
-  Tolower = 'tolower',
-  Toupper = 'toupper',
-  Trim = 'trim',
-  Year = 'year',
-  Month = 'month',
-  Day = 'day',
-  Hour = 'hour',
-  Minute = 'minute',
-  Second = 'second',
-  Fractionalseconds = 'fractionalseconds',
-  Totalseconds = 'totalseconds',
-  Date = 'date',
-  Time = 'time',
-  Totaloffsetminutes = 'totaloffsetminutes',
-  Round = 'round',
-  Floor = 'floor',
-  Ceiling = 'ceiling',
-  Geo_length = 'geo.length'
+    Length = 'length',
+    Tolower = 'tolower',
+    Toupper = 'toupper',
+    Trim = 'trim',
+    Year = 'year',
+    Month = 'month',
+    Day = 'day',
+    Hour = 'hour',
+    Minute = 'minute',
+    Second = 'second',
+    Fractionalseconds = 'fractionalseconds',
+    Totalseconds = 'totalseconds',
+    Date = 'date',
+    Time = 'time',
+    Totaloffsetminutes = 'totaloffsetminutes',
+    Round = 'round',
+    Floor = 'floor',
+    Ceiling = 'ceiling',
+    Geo_length = 'geo.length'
 }
 
 export enum FuncNames0Args {
-  Mindatetime = 'mindatetime',
-  Maxdatetime = 'maxdatetime',
-  Now = 'now'
+    Mindatetime = 'mindatetime',
+    Maxdatetime = 'maxdatetime',
+    Now = 'now'
 }
 
 export enum FuncNamesVarArgs {
-  Isof = 'isof',
-  Cast = 'cast',
-  Substring = 'substring',
-  Case = 'case'
+    Isof = 'isof',
+    Cast = 'cast',
+    Substring = 'substring',
+    Case = 'case'
 }
 
 /**
  * Order parser nodes
  */
 export enum OrderDirection {
-  Asc = 'asc',
-  Desc = 'desc'
+    Asc = 'asc',
+    Desc = 'desc'
 }
 
 export type OrderbyNode = {
-  nodeType: NodeTypes.OrderbyNode;
-  value: OrderbyItemNode[];
+    nodeType: NodeTypes.OrderbyNode;
+    value: OrderbyItemNode[];
 };
 
 export type OrderbyItemNode = {
-  nodeType: NodeTypes.OrderbyItemNode;
-  type: OrderDirection;
-  value: string;
+    nodeType: NodeTypes.OrderbyItemNode;
+    type: OrderDirection;
+    value: string;
 };
 
 /**
@@ -330,14 +330,14 @@ export type OrderbyItemNode = {
  */
 
 export type ComputeNode = {
-  nodeType: NodeTypes.ComputeNode;
-  value: ComputeItemNode[];
+    nodeType: NodeTypes.ComputeNode;
+    value: ComputeItemNode[];
 };
 
 export type ComputeItemNode = {
-  nodeType: NodeTypes.ComputeItemNode;
-  commonExpr: FilterNode;
-  computeIdentifier: string;
+    nodeType: NodeTypes.ComputeItemNode;
+    commonExpr: FilterNode;
+    computeIdentifier: string;
 };
 
 /**
@@ -352,8 +352,8 @@ export type ComputeItemNode = {
  * => Would create a SelectNode
  */
 export type SelectNode = {
-  nodeType: NodeTypes.SelectNode;
-  value: (SelectPathNode | SelectPathNodeWithOptions)[];
+    nodeType: NodeTypes.SelectNode;
+    value: (SelectPathNode | SelectPathNodeWithOptions)[];
 };
 
 /**
@@ -365,8 +365,8 @@ export type SelectNode = {
  *
  */
 export type SelectPathNode = {
-  nodeType: NodeTypes.SelectPathNode;
-  value: SelectItemNode[];
+    nodeType: NodeTypes.SelectPathNode;
+    value: SelectItemNode[];
 };
 
 /**
@@ -377,9 +377,9 @@ export type SelectPathNode = {
  * => Would create a SelectPathNode for Name and a SelectPathNodeWithOptions for Adress/Street($top=5)
  */
 export type SelectPathNodeWithOptions = {
-  nodeType: NodeTypes.SelectPathNodeWithOptions;
-  value: SelectItemNode[];
-  options: SelectOptions | SelectOptionsUnprocessedNode;
+    nodeType: NodeTypes.SelectPathNodeWithOptions;
+    value: SelectItemNode[];
+    options: SelectOptions | SelectOptionsUnprocessedNode;
 };
 
 export type SelectItemNode = SelectIdentifierNode | SelectFunctionNode;
@@ -392,9 +392,9 @@ export type SelectItemNode = SelectIdentifierNode | SelectFunctionNode;
  * => Would create a SelectFunctionNode inside a SelectPathNode
  */
 export type SelectFunctionNode = {
-  nodeType: NodeTypes.SelectFunctionNode;
-  func: string;
-  args: SelectIdentifierNode[];
+    nodeType: NodeTypes.SelectFunctionNode;
+    func: string;
+    args: SelectIdentifierNode[];
 };
 
 /**
@@ -407,17 +407,17 @@ export type SelectFunctionNode = {
  * => Flag will be set if the identifier is a annotation (@)
  */
 export type SelectIdentifierNode = {
-  nodeType: NodeTypes.SelectIdentifierNode;
-  flag?: SelectIdentifierFlags;
-  value: string;
+    nodeType: NodeTypes.SelectIdentifierNode;
+    flag?: SelectIdentifierFlags;
+    value: string;
 };
 
 /**
  * for internal processing
  */
 export type SelectOptionsUnprocessedNode = {
-  nodeType: NodeTypes.SelectOptionsUnprocessedNode;
-  value: string;
+    nodeType: NodeTypes.SelectOptionsUnprocessedNode;
+    value: string;
 };
 
 /**
@@ -429,21 +429,21 @@ export type SelectOptionsUnprocessedNode = {
  *
  */
 export type SelectOptions = {
-  aliasAndValue?: any;
-  compute?: ComputeNode;
-  expand?: ExpandNode;
-  filter?: FilterNode;
-  count?: any;
-  orderby?: OrderbyNode;
-  search?: SearchNode;
-  select?: SelectNode;
-  skip?: number;
-  top?: number;
+    aliasAndValue?: any;
+    compute?: ComputeNode;
+    expand?: ExpandNode;
+    filter?: FilterNode;
+    count?: any;
+    orderby?: OrderbyNode;
+    search?: SearchNode;
+    select?: SelectNode;
+    skip?: number;
+    top?: number;
 };
 
 export enum SelectIdentifierFlags {
-  AllOperationsInSchema = 'AllOperationsInSchema', //Name.*
-  Annotation = 'Annotation' //@Measures.Currency
+    AllOperationsInSchema = 'AllOperationsInSchema', //Name.*
+    Annotation = 'Annotation' //@Measures.Currency
 }
 
 /**
@@ -453,27 +453,27 @@ export enum SelectIdentifierFlags {
 export type SearchNode = SearchOperatorNode | SearchItemNode;
 
 export type SearchOperatorNode = {
-  nodeType: NodeTypes.SearchOperatorNode;
-  op: SearchOperators;
-  left?: SearchNode;
-  right: SearchNode;
+    nodeType: NodeTypes.SearchOperatorNode;
+    op: SearchOperators;
+    left?: SearchNode;
+    right: SearchNode;
 };
 
 export type SearchItemNode = {
-  nodeType: NodeTypes.SearchItemNode;
-  type: SearchItemTypes;
-  value: string;
+    nodeType: NodeTypes.SearchItemNode;
+    type: SearchItemTypes;
+    value: string;
 };
 
 export enum SearchOperators {
-  And = 'AND',
-  Or = 'OR',
-  Not = 'NOT'
+    And = 'AND',
+    Or = 'OR',
+    Not = 'NOT'
 }
 
 export enum SearchItemTypes {
-  Phrase = 'Phrase',
-  Word = 'Word'
+    Phrase = 'Phrase',
+    Word = 'Word'
 }
 
 /**
@@ -488,13 +488,13 @@ export enum SearchItemTypes {
  * => Would create an ExpandNode
  */
 export type ExpandNode = {
-  nodeType: NodeTypes.ExpandNode;
-  value: (ExpandPathNode | ExpandPathNodeWithOptions)[];
+    nodeType: NodeTypes.ExpandNode;
+    value: (ExpandPathNode | ExpandPathNodeWithOptions)[];
 };
 export type ExpandItemNode =
-  | ExpandValueNode
-  | ExpandIdentifierNode
-  | ExpandStarNode;
+    | ExpandValueNode
+    | ExpandIdentifierNode
+    | ExpandStarNode;
 
 /**
  * ExpandPathNodes are representing one expandItem (seperated by comma) each
@@ -505,8 +505,8 @@ export type ExpandItemNode =
  *
  */
 export type ExpandPathNode = {
-  nodeType: NodeTypes.ExpandPathNode;
-  value: ExpandItemNode[];
+    nodeType: NodeTypes.ExpandPathNode;
+    value: ExpandItemNode[];
 };
 
 /**
@@ -517,10 +517,10 @@ export type ExpandPathNode = {
  * => Would create an ExpandPathNode for Name and an ExpandPathNodeWithOptions for Adress/Street($top=5)
  */
 export type ExpandPathNodeWithOptions = {
-  nodeType: NodeTypes.ExpandPathNodeWithOptions;
-  value: ExpandItemNode[];
-  options: ExpandOptionsUnprocessedNode | ExpandOptions;
-  optionType: 'default' | 'ref' | 'count';
+    nodeType: NodeTypes.ExpandPathNodeWithOptions;
+    value: ExpandItemNode[];
+    options: ExpandOptionsUnprocessedNode | ExpandOptions;
+    optionType: 'default' | 'ref' | 'count';
 };
 
 /**
@@ -533,18 +533,18 @@ export type ExpandPathNodeWithOptions = {
  * => Flag will be set if the identifier is a annotation (@)
  */
 export type ExpandIdentifierNode = {
-  nodeType: NodeTypes.ExpandIdentifierNode;
-  flag?: ExpandIdentifierFlags;
-  value: string;
+    nodeType: NodeTypes.ExpandIdentifierNode;
+    flag?: ExpandIdentifierFlags;
+    value: string;
 };
 
 /**
  * for internal processing
  */
 export type ExpandOptionsUnprocessedNode = {
-  nodeType: NodeTypes.ExpandOptionsUnprocessedNode;
-  value: string;
-  type: 'default' | 'ref' | 'count';
+    nodeType: NodeTypes.ExpandOptionsUnprocessedNode;
+    value: string;
+    type: 'default' | 'ref' | 'count';
 };
 
 /**
@@ -556,11 +556,11 @@ export type ExpandOptionsUnprocessedNode = {
  *
  */
 export type ExpandStarNode = {
-  nodeType: NodeTypes.ExpandStarNode;
-  options: {
-    ref?: boolean;
-    levels?: number | 'max';
-  };
+    nodeType: NodeTypes.ExpandStarNode;
+    options: {
+        ref?: boolean;
+        levels?: number | 'max';
+    };
 };
 
 /**
@@ -572,7 +572,7 @@ export type ExpandStarNode = {
  *
  */
 export type ExpandValueNode = {
-  nodeType: NodeTypes.ExpandValueNode;
+    nodeType: NodeTypes.ExpandValueNode;
 };
 
 /**
@@ -584,19 +584,19 @@ export type ExpandValueNode = {
  *
  */
 export type ExpandOptions = {
-  aliasAndValue?: any;
-  compute?: ComputeNode;
-  expand?: ExpandNode;
-  filter?: FilterNode;
-  count?: any;
-  orderby?: OrderbyNode;
-  search?: any;
-  select?: SelectNode;
-  skip?: number;
-  top?: number;
-  levels?: number | 'max';
+    aliasAndValue?: any;
+    compute?: ComputeNode;
+    expand?: ExpandNode;
+    filter?: FilterNode;
+    count?: any;
+    orderby?: OrderbyNode;
+    search?: any;
+    select?: SelectNode;
+    skip?: number;
+    top?: number;
+    levels?: number | 'max';
 };
 
 export enum ExpandIdentifierFlags {
-  Annotation = 'Annotation' //@Measures.Currency
+    Annotation = 'Annotation' //@Measures.Currency
 }

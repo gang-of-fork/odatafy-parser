@@ -76,25 +76,25 @@ HTAB   = '  '
 `);
 
 function parseSearch(expr: string): SearchNode {
-  try {
-    expr = searchExpressionPreProc(expr);
+    try {
+        expr = searchExpressionPreProc(expr);
 
-    const searchNode = <SearchNode>searchParser.parse(expr);
+        const searchNode = <SearchNode>searchParser.parse(expr);
 
-    return searchNode;
-  } catch (e) {
-    throw getOdatafyParserError(
-      'malformed search expression',
-      OdatafyQueryOptions.Search
-    );
-  }
+        return searchNode;
+    } catch (e) {
+        throw getOdatafyParserError(
+            'malformed search expression',
+            OdatafyQueryOptions.Search
+        );
+    }
 }
 export default {
-  /**
-   * Parser for search expressions
-   * @param expr search expression as string
-   * @example searchParser.parse("blue OR green OR red")
-   * @returns Abstract Syntax Tree (AST) of type SearchNode
-   */
-  parse: parseSearch
+    /**
+     * Parser for search expressions
+     * @param expr search expression as string
+     * @example searchParser.parse("blue OR green OR red")
+     * @returns Abstract Syntax Tree (AST) of type SearchNode
+     */
+    parse: parseSearch
 };

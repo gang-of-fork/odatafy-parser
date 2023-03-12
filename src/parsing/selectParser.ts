@@ -1,9 +1,9 @@
 import peggy from 'peggy';
 import {
-  NodeTypes,
-  SelectNode,
-  SelectOptions,
-  SelectOptionsUnprocessedNode
+    NodeTypes,
+    SelectNode,
+    SelectOptions,
+    SelectOptionsUnprocessedNode
 } from '../types/nodes';
 import querystring from 'querystring';
 import filterParser from './filterParser';
@@ -108,125 +108,125 @@ HTAB   = '  '
 `);
 
 function parseSelect(expr: string): SelectNode {
-  let ast;
-  try {
-    ast = <SelectNode>selectParser.parse(expr);
-  } catch (e) {
-    throw getOdatafyParserError(
-      'malformed select expression',
-      OdatafyQueryOptions.Select
-    );
-  }
-
-  try {
-    for (const selectPath of ast.value) {
-      if (selectPath.nodeType == NodeTypes.SelectPathNodeWithOptions) {
-        selectPath.options = processSelectOptionsUnprocessedNode(
-          <SelectOptionsUnprocessedNode>selectPath.options
+    let ast;
+    try {
+        ast = <SelectNode>selectParser.parse(expr);
+    } catch (e) {
+        throw getOdatafyParserError(
+            'malformed select expression',
+            OdatafyQueryOptions.Select
         );
-      }
     }
-    return ast;
-  } catch (e) {
-    throw getOdatafyParserError(
-      'malformed select options',
-      OdatafyQueryOptions.Select
-    );
-  }
+
+    try {
+        for (const selectPath of ast.value) {
+            if (selectPath.nodeType == NodeTypes.SelectPathNodeWithOptions) {
+                selectPath.options = processSelectOptionsUnprocessedNode(
+                    <SelectOptionsUnprocessedNode>selectPath.options
+                );
+            }
+        }
+        return ast;
+    } catch (e) {
+        throw getOdatafyParserError(
+            'malformed select options',
+            OdatafyQueryOptions.Select
+        );
+    }
 }
 
 export function processSelectOptionsUnprocessedNode(
-  SelectOptionsUnprocessedNode: SelectOptionsUnprocessedNode
+    SelectOptionsUnprocessedNode: SelectOptionsUnprocessedNode
 ): SelectOptions {
-  const parsedOptions = querystring.parse(
-    SelectOptionsUnprocessedNode.value,
-    ';'
-  );
-  const options: SelectOptions = {};
+    const parsedOptions = querystring.parse(
+        SelectOptionsUnprocessedNode.value,
+        ';'
+    );
+    const options: SelectOptions = {};
 
-  //parse options wíth $
-  if (parsedOptions.$filter && typeof parsedOptions.$filter == 'string') {
-    options.filter = filterParser.parse(parsedOptions.$filter);
-  }
+    //parse options wíth $
+    if (parsedOptions.$filter && typeof parsedOptions.$filter == 'string') {
+        options.filter = filterParser.parse(parsedOptions.$filter);
+    }
 
-  if (parsedOptions.$orderby && typeof parsedOptions.$orderby == 'string') {
-    options.orderby = orderbyParser.parse(parsedOptions.$orderby);
-  }
+    if (parsedOptions.$orderby && typeof parsedOptions.$orderby == 'string') {
+        options.orderby = orderbyParser.parse(parsedOptions.$orderby);
+    }
 
-  if (parsedOptions.$skip && typeof parsedOptions.$skip == 'string') {
-    options.skip = skipParser.parse(parsedOptions.$skip);
-  }
+    if (parsedOptions.$skip && typeof parsedOptions.$skip == 'string') {
+        options.skip = skipParser.parse(parsedOptions.$skip);
+    }
 
-  if (parsedOptions.$top && typeof parsedOptions.$top == 'string') {
-    options.top = topParser.parse(parsedOptions.$top);
-  }
+    if (parsedOptions.$top && typeof parsedOptions.$top == 'string') {
+        options.top = topParser.parse(parsedOptions.$top);
+    }
 
-  if (parsedOptions.$select && typeof parsedOptions.$select == 'string') {
-    options.select = parseSelect(parsedOptions.$select);
-  }
+    if (parsedOptions.$select && typeof parsedOptions.$select == 'string') {
+        options.select = parseSelect(parsedOptions.$select);
+    }
 
-  if (parsedOptions.$compute && typeof parsedOptions.$compute == 'string') {
-    options.compute = computeParser.parse(parsedOptions.$compute);
-  }
+    if (parsedOptions.$compute && typeof parsedOptions.$compute == 'string') {
+        options.compute = computeParser.parse(parsedOptions.$compute);
+    }
 
-  if (parsedOptions.$expand && typeof parsedOptions.$expand == 'string') {
-    options.expand = expandParser.parse(parsedOptions.$expand);
-  }
+    if (parsedOptions.$expand && typeof parsedOptions.$expand == 'string') {
+        options.expand = expandParser.parse(parsedOptions.$expand);
+    }
 
-  if (parsedOptions.$count && typeof parsedOptions.$count == 'string') {
-    options.count = true;
-  }
+    if (parsedOptions.$count && typeof parsedOptions.$count == 'string') {
+        options.count = true;
+    }
 
-  if (parsedOptions.$search && typeof parsedOptions.$search == 'string') {
-    options.search = searchParser.parse(parsedOptions.$search);
-  }
+    if (parsedOptions.$search && typeof parsedOptions.$search == 'string') {
+        options.search = searchParser.parse(parsedOptions.$search);
+    }
 
-  // parse options without $
-  if (parsedOptions.filter && typeof parsedOptions.filter == 'string') {
-    options.filter = filterParser.parse(parsedOptions.filter);
-  }
+    // parse options without $
+    if (parsedOptions.filter && typeof parsedOptions.filter == 'string') {
+        options.filter = filterParser.parse(parsedOptions.filter);
+    }
 
-  if (parsedOptions.orderby && typeof parsedOptions.orderby == 'string') {
-    options.orderby = orderbyParser.parse(parsedOptions.orderby);
-  }
+    if (parsedOptions.orderby && typeof parsedOptions.orderby == 'string') {
+        options.orderby = orderbyParser.parse(parsedOptions.orderby);
+    }
 
-  if (parsedOptions.skip && typeof parsedOptions.skip == 'string') {
-    options.skip = skipParser.parse(parsedOptions.skip);
-  }
+    if (parsedOptions.skip && typeof parsedOptions.skip == 'string') {
+        options.skip = skipParser.parse(parsedOptions.skip);
+    }
 
-  if (parsedOptions.top && typeof parsedOptions.top == 'string') {
-    options.top = topParser.parse(parsedOptions.top);
-  }
+    if (parsedOptions.top && typeof parsedOptions.top == 'string') {
+        options.top = topParser.parse(parsedOptions.top);
+    }
 
-  if (parsedOptions.select && typeof parsedOptions.select == 'string') {
-    options.select = parseSelect(parsedOptions.select);
-  }
+    if (parsedOptions.select && typeof parsedOptions.select == 'string') {
+        options.select = parseSelect(parsedOptions.select);
+    }
 
-  if (parsedOptions.compute && typeof parsedOptions.compute == 'string') {
-    options.compute = computeParser.parse(parsedOptions.compute);
-  }
+    if (parsedOptions.compute && typeof parsedOptions.compute == 'string') {
+        options.compute = computeParser.parse(parsedOptions.compute);
+    }
 
-  if (parsedOptions.expand && typeof parsedOptions.expand == 'string') {
-    options.expand = expandParser.parse(parsedOptions.expand);
-  }
+    if (parsedOptions.expand && typeof parsedOptions.expand == 'string') {
+        options.expand = expandParser.parse(parsedOptions.expand);
+    }
 
-  if (parsedOptions.count && typeof parsedOptions.count == 'string') {
-    options.count = true;
-  }
+    if (parsedOptions.count && typeof parsedOptions.count == 'string') {
+        options.count = true;
+    }
 
-  if (parsedOptions.search && typeof parsedOptions.search == 'string') {
-    options.search = searchParser.parse(parsedOptions.search);
-  }
+    if (parsedOptions.search && typeof parsedOptions.search == 'string') {
+        options.search = searchParser.parse(parsedOptions.search);
+    }
 
-  return options;
+    return options;
 }
 
 export default {
-  /**
-   * Parser for select expressions
-   * @param expr select expression as string
-   * @example selectParser.parse("Name,Age")
-   * @returns Abstract Syntax Tree (AST) of type SelectNode
-   */
-  parse: parseSelect
+    /**
+     * Parser for select expressions
+     * @param expr select expression as string
+     * @example selectParser.parse("Name,Age")
+     * @returns Abstract Syntax Tree (AST) of type SelectNode
+     */
+    parse: parseSelect
 };

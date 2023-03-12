@@ -8,44 +8,44 @@ import { getOdatafyParserError } from '../utils';
 import { filterGrammar } from './filterParser';
 
 const computeParser = peggy.generate(
-  filterGrammar +
-    `
+    filterGrammar +
+        `
 start = head:computeItem tail:( COMMA @computeItem )* {return{nodeType: "ComputeNode", computeProps: [head, ...tail]}}
 
 computeItem = commonExpr:(commonExpr / value:$mathExpr {return {type: 'mathExpr', value: value}} / odataIdentifier) RWS "as" RWS computeIdentifier:$odataIdentifier {return {nodeType: "ComputeItemNode", commonExpr:commonExpr, computeIdentifier: computeIdentifier}}
 `,
-  { allowedStartRules: ['start'] }
+    { allowedStartRules: ['start'] }
 );
 
 function parseCompute(expr: string): ComputeNode {
-  const computeNode: ComputeNode = {
-    nodeType: NodeTypes.ComputeNode,
-    value: []
-  };
-  try {
-    expr = filterExpressionPreProc(expr);
+    const computeNode: ComputeNode = {
+        nodeType: NodeTypes.ComputeNode,
+        value: []
+    };
+    try {
+        expr = filterExpressionPreProc(expr);
 
-    const ast = computeParser.parse(expr);
+        const ast = computeParser.parse(expr);
 
-    ast.computeProps.forEach((computeItem: any) => {
-      computeItem.commonExpr = astPostProc(computeItem.commonExpr);
-      computeNode.value.push(computeItem);
-    });
-    return computeNode;
-  } catch (e) {
-    throw getOdatafyParserError(
-      'malformed compute expression',
-      OdatafyQueryOptions.Compute
-    );
-  }
+        ast.computeProps.forEach((computeItem: any) => {
+            computeItem.commonExpr = astPostProc(computeItem.commonExpr);
+            computeNode.value.push(computeItem);
+        });
+        return computeNode;
+    } catch (e) {
+        throw getOdatafyParserError(
+            'malformed compute expression',
+            OdatafyQueryOptions.Compute
+        );
+    }
 }
 
 export default {
-  /**
-   * Parser for compute expressions
-   * @param expr compute expression as string
-   * @example computeParser.parse("FirstName as Name")
-   * @returns Abstract Syntax Tree (AST) of type ComputeNode
-   */
-  parse: parseCompute
+    /**
+     * Parser for compute expressions
+     * @param expr compute expression as string
+     * @example computeParser.parse("FirstName as Name")
+     * @returns Abstract Syntax Tree (AST) of type ComputeNode
+     */
+    parse: parseCompute
 };

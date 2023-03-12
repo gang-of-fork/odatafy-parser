@@ -14,12 +14,12 @@
     "rules": {
         "no-case-declarations": 0,
         "@typescript-eslint/ban-ts-comment": 1,
-        "prettier/prettier": [
-            "error",
-            {
-              "endOfLine": "auto"
-            }
-          ],
-          "prefer-const": "error"
+        "prefer-const": "error",
+        "indent": "off",
+        "@typescript-eslint/no-empty-interface": "off",
+        "object-curly-spacing": [
+            "warn",
+            "always"
+        ]
     }
 }

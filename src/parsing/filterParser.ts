@@ -382,27 +382,27 @@ export const rawParser = peggy.generate(filterGrammar, { trace: false });
 const myParser = peggy.generate(filterGrammar, { trace: false });
 
 export default {
-  /**
-   * Parser for filter expressions
-   * @param expr filter expression as string
-   * @param options options for peggy.js parser
-   * @example filterParser.parse("Name eq 'Max'");
-   * @returns Abstract Syntax Tree (AST) of type FilterNode
-   */
-  parse: (
-    expr: string,
-    options?: peggy.ParserOptions | undefined
-  ): FilterNode => {
-    try {
-      expr = filterExpressionPreProc(expr);
-      let output = myParser.parse(expr, options);
-      output = astPostProc(output);
-      return output;
-    } catch (e) {
-      throw getOdatafyParserError(
-        'malformed filter expression',
-        OdatafyQueryOptions.Filter
-      );
+    /**
+     * Parser for filter expressions
+     * @param expr filter expression as string
+     * @param options options for peggy.js parser
+     * @example filterParser.parse("Name eq 'Max'");
+     * @returns Abstract Syntax Tree (AST) of type FilterNode
+     */
+    parse: (
+        expr: string,
+        options?: peggy.ParserOptions | undefined
+    ): FilterNode => {
+        try {
+            expr = filterExpressionPreProc(expr);
+            let output = myParser.parse(expr, options);
+            output = astPostProc(output);
+            return output;
+        } catch (e) {
+            throw getOdatafyParserError(
+                'malformed filter expression',
+                OdatafyQueryOptions.Filter
+            );
+        }
     }
-  }
 };
