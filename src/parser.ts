@@ -8,10 +8,18 @@ import topParser from './parsing/topParser';
 import expandParser from './parsing/expandParser';
 import selectParser from './parsing/selectParser';
 
-import { FilterNode, OrderbyNode, ExpandNode, ComputeNode, SelectNode, SearchNode } from './types/nodes';
+import {
+    FilterNode,
+    OrderbyNode,
+    ExpandNode,
+    ComputeNode,
+    SelectNode,
+    SearchNode
+} from './types/nodes';
 import searchParser from './parsing/searchParser';
 import { getOdatafyParserError } from './utils';
 import { ParsedUrlQuery } from 'querystring';
+import countParser from './parsing/countParser';
 
 export type oDataParameters = {
     filter?: string;
@@ -22,57 +30,63 @@ export type oDataParameters = {
     compute?: string;
     select?: string;
     search?: string;
-}
+    count?: string;
+};
 
 export type oDataParseResult = {
     filter?: FilterNode;
     orderby?: OrderbyNode;
     skip?: number;
-    top?: number; 
+    top?: number;
     expand?: ExpandNode;
     compute?: ComputeNode;
     select?: SelectNode;
     search?: SearchNode;
-}
+    count?: boolean;
+};
 
 /**
  * parse oData parameter expressions
  * @param parameters oData url parameters
  * @returns parsed oData parameters
  */
- function parseOData(parameters: oDataParameters): oDataParseResult {
-    let result: oDataParseResult = {};
+function parseOData(parameters: oDataParameters): oDataParseResult {
+    const result: oDataParseResult = {};
 
-    if(parameters.filter) {
+    if (parameters.filter) {
         result.filter = filterParser.parse(parameters.filter);
     }
 
-    if(parameters.orderby) {
+    if (parameters.orderby) {
         result.orderby = orderbyParser.parse(parameters.orderby);
     }
 
-    if(parameters.skip) {
+    if (parameters.skip) {
         result.skip = skipParser.parse(parameters.skip);
     }
 
-    if(parameters.top) {
+    if (parameters.top) {
         result.top = topParser.parse(parameters.top);
     }
 
-    if(parameters.expand) {
+    if (parameters.expand) {
         result.expand = expandParser.parse(parameters.expand);
     }
-    
-    if(parameters.compute) {
+
+    if (parameters.compute) {
         result.compute = computeParser.parse(parameters.compute);
     }
 
-    if(parameters.select) {
+    if (parameters.select) {
         result.select = selectParser.parse(parameters.select);
     }
 
-    if(parameters.search) {
+    if (parameters.search) {
         result.search = searchParser.parse(parameters.search);
+    }
+
+    if (parameters.count) {
+        result.count = countParser.parse(parameters.count);
     }
     return result;
 }
@@ -85,29 +99,52 @@ export type oDataParseResult = {
  * @returns parsed oData parameters
  */
 export function parseODataUrl(oDataUrl: string): oDataParseResult {
-    let query:ParsedUrlQuery;
-    try{
+    let query: ParsedUrlQuery;
+    try {
         query = url.parse(oDataUrl, true).query;
-    } catch(e) {
-        throw getOdatafyParserError("malformed URL")
+    } catch (e) {
+        throw getOdatafyParserError('malformed URL');
     }
-    const validParams = [ 'filter', 'orderby', 'skip', 'top', 'expand', 'compute', 'select', 'search'];
+    const validParams = [
+        'filter',
+        'orderby',
+        'skip',
+        'top',
+        'expand',
+        'compute',
+        'select',
+        'search',
+        'count'
+    ];
     const params = Object.keys(query);
 
-    let parseParameters: oDataParameters = {}
+    const parseParameters: oDataParameters = {};
 
-    validParams.forEach((param: string) =>{
-        //check if url 
-        if(params.includes(param) && params.includes('$' + param)) {
-            throw getOdatafyParserError(`Malformed oData url, cannot contain param: ${param} and param: $${param}`)
+    validParams.forEach((param: string) => {
+        //check if url
+        if (params.includes(param) && params.includes('$' + param)) {
+            throw getOdatafyParserError(
+                `Malformed oData url, cannot contain param: ${param} and param: $${param}`
+            );
         }
 
-        if(params.includes(param) || params.includes('$' + param)) {
-            parseParameters[param as keyof oDataParameters] = query[(params.includes(param)? param: '$' + param)] as string
+        if (params.includes(param) || params.includes('$' + param)) {
+            parseParameters[param as keyof oDataParameters] = query[
+                params.includes(param) ? param : '$' + param
+            ] as string;
         }
     });
 
-return parseOData(parseParameters);
+    return parseOData(parseParameters);
 }
 
-export { filterParser, orderbyParser, skipParser, topParser, expandParser, computeParser, selectParser, searchParser };
+export {
+    filterParser,
+    orderbyParser,
+    skipParser,
+    topParser,
+    expandParser,
+    computeParser,
+    selectParser,
+    searchParser
+};

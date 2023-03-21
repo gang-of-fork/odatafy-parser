@@ -9,11 +9,14 @@ export default {
      * @example skipParser.parse("5");
      * @returns integer number for skip
      */
-    parse: function(expr: string):number {
-        if(isPositiveInteger(expr)) {
+    parse: function (expr: string): number {
+        if (isPositiveInteger(expr)) {
             return parseInt(expr as string);
         }
 
-        throw getOdatafyParserError("skip must be a valid integer value", OdatafyQueryOptions.Skip)
+        throw getOdatafyParserError(
+            'skip must be a valid integer value',
+            OdatafyQueryOptions.Skip
+        );
     }
-}
+};

@@ -14,6 +14,6 @@ Click [here](https://gang-of-fork.github.io/odatafy-parser/modules.html#expandPa
 
 # License
 
-This project is licensed under [GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/).
+This project is licensed under [GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/). 
 
 

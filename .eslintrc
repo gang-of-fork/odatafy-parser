@@ -1,0 +1,25 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint",
+        "prettier"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier"
+    ],
+    "rules": {
+        "no-case-declarations": 0,
+        "@typescript-eslint/ban-ts-comment": 1,
+        "prefer-const": "error",
+        "indent": "off",
+        "@typescript-eslint/no-empty-interface": "off",
+        "object-curly-spacing": [
+            "warn",
+            "always"
+        ]
+    }
+}

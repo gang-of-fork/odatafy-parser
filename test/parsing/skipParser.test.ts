@@ -14,7 +14,7 @@ describe('Skip Parser tests', () => {
             expectedOutput: 0
         }
         ].forEach(testcase => {
-            it(`should generate a valid ${testcase.type} Escape Identifier`, () => {
+            it(`should parse ${testcase.type}`, () => {
                 let parsedOutput = skipParser.parse(testcase.input)
                 assert(parsedOutput == testcase.expectedOutput)
             });

@@ -9,14 +9,17 @@ export default {
      * @example levelsParser.parse("5");
      * @returns integer number for levels or "max"
      */
-    parse: function(expr: string): number | "max" {
-        if(expr == "max") {
-            return "max";
+    parse: function (expr: string): number | 'max' {
+        if (expr == 'max') {
+            return 'max';
         }
-        if(isPositiveInteger(expr)) {
+        if (isPositiveInteger(expr)) {
             return parseInt(expr as string);
         }
 
-        throw getOdatafyParserError("levels must be positive integer or 'max'", OdatafyQueryOptions.Levels)
+        throw getOdatafyParserError(
+            "levels must be positive integer or 'max'",
+            OdatafyQueryOptions.Levels
+        );
     }
-}
+};

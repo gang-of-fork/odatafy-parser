@@ -10,21 +10,29 @@ export default {
      * @returns AbstractSyntaxTree (AST) of type OrderbyNode
      */
     parse: function parseOrderby(expr: string): OrderbyNode {
-        const regexp = new RegExp("^(([a-zA-z/]+ (asc|desc),)|[a-zA-z/]+,)*(([a-zA-z/]+ (asc|desc))|[a-zA-z/]+)$", "gmy")
+        const regexp = new RegExp(
+            '^(([a-zA-z/]+ (asc|desc),)|[a-zA-z/]+,)*(([a-zA-z/]+ (asc|desc))|[a-zA-z/]+)$',
+            'gmy'
+        );
         if (regexp.test(expr)) {
             return {
                 nodeType: NodeTypes.OrderbyNode,
-                value: expr.split(",").map(ele => {
-                    const splt_ele = ele.trim().split(" ");
+                value: expr.split(',').map((ele) => {
+                    const splt_ele = ele.trim().split(' ');
                     return {
                         nodeType: NodeTypes.OrderbyItemNode,
-                        type: (splt_ele.length == 1 ? OrderDirection.Asc : splt_ele[1]) as OrderDirection,
+                        type: (splt_ele.length == 1
+                            ? OrderDirection.Asc
+                            : splt_ele[1]) as OrderDirection,
                         value: splt_ele[0]
                     };
                 })
             };
         } else {
-            throw getOdatafyParserError("malformed orderby expression", OdatafyQueryOptions.OrderBy);
+            throw getOdatafyParserError(
+                'malformed orderby expression',
+                OdatafyQueryOptions.OrderBy
+            );
         }
     }
-}
+};
