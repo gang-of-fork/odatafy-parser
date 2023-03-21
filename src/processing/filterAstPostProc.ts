@@ -87,7 +87,6 @@ export function parseMathExpression(mathExpr: string) {
     const preparedMathExpr = replaceMathSymbols(funcResult);
     const mathExprAst = parse(preparedMathExpr);
 
-    //@ts-ignore unspecified types from lib
     const resolvedAst = mathExprAst.transform((node, _path, _parent) => {
         if (node.type == 'SymbolNode') {
             const symbolNode = <math.SymbolNode>node;
