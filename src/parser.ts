@@ -19,6 +19,7 @@ import {
 import searchParser from './parsing/searchParser';
 import { getOdatafyParserError } from './utils';
 import { ParsedUrlQuery } from 'querystring';
+import countParser from './parsing/countParser';
 
 export type oDataParameters = {
     filter?: string;
@@ -29,6 +30,7 @@ export type oDataParameters = {
     compute?: string;
     select?: string;
     search?: string;
+    count?: string;
 };
 
 export type oDataParseResult = {
@@ -40,6 +42,7 @@ export type oDataParseResult = {
     compute?: ComputeNode;
     select?: SelectNode;
     search?: SearchNode;
+    count?: boolean;
 };
 
 /**
@@ -81,6 +84,10 @@ function parseOData(parameters: oDataParameters): oDataParseResult {
     if (parameters.search) {
         result.search = searchParser.parse(parameters.search);
     }
+
+    if (parameters.count) {
+        result.count = countParser.parse(parameters.count);
+    }
     return result;
 }
 
@@ -106,7 +113,8 @@ export function parseODataUrl(oDataUrl: string): oDataParseResult {
         'expand',
         'compute',
         'select',
-        'search'
+        'search',
+        'count'
     ];
     const params = Object.keys(query);
 

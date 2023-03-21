@@ -35,5 +35,6 @@ export enum OdatafyQueryOptions {
     Search = 'search',
     Select = 'select',
     Skip = 'skip',
-    Top = 'top'
+    Top = 'top',
+    Count = 'count'
 }
