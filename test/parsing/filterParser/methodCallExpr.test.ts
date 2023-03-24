@@ -507,7 +507,7 @@ describe('filter-expressions with method calls', () => {
             }
         },
         {
-            type: "method with Array as Argument",
+            type: "method with Array (String, Number, null) as Argument",
             input: "length([\"1\",2,null])",
             expectedAST: {
                 nodeType: "FuncNode1Args",
