@@ -153,13 +153,12 @@ export function cleanAST(ast: any): FilterNode {
 
 export function processAST(ast: any): FilterNode {
 
-    if(isFuncNodeWithArgs(ast)) {
+    if(isFuncNodeWithArgs(ast)) { //siganture validator
         try {
             validateFuncNode(ast);
         } catch(e) {
             console.log(e);
         }
-        
     }
 
     if (ast.type == "mathExpr") {

@@ -6,6 +6,18 @@ import {
 
 import { getFuncSignature } from './signatureResolver';
 
+/**
+ * Array of nodeTypes that will not be validated by function Node validation
+ */
+const NodesWithoutValidation = [
+    FuncNames1Args.Geo_length,
+    FuncNames2Args.Geo_distance,
+    FuncNames2Args.Geo_intersects,
+    FuncNamesVarArgs.Case,
+    FuncNamesVarArgs.Cast,
+    FuncNamesVarArgs.Isof
+]
+
 export class ValidationError extends Error {
     constructor(message: string) {
         super(message);
@@ -28,6 +40,11 @@ export function isFuncNodeWithArgs(node: FilterNode): boolean {
 }
 
 export function validateFuncNode(node: FuncNode1Args | FuncNode2Args | FuncNodeVarArgs) {
+    if(NodesWithoutValidation.includes(node.func)) {
+        return;
+    }
+
+
     const signatures = getFuncSignature(node.func);
     let lastMatchedSig: number[] = [];
 
@@ -47,7 +64,7 @@ export function validateFuncNode(node: FuncNode1Args | FuncNode2Args | FuncNodeV
             
             typesToMatch = [ (<ConstantNode>node.args[i]).type ]
         } else { //is nested function node
-            if(!Object.values(FuncNames0Args).includes((<FuncNode0Args>node.args[i]).func)) { //if 
+            if(isFuncNodeWithArgs(node)) { //if 
                 validateFuncNode(node.args[i] as FuncNode1Args | FuncNode2Args | FuncNodeVarArgs);
             }
 
