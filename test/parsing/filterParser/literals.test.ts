@@ -1,6 +1,6 @@
 import assert from 'assert';
 import filterParser from '../../../src/parsing/filterParser';
-import { ConstantSpatialNode, ConstantSpatialNodeAbstractSpatialTypes, FilterNode, NodeTypes, SpatialNode } from '../../../src/types/nodes';
+import { ConstantNode, ConstantNodeTypes, ConstantSpatialNodeAbstractSpatialTypes, FilterNode, NodeTypes, SpatialNode } from '../../../src/types/nodes';
 
 function testParsingAndAST(testcase: { type: string, input: string, expectedAST: any }) {
     it(`should parse ${testcase.type}: ${testcase.input}`, () => {
@@ -246,15 +246,16 @@ describe('Literal Tests', () => {
                 }
             }
         },
-    ].forEach(testcase => testParsingAndAST(testcase))
+        ].forEach(testcase => testParsingAndAST(testcase))
     })
     describe('Spatial Literal Tests', () => {
         [{
             type: "simple eq expression with GeographyCollection",
             spatialInput: "geography'SRID=0;Collection(LineString(142.1 64.1,3.14 2.78))'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geography,
+                type: ConstantNodeTypes.GeographyCollectionNode,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.CollectionNode,
                     srid: 0,
@@ -279,8 +280,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeographyLineString",
             spatialInput: "geography'SRID=0;LineString(142.1 64.1,3.14 2.78)'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeographyLineStringNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geography,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.LineStringNode,
@@ -304,8 +306,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeographyMultiLineString",
             spatialInput: "geography'SRID=0;MultiLineString((142.1 64.1,3.14 2.78),(142.1 64.1,3.14 2.78))'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeographyMultiLineStringNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geography,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.MultiLineStringNode,
@@ -347,8 +350,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeographyMultiPoint I",
             spatialInput: "geography'SRID=0;MultiPoint()'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeographyMultiPointNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geography,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.MultiPointNode,
@@ -360,8 +364,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeographyMultiPoint II",
             spatialInput: "geography'SRID=0;MultiPoint((142.1 64.1),(1 2))'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeographyMultiPointNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geography,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.MultiPointNode,
@@ -384,8 +389,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeographyMultiPolygon",
             spatialInput: "geography'SRID=0;MultiPolygon(((1 1,1 1),(1 1,2 2,3 3,1 1)))'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeographyMultiPolygonNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geography,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.MultiPolygonNode,
@@ -440,8 +446,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeographyPoint",
             spatialInput: "geography'SRID=0;Point(142.1 64.1)'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeographyPointNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geography,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.PointNode,
@@ -459,8 +466,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeographyPoint with elevation(altitude)",
             spatialInput: "geography'SRID=0;Point(142.1 64.1 10.0)'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeographyPointNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geography,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.PointNode,
@@ -477,8 +485,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeographyPoint with elevation(altitude) and measure",
             spatialInput: "geography'SRID=0;Point(142.1 64.1 10.0 -3.14)'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeographyPointNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geography,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.PointNode,
@@ -495,8 +504,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeographyPolygon",
             spatialInput: "geography'SRID=0;Polygon((1 1,1 1),(1 1,2 2,3 3,1 1))'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeographyPolygonNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geography,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.PolygonNode,
@@ -553,8 +563,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeometryCollection",
             spatialInput: "geometry'SRID=0;Collection(LineString(142.1 64.1,3.14 2.78))'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeometryCollectionNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geometry,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.CollectionNode,
@@ -582,8 +593,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeometryLineString",
             spatialInput: "geometry'SRID=0;LineString(142.1 64.1,3.14 2.78)'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeometryLineStringNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geometry,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.LineStringNode,
@@ -608,8 +620,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeometryMultiLineString",
             spatialInput: "geometry'SRID=0;MultiLineString((142.1 64.1,3.14 2.78),(142.1 64.1,3.14 2.78))'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeometryMultiLineStringNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geometry,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.MultiLineStringNode,
@@ -654,12 +667,13 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeometryMultiPoint I",
             spatialInput: "geometry'SRID=0;MultiPoint()'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeometryMultiPointNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geometry,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.MultiPointNode,
-                    srid:0,
+                    srid: 0,
                     points: []
                 }
             }
@@ -667,8 +681,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeometryMultiPoint II",
             spatialInput: "geometry'SRID=0;MultiPoint((142.1 64.1),(1 2))'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeometryMultiPointNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geometry,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.MultiPointNode,
@@ -692,8 +707,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeometryMultiPolygon",
             spatialInput: "geometry'SRID=0;MultiPolygon(((1 1,1 1),(1 1,2 2,3 3,1 1)))'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeometryMultiPolygonNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geometry,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.MultiPolygonNode,
@@ -754,8 +770,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeometryPoint",
             spatialInput: "geometry'SRID=0;Point(142.1 64.1)'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeometryPointNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geometry,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.PointNode,
@@ -773,8 +790,9 @@ describe('Literal Tests', () => {
         {
             type: "simple eq expression with GeometryPolygon",
             spatialInput: "geometry'SRID=0;Polygon((1 1,1 1),(1 1,2 2,3 3,1 1))'",
-            expectedSpatialAST: <ConstantSpatialNode>{
-                nodeType: NodeTypes.ConstantSpatialNode,
+            expectedSpatialAST: <ConstantNode>{
+                nodeType: NodeTypes.ConstantNode,
+                type: ConstantNodeTypes.GeometryPolygonNode,
                 abstractSpatialType: ConstantSpatialNodeAbstractSpatialTypes.Geometry,
                 value: <SpatialNode>{
                     nodeType: NodeTypes.PolygonNode,

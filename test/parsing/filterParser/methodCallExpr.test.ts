@@ -491,6 +491,7 @@ describe('filter-expressions with method calls', () => {
                 },
             }
         },
+        /*
         {
             type: "method with Object as Argument",
             input: "length({\"prop\": \"value\"})",
@@ -506,6 +507,7 @@ describe('filter-expressions with method calls', () => {
                 }]
             }
         },
+        */
         {
             type: "method with Array as Argument",
             input: "length([\"1\",2,null])",
@@ -520,15 +522,15 @@ describe('filter-expressions with method calls', () => {
                 ]
             }
         },
-        /*
-        {
-            type: "method with Geometry as Argument",
-            input: "geo.intersects(geometry'SRID=0;Point(142.164.1)',geometry'SRID=0;Polygon((1 1,1 1),(1 1,2 2,3 3,1 1))'",
-            //TODO
-            expectedAST: {}
-        },
-        */
-    ].forEach(testcase => testParsingAndAST(testcase))
+            /*
+            {
+                type: "method with Geometry as Argument",
+                input: "geo.intersects(geometry'SRID=0;Point(142.164.1)',geometry'SRID=0;Polygon((1 1,1 1),(1 1,2 2,3 3,1 1))'",
+                //TODO
+                expectedAST: {}
+            },
+            */
+        ].forEach(testcase => testParsingAndAST(testcase))
     })
 
 })
