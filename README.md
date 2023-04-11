@@ -10,8 +10,8 @@ odatafy is a framework that is designed to help developers with creating better 
 To achieve this odatafy provides an ecosystem of adapter packages that each leverage the odatafy parser to map oData requests to databases. The goal of odatafy is to provide oData compatible API-standards, to help developers accelerting REST-API development. Therefore odatafy implements only subset of operations
 
 # Documentation
-Click [Official ODatafy Documentation](https://gang-of-fork.github.io/odatafy-docs/)
-Click [TypeDoc Documentation](https://gang-of-fork.github.io/odatafy-parser)
+* [Official ODatafy Documentation](https://gang-of-fork.github.io/odatafy-docs/)
+* [TypeDoc Documentation](https://gang-of-fork.github.io/odatafy-parser)
 
 
 # License
