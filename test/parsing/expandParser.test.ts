@@ -41,7 +41,7 @@ describe("Expand Parser tests", () => {
         },
       },
       {
-        type: "single navigation property",
+        type: "single navigation property with $ref",
         input: "Items/$ref",
         expectedAST: <ExpandNode>{
           nodeType: NodeTypes.ExpandNode,
@@ -231,14 +231,14 @@ describe("Expand Parser tests", () => {
         },
       },
       {
-        type: "Expand - $count and $filter",
-        input: "Items/$count($filter=Name eq 'Hugo')",
+        type: "Expand - $filter",
+        input: "Items($filter=Name eq 'Hugo')",
         expectedAST: <ExpandNode>{
           nodeType: NodeTypes.ExpandNode,
           value: [
             {
               nodeType: NodeTypes.ExpandPathNodeWithOptions,
-              optionType: "count",
+              optionType: "default",
               options: {
                 filter: {
                   nodeType: NodeTypes.OperatorNode,
