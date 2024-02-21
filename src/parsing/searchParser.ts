@@ -45,7 +45,7 @@ pct_encoded_no_DQUOTE = "%" ( "0" / "1" / "3" / "4" / "5" / "6" / "7" / "8" / "9
 
 SQUOTE_in_string = SQUOTE SQUOTE
 
-unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
+unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~" 
 
 quotation_mark  = DQUOTE / "%22"
 
@@ -65,7 +65,7 @@ SQUOTE = "'" / "%27"
 OPEN  = "(" / "%28"
 CLOSE = ")" / "%29"
 
-ALPHA  = [a-z] / [A-Z] 
+ALPHA  = [a-z] / [A-Z] / "ä" / "ö" / "ü" / "Ä" / "Ö" / "Ü" / "ß"
 DIGIT  = [0-9]
 HEXDIG = DIGIT / A_to_F
 A_to_F = "A" / "B" / "C" / "D" / "E" / "F" 

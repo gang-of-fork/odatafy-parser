@@ -5,7 +5,7 @@ import { ConstantNodeTypes, NodeTypes, OperatorNodeOperators, OrderDirection, Se
 describe('public API tests', () => {
     describe('parseODataUrl()', () => {
         it('should parse ODataUrl correctly', () => {
-            let url = "https://api.dualis-bot.robin-reyer.de/Users?compute=FirstName as Name&expand=Products&$filter=Name eq 'Sebastian'&orderby=Name asc&$search=Spengler&select=Name&$skip=1&top=1"
+            let url = "https://api.dualis-bot.robin-reyer.de/Users?compute=FirstName as Name&expand=Products&$filter=Name eq 'Sebastian'&orderby=Name asc&$search=Spengler&select=Name&$skip=1&top=1&count=true"
             let ast = parseODataUrl(url)
             let expectedAST: oDataParseResult = {
                 compute: {
@@ -68,7 +68,8 @@ describe('public API tests', () => {
                     }]
                 },
                 skip: 1,
-                top: 1
+                top: 1,
+                count: true
 
             }
             assert.deepStrictEqual(ast, expectedAST)

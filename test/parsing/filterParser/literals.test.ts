@@ -193,7 +193,7 @@ describe('Literal Tests', () => {
             }
         },
         {
-            type: "simple eq expression with Array-expression",
+            type: "simple eq expression with Array-expression (number and string)",
             input: "Identifier eq [\"1\", 2, \"3\"]",
             expectedAST: {
                 nodeType: "OperatorNode",
