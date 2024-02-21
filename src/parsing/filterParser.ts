@@ -369,7 +369,7 @@ CLOSE = ")" / "%29"
 /*
 * abnf core rules (vchar missing)
 */
-ALPHA  = [a-zA-Z] 
+ALPHA  = [a-zA-Z] / "ä" / "ö" / "ü" / "Ä" / "Ö" / "Ü" / "ß"
 DIGIT  = [0-9] 
 HEXDIG = DIGIT / A_to_F
 A_to_F = "A" / "B" / "C" / "D" / "E" / "F" 

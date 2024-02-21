@@ -43,6 +43,24 @@ describe("Search Parser tests", () => {
         },
       },
       {
+        type: "simple term with umlaut ä / ö",
+        input: "Hörgerät",
+        expectedAST: <SearchNode>{
+          nodeType: NodeTypes.SearchItemNode,
+          type: SearchItemTypes.Word,
+          value: "Hörgerät",
+        },
+      },
+      {
+        type: "simple term with umlaut ü",
+        input: "Tür",
+        expectedAST: <SearchNode>{
+          nodeType: NodeTypes.SearchItemNode,
+          type: SearchItemTypes.Word,
+          value: "Tür",
+        },
+      },
+      {
         type: "simple term with dot",
         input: "1.2",
         expectedAST: <SearchNode>{
